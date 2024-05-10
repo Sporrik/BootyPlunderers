@@ -14,7 +14,7 @@ public class PirateCrew : MonoBehaviour
 
     private bool _isCollidingEnemy = false;
 
-    private Vector3 _targetPosition;
+    public Vector3 _targetPosition;
     private Hex _currentHex, _targetHex;
 
     private void Awake()
@@ -23,21 +23,8 @@ public class PirateCrew : MonoBehaviour
         _currentHealth = _maxHealth;
         _movement = _moveSpeed;
     }
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.Mouse1) && _movement > 0)
-        {
-            _targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            StartCoroutine(MoveCharacter());
-        }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine(NextTurn());
-        }
-    }
-
-    IEnumerator MoveCharacter()
+    public IEnumerator MoveCharacter()
     {
         for (int remaining = _movement; remaining > 0; remaining--)
         {
@@ -80,12 +67,6 @@ public class PirateCrew : MonoBehaviour
         }
     }
 
-    IEnumerator NextTurn()
-    {
-        _movement = _moveSpeed;
-        yield return new WaitForSeconds(0.25f);
-    }
-
     private void OnTriggerEnter(Collider collideObject)
     {
         if (collideObject.tag == "Enemy")
@@ -94,6 +75,7 @@ public class PirateCrew : MonoBehaviour
             Debug.Log("Player collides with enemy!");
         }
     }
+
     private void OnTriggerExit(Collider collideObject) 
     {
         _isCollidingEnemy = false; //Assuming there is only one collision with the enemies

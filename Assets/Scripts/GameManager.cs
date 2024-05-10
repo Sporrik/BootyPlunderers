@@ -32,6 +32,17 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SetupGame());
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Mouse1) && playerUnit._movement > 0)
+        {
+            playerUnit._targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            StartCoroutine(playerUnit.MoveCharacter()); 
+        }
+
+        playerHUD.SetMove(playerUnit._movement);
+    }
+
     IEnumerator SetupGame()
     {
         GameObject playerGO = Instantiate(playerPrefab, playerSpawn);
@@ -56,6 +67,10 @@ public class GameManager : MonoBehaviour
     IEnumerator PlayerTurn()
     {
         dialogueText.text = "Your Turn";
+
+        playerUnit._movement = 3;
+        playerHUD.SetMove(playerUnit._movement);
+
         yield return new WaitForSeconds(2f);
     }
 
