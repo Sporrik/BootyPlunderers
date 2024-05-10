@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PirateCrew : MonoBehaviour
 {
@@ -12,6 +11,7 @@ public class PirateCrew : MonoBehaviour
     public int _movement;
     private int _moveSpeed = 3;
 
+    private bool _isCollidingEnemy = false;
     private Vector3 _targetPosition;
     private Hex _currentHex, _targetHex;
 
@@ -57,10 +57,19 @@ public class PirateCrew : MonoBehaviour
                 direction.r /= Mathf.Abs(direction.r);
             }
 
+            Hex previouseHex = _currentHex;
             _currentHex += direction;
-
-            transform.position = _currentHex.ToWorld();
-            _movement--;
+            
+            if (!_isCollidingEnemy)
+            {
+                transform.position = _currentHex.ToWorld();
+                _movement--;
+            }
+            else
+            {
+                _currentHex = previouseHex;
+                transform.position = _currentHex.ToWorld();
+            }
 
             EndMovement:
             GetComponent<Node>().ApplyTransform();
@@ -72,5 +81,19 @@ public class PirateCrew : MonoBehaviour
     {
         _movement = _moveSpeed;
         yield return new WaitForSeconds(0.25f);
+    }
+
+    private void OnTriggerEnter(Collider collideObject)
+    {
+        if (collideObject.tag == "Enemy")
+        {
+            _isCollidingEnemy = true;
+            Debug.Log("Player collides with enemy!");
+        }
+    }
+    private void OnTriggerExit(Collider collideObject) 
+    {
+        _isCollidingEnemy = false; //Assuming there is only one collision with the enemies
+        
     }
 }
