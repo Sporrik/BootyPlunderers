@@ -16,6 +16,7 @@ public class PirateCrew : MonoBehaviour
 
     private void Awake()
     {
+        _currentHealth = _maxHealth;
         _movement = _moveSpeed;
     }
     private void Update()
