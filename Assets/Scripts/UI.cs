@@ -5,11 +5,31 @@ using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
-    public Text moveText;
-    public Text healthText;
+    public Slider moveSlider;
+    public Slider healthSlider;
 
     public void SetHUD(PirateCrew pirate)
     {
-        moveText.text = pirate._movement.ToString();
+        moveSlider.maxValue = pirate._moveSpeed;
+        moveSlider.value = pirate._movement;
+
+        healthSlider.maxValue = pirate._maxHealth;
+        healthSlider.value = pirate._currentHealth;
+    }
+
+    public void SetHUD(EnemyCrew enemy)
+    {
+        healthSlider.maxValue = enemy._maxHealth;
+        healthSlider.value = enemy._currentHealth;
+    }
+
+    public void SetHP(int hp)
+    {
+        healthSlider.value = hp;
+    }
+
+    public void SetMove(int move)
+    {
+        moveSlider.value = move;
     }
 }

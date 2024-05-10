@@ -7,10 +7,10 @@ using UnityEngine.UI;
 
 public class PirateCrew : MonoBehaviour
 {
-    [SerializeField]
     public int _maxHealth, _currentHealth;
     public int _movement;
-    private int _moveSpeed = 3;
+    public int _moveSpeed = 3;
+    public int _damage = 3;
 
     private bool _isCollidingEnemy = false;
 
@@ -19,6 +19,7 @@ public class PirateCrew : MonoBehaviour
 
     private void Awake()
     {
+        _maxHealth = 10;
         _currentHealth = _maxHealth;
         _movement = _moveSpeed;
     }
@@ -97,5 +98,13 @@ public class PirateCrew : MonoBehaviour
     {
         _isCollidingEnemy = false; //Assuming there is only one collision with the enemies
         
+    }
+
+    public bool TakeDamage(int damage)
+    {
+        _currentHealth -= damage;
+
+        if (_currentHealth <= 0) return true;
+        else return false;
     }
 }
