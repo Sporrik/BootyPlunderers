@@ -7,4 +7,9 @@ public class EnemyCrew : MonoBehaviour
     [SerializeField]
     private int _currentHealth, _maxHealth;
     private int _moveSpeed;
+
+    private void Awake()
+    {
+        _currentHealth = _maxHealth;
+    }
 }
