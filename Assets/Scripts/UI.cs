@@ -10,6 +10,6 @@ public class UI : MonoBehaviour
 
     public void SetHUD(PirateCrew pirate)
     {
-        moveText.text = pirate._movement;
+        moveText.text = pirate._movement.ToString();
     }
 }
