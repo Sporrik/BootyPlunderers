@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PirateCrew : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class PirateCrew : MonoBehaviour
     private int _moveSpeed = 3;
 
     private bool _isCollidingEnemy = false;
+
     private Vector3 _targetPosition;
     private Hex _currentHex, _targetHex;
 
