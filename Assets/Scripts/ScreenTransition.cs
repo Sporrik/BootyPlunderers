@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,12 +7,10 @@ using UnityEngine.SceneManagement;
 
 public class ScreenTransition : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    public Scene SceneToLoad;
+    public float TransitionWaitTime = 1;
+    public Animator Transition ; 
+   
     // Update is called once per frame
     void Update()
     {
@@ -21,9 +20,20 @@ public class ScreenTransition : MonoBehaviour
         }
     }
 
-    private void LoadNextLevel()
+    public void LoadNextLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        StartCoroutine(LoadLevel(SceneToLoad));
+    }
 
+    IEnumerator LoadLevel(Scene ChosenLvl)
+    {
+        //Play aniamtion
+         Transition.SetTrigger("start");
+
+        //Wait for animation to stop
+        yield return new WaitForSeconds(TransitionWaitTime);
+
+        //Load Scene
+        SceneManager.LoadScene(ChosenLvl.name);
     }
 }
