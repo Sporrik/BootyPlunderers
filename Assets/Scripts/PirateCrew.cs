@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PirateCrew : MonoBehaviour
 {
     [SerializeField]
-    private int _maxHealth, _currentHealth;
-    private int _movement;
+    public int _maxHealth, _currentHealth;
+    public int _movement;
     private int _moveSpeed = 3;
 
     private Vector3 _targetPosition;

@@ -16,17 +16,23 @@ public class GameManager : MonoBehaviour
     public Transform enemySpawn;
     public Transform treasureSpawn;
 
+    private PirateCrew playerUnit;
+    private EnemyCrew enemyUnit;
+
     private void Start()
     {
         state = GameState.START;
         SetupGame();
-        
     }
 
     private void SetupGame()
     {
-        Instantiate(playerPrefab, playerSpawn);
-        Instantiate(enemyPrefab, enemySpawn);
+        GameObject playerGO = Instantiate(playerPrefab, playerSpawn);
+        playerUnit = playerGO.GetComponent<PirateCrew>();
+
+        GameObject enemyGO = Instantiate(enemyPrefab, enemySpawn);
+        enemyUnit = enemyGO.GetComponent<EnemyCrew>();
+
         Instantiate(treasurePrefab, treasureSpawn);
     }
 }
