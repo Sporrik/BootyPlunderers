@@ -9,13 +9,14 @@ public class PirateCrew : MonoBehaviour
 {
     public int _maxHealth, _currentHealth;
     public int _movement;
-    public int _moveSpeed = 3;
+    public int _moveSpeed;
     public int _damage = 3;
 
     private bool _isCollidingEnemy = false;
+    public GameObject HeldObject;
 
     public Vector3 _targetPosition;
-    private Hex _currentHex, _targetHex;
+    private Hex _currentHex, _targetHex;    
 
     private void Awake()
     {
@@ -66,20 +67,42 @@ public class PirateCrew : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
         }
     }
-
-    private void OnTriggerEnter(Collider collideObject)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collideObject.tag == "Enemy")
+        if (collision.tag == "Enemy")
         {
             _isCollidingEnemy = true;
             Debug.Log("Player collides with enemy!");
         }
+
+        if (collision.tag == "Treasure")
+        {
+            if (HeldObject == null)
+            {
+                Debug.Log("Player collides with treasure!");
+                var treasure = collision.gameObject;
+                treasure.transform.localScale = new Vector2(0.5f, 0.5f);
+                treasure.transform.SetParent(transform);
+                treasure.transform.position += Vector3.up * 0.5f;
+                HeldObject = treasure;
+            }            
+        }
+
+        if (collision.tag == "ClaimPoint")
+        {
+            if (HeldObject != null)
+            {
+                Debug.Log("Player collides with Claim Point!");
+                var claimPoint = collision.gameObject;
+                Destroy(HeldObject);
+                HeldObject = null;
+            }
+        }
     }
 
-    private void OnTriggerExit(Collider collideObject) 
+    private void OnTriggerExit2D(Collider2D collision)
     {
         _isCollidingEnemy = false; //Assuming there is only one collision with the enemies
-        
     }
 
     public bool TakeDamage(int damage)
