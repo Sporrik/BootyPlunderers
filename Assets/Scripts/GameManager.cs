@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Mouse1) && playerUnit._movement > 0)
+        if (Input.GetKeyUp(KeyCode.Mouse1) && playerUnit._movement > 0 && state == GameState.PLAYERTURN)
         {
             playerUnit._targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             StartCoroutine(playerUnit.MoveCharacter()); 

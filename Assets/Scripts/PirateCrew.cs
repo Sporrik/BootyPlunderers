@@ -12,11 +12,12 @@ public class PirateCrew : MonoBehaviour
     public int _moveSpeed;
     public int _damage = 3;
 
-    private bool _isCollidingEnemy = false;
     public GameObject HeldObject;
 
+    public bool isOnBad = false;
+
     public Vector3 _targetPosition;
-    private Hex _currentHex, _targetHex;    
+    private Hex _currentHex, _targetHex, _previousHex;  
 
     private void Awake()
     {
@@ -32,6 +33,17 @@ public class PirateCrew : MonoBehaviour
             _currentHex = transform.position.ToHex();
             _targetHex = _targetPosition.ToHex();
 
+            if (isOnBad)
+            {
+                isOnBad = false;
+
+                transform.position = _previousHex.ToWorld();
+                _movement++;
+
+                GetComponent<Node>().ApplyTransform();
+                StopCoroutine(MoveCharacter());
+            }
+            
             var direction = _targetHex - _currentHex;
 
             if (direction.q == 0 && direction.r == 0)
@@ -48,19 +60,11 @@ public class PirateCrew : MonoBehaviour
                 direction.r /= Mathf.Abs(direction.r);
             }
 
-            Hex previouseHex = _currentHex;
+            _previousHex = _currentHex;
             _currentHex += direction;
             
-            if (!_isCollidingEnemy)
-            {
-                transform.position = _currentHex.ToWorld();
-                _movement--;
-            }
-            else
-            {
-                _currentHex = previouseHex;
-                transform.position = _currentHex.ToWorld();
-            }
+            transform.position = _currentHex.ToWorld();
+            _movement--;
 
             EndMovement:
             GetComponent<Node>().ApplyTransform();
@@ -69,9 +73,10 @@ public class PirateCrew : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Enemy")
+        if (collision.tag == "Enemy" || collision.tag == "Border")
         {
-            _isCollidingEnemy = true;
+            isOnBad = true;
+
             Debug.Log("Player collides with enemy!");
         }
 
@@ -98,11 +103,6 @@ public class PirateCrew : MonoBehaviour
                 HeldObject = null;
             }
         }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        _isCollidingEnemy = false; //Assuming there is only one collision with the enemies
     }
 
     public bool TakeDamage(int damage)
