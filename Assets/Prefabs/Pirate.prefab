@@ -118,13 +118,20 @@ MonoBehaviour:
   _maxHealth: 0
   _currentHealth: 10
   _movement: 0
-  _moveSpeed: 20
+  _moveSpeed: 3
   _damage: 3
+  collectedTreasure: 0
   HeldObject: {fileID: 0}
   isOnBad: 0
   hasAttacked: 0
   _targetPosition: {x: 0, y: 0, z: 0}
   _attackTarget: {x: 0, y: 0, z: 0}
+  _currentHex:
+    q: 0
+    r: 0
+  _attackHex:
+    q: 0
+    r: 0
 --- !u!58 &4146251580152521410
 CircleCollider2D:
   m_ObjectHideFlags: 0
