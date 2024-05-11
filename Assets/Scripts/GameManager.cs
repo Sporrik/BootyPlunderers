@@ -40,6 +40,12 @@ public class GameManager : MonoBehaviour
             StartCoroutine(playerUnit.MoveCharacter()); 
         }
 
+        if (Input.GetKeyUp(KeyCode.Mouse0) && !playerUnit.hasAttacked && state == GameState.PLAYERTURN)
+        {
+            playerUnit._attackTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            StartCoroutine(PlayerAttack());
+        }
+
         playerHUD.SetMove(playerUnit._movement);
     }
 
@@ -68,29 +74,17 @@ public class GameManager : MonoBehaviour
     {
         dialogueText.text = "Your Turn";
 
+        playerUnit.hasAttacked = false;
         playerUnit._movement = playerUnit._moveSpeed;
         playerHUD.SetMove(playerUnit._movement);
 
         yield return new WaitForSeconds(2f);
     }
 
-    public void OnAttackButton()
-    {
-        if (state != GameState.PLAYERTURN) return;
-
-        StartCoroutine(PlayerAttack());
-    }
-
-    public void EndTurnButton()
-    {
-        if (state != GameState.PLAYERTURN) return;
-
-        state = GameState.ENEMYTURN;
-        StartCoroutine(EnemyTurn());
-    }
-
     IEnumerator PlayerAttack()
     {
+        playerUnit.hasAttacked = true;
+
         bool isDead = enemyUnit.TakeDamage(playerUnit._damage);
 
         enemyHUD.SetHP(enemyUnit._currentHealth);
@@ -139,6 +133,14 @@ public class GameManager : MonoBehaviour
         {
             dialogueText.text = "Defeat!";
         }
+    }
+
+    public void EndTurnButton()
+    {
+        if (state != GameState.PLAYERTURN) return;
+
+        state = GameState.ENEMYTURN;
+        StartCoroutine(EnemyTurn());
     }
 }
 

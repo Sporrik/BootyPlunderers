@@ -15,8 +15,9 @@ public class PirateCrew : MonoBehaviour
     public GameObject HeldObject;
 
     public bool isOnBad = false;
+    public bool hasAttacked = false;
 
-    public Vector3 _targetPosition;
+    public Vector3 _targetPosition, _attackTarget;
     private Hex _currentHex, _targetHex, _previousHex;  
 
     private void Awake()
