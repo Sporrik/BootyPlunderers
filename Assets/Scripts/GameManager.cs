@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
     {
         dialogueText.text = "Your Turn";
 
-        playerUnit._movement = 3;
+        playerUnit._movement = playerUnit._moveSpeed;
         playerHUD.SetMove(playerUnit._movement);
 
         yield return new WaitForSeconds(2f);
@@ -79,6 +79,14 @@ public class GameManager : MonoBehaviour
         if (state != GameState.PLAYERTURN) return;
 
         StartCoroutine(PlayerAttack());
+    }
+
+    public void EndTurnButton()
+    {
+        if (state != GameState.PLAYERTURN) return;
+
+        state = GameState.ENEMYTURN;
+        StartCoroutine(EnemyTurn());
     }
 
     IEnumerator PlayerAttack()
@@ -94,11 +102,6 @@ public class GameManager : MonoBehaviour
         {
             state = GameState.WON;
             EndBattle();
-        }
-        else
-        {
-            state = GameState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
         }
     }
 
