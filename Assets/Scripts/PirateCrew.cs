@@ -12,7 +12,7 @@ public class PirateCrew : MonoBehaviour
     public int _moveSpeed;
     public int _damage = 3;
 
-    public GameObject HeldObject;
+    public GameObject heldObject;
 
     public bool isOnBad = false;
     public bool hasAttacked = false;
@@ -87,25 +87,25 @@ public class PirateCrew : MonoBehaviour
 
         if (collision.tag == "Treasure")
         {
-            if (HeldObject == null)
+            if (heldObject == null)
             {
                 Debug.Log("Player collides with treasure!");
                 var treasure = collision.gameObject;
                 treasure.transform.localScale = new Vector2(0.5f, 0.5f);
                 treasure.transform.SetParent(transform);
                 treasure.transform.position += Vector3.up * 0.5f;
-                HeldObject = treasure;
+                heldObject = treasure;
             }            
         }
 
         if (collision.tag == "ClaimPoint")
         {
-            if (HeldObject != null)
+            if (heldObject != null)
             {
                 Debug.Log("Player collides with Claim Point!");
                 var claimPoint = collision.gameObject;
-                Destroy(HeldObject);
-                HeldObject = null;
+                Destroy(heldObject);
+                heldObject = null;
             }
         }
     }
