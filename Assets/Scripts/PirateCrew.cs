@@ -11,6 +11,7 @@ public class PirateCrew : MonoBehaviour
     public int _movement;
     public int _moveSpeed;
     public int _damage = 3;
+    public int collectedTreasure;
 
     public GameObject heldObject;
 
@@ -102,6 +103,7 @@ public class PirateCrew : MonoBehaviour
         {
             if (heldObject != null)
             {
+                ++collectedTreasure;
                 Debug.Log("Player collides with Claim Point!");
                 var claimPoint = collision.gameObject;
                 Destroy(heldObject);

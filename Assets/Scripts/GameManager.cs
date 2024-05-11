@@ -16,7 +16,9 @@ public class GameManager : MonoBehaviour
 
     public Transform playerSpawn;
     public Transform enemySpawn;
-    public Transform treasureSpawn;
+    public Transform treasureSpawnA;
+    public Transform treasureSpawnB;
+    public Transform treasureSpawnC;
 
     private PirateCrew playerUnit;
     private EnemyCrew enemyUnit;
@@ -25,6 +27,8 @@ public class GameManager : MonoBehaviour
 
     public UI playerHUD;
     public UI enemyHUD;
+
+    private int maxTreasure = 3;
 
     private void Start()
     {
@@ -47,6 +51,12 @@ public class GameManager : MonoBehaviour
         }
 
         playerHUD.SetMove(playerUnit._movement);
+
+        if (playerUnit.collectedTreasure == maxTreasure)
+        {
+            state = GameState.WON;
+            EndBattle();
+        }
     }
 
     IEnumerator SetupGame()
@@ -57,7 +67,9 @@ public class GameManager : MonoBehaviour
         GameObject enemyGO = Instantiate(enemyPrefab, enemySpawn);
         enemyUnit = enemyGO.GetComponent<EnemyCrew>();
 
-        Instantiate(treasurePrefab, treasureSpawn);
+        Instantiate(treasurePrefab, treasureSpawnA);
+        Instantiate(treasurePrefab, treasureSpawnB);
+        Instantiate(treasurePrefab, treasureSpawnC);
 
         dialogueText.text = "Plunder their Booty!";
 
