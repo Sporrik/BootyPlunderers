@@ -18,13 +18,15 @@ public class PirateCrew : MonoBehaviour
     public bool hasAttacked = false;
 
     public Vector3 _targetPosition, _attackTarget;
-    private Hex _currentHex, _targetHex, _previousHex;  
+    private Hex _targetHex, _previousHex;
+    public Hex _currentHex, _attackHex;
 
     private void Awake()
     {
         _maxHealth = 10;
         _currentHealth = _maxHealth;
         _movement = _moveSpeed;
+        _currentHex = transform.position.ToHex();
     }
 
     public IEnumerator MoveCharacter()
@@ -38,6 +40,8 @@ public class PirateCrew : MonoBehaviour
             {
                 isOnBad = false;
 
+                _targetHex = _previousHex;
+                _currentHex = _previousHex;
                 transform.position = _previousHex.ToWorld();
                 _movement++;
 

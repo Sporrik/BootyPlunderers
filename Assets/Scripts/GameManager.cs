@@ -83,24 +83,42 @@ public class GameManager : MonoBehaviour
 
     IEnumerator PlayerAttack()
     {
-        playerUnit.hasAttacked = true;
+        if (playerUnit._currentHex.DistanceTo(playerUnit._attackTarget.ToHex()) < 4)
+        {
+            if (playerUnit._attackTarget.ToHex().DistanceTo(enemyUnit._currentHex) == 0)
+            {
+                playerUnit.hasAttacked = true;
 
-        bool isDead = enemyUnit.TakeDamage(playerUnit._damage);
+                bool isDead = enemyUnit.TakeDamage(playerUnit._damage);
+                enemyHUD.SetHP(enemyUnit._currentHealth);
 
-        enemyHUD.SetHP(enemyUnit._currentHealth);
-        dialogueText.text = "Attack!";
+                dialogueText.text = "Attack!";
+
+                yield return new WaitForSeconds(2f);
+
+                if (isDead)
+                {
+                    state = GameState.WON;
+                    EndBattle();
+                }
+            }
+            else
+            {
+                dialogueText.text = "No Target";
+            }
+        }
+        else
+        {
+            dialogueText.text = "Out of Range";
+        }
 
         yield return new WaitForSeconds(2f);
-
-        if (isDead)
-        {
-            state = GameState.WON;
-            EndBattle();
-        }
+        dialogueText.text = "Your Turn";
     }
 
     IEnumerator EnemyTurn()
     {
+        enemyUnit._targetPosition = playerUnit.transform.position;
         dialogueText.text = "Enemy Attacks!";
 
         yield return new WaitForSeconds(1f);
