@@ -8497,7 +8497,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  playerPrefab: {fileID: 7455965175477509173, guid: d2a2eacf6ca86a743a95fcaee8237ea8, type: 3}
+  playerPrefab: {fileID: 7455965175477509173, guid: 9870c6ca7e7c274489a2b18debf0818f, type: 3}
   enemyPrefab: {fileID: 2112369260278511487, guid: a7e0af1c721b18c47889d2257d3c1858, type: 3}
   treasurePrefab: {fileID: 1683946411947725258, guid: f6d2aef5f93ef0d48ad47fefe6df0e83, type: 3}
   playerSpawn: {fileID: 1271737870}
@@ -10211,7 +10211,7 @@ Transform:
   m_GameObject: {fileID: 2135899261}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: -3.4641016, z: -3.4641016}
+  m_LocalPosition: {x: -2.5, y: 2.598076, z: 2.598076}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

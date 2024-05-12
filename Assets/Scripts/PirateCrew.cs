@@ -32,10 +32,11 @@ public class PirateCrew : MonoBehaviour
 
     public IEnumerator MoveCharacter()
     {
+        _targetHex = _targetPosition.ToHex();
+
         for (int remaining = _movement; remaining > 0; remaining--)
         {
             _currentHex = transform.position.ToHex();
-            _targetHex = _targetPosition.ToHex();
 
             if (isOnBad)
             {

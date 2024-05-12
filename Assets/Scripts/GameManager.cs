@@ -130,27 +130,41 @@ public class GameManager : MonoBehaviour
 
     IEnumerator EnemyTurn()
     {
+        enemyUnit._movement = enemyUnit._moveSpeed;
+
         enemyUnit._targetPosition = playerUnit.transform.position;
-        dialogueText.text = "Enemy Attacks!";
 
-        yield return new WaitForSeconds(1f);
-
-        bool isDead = playerUnit.TakeDamage(enemyUnit._damage);
-
-        playerHUD.SetHP(playerUnit._currentHealth);
-
-        yield return new WaitForSeconds(1f);
-
-        if (isDead)
+        if (enemyUnit._currentHex.DistanceTo(enemyUnit._targetPosition.ToHex()) > 1)
         {
-            state = GameState.LOST;
-            EndBattle();
+            StartCoroutine(enemyUnit.MoveEnemy());
         }
-        else
+
+        if (enemyUnit._currentHex.DistanceTo(enemyUnit._targetPosition.ToHex()) < 4)
         {
-            state = GameState.PLAYERTURN;
-            StartCoroutine(PlayerTurn());
+            dialogueText.text = "Enemy Attacks!";
+
+            yield return new WaitForSeconds(2f);
+
+            bool isDead = playerUnit.TakeDamage(enemyUnit._damage);
+
+            playerHUD.SetHP(playerUnit._currentHealth);
+
+            yield return new WaitForSeconds(2f);
+
+            if (isDead)
+            {
+                state = GameState.LOST;
+                EndBattle();
+            }
+            else
+            {
+                state = GameState.PLAYERTURN;
+                StartCoroutine(PlayerTurn());
+            }
         }
+
+        state = GameState.PLAYERTURN;
+        StartCoroutine(PlayerTurn());
     }
 
     void EndBattle()

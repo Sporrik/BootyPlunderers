@@ -15,16 +15,29 @@ public class EnemyCrew : MonoBehaviour
 
     private void Awake()
     {
+        _maxHealth = 10;
         _currentHealth = _maxHealth;
+        _movement = _moveSpeed;
         _currentHex = transform.position.ToHex();
     }
 
     public IEnumerator MoveEnemy()
     {
+        _targetHex = _targetPosition.ToHex();
+
         for (int remaining = _movement; remaining > 0; remaining--)
         {
             _currentHex = transform.position.ToHex();
-            _targetHex = _targetPosition.ToHex();
+
+            if (_currentHex.DistanceTo(_targetPosition.ToHex()) < 2)
+            {
+                _targetHex = _currentHex;
+                transform.position = _currentHex.ToWorld();
+                _movement++;
+
+                GetComponent<Node>().ApplyTransform();
+                StopCoroutine(MoveEnemy());
+            }
 
             //if (isOnBad)
             //{
@@ -53,7 +66,7 @@ public class EnemyCrew : MonoBehaviour
                 direction.r /= Mathf.Abs(direction.r);
             }
 
-            _previousHex = _currentHex;
+            //_previousHex = _currentHex;
             _currentHex += direction;
 
             transform.position = _currentHex.ToWorld();
