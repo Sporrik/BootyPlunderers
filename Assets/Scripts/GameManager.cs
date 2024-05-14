@@ -90,8 +90,8 @@ public class GameManager : MonoBehaviour
 
         dialogueText.text = "Plunder their Booty!";
 
-        playerHUD.SetHUD(playerUnitA);
-        enemyHUD.SetHUD(enemyUnitA);
+        playerHUD.SetHUD(playerSelected);
+        enemyHUD.SetHUD(enemySelected);
 
         yield return new WaitForSeconds(2f);
 
@@ -116,6 +116,8 @@ public class GameManager : MonoBehaviour
 
         playerSelected.hasAttacked = false;
         playerSelected.movement = playerSelected.moveSpeed;
+
+        playerHUD.SetHP(playerSelected.movement);
         playerHUD.SetMove(playerSelected.movement);
 
         yield return new WaitForSeconds(2f);
@@ -138,13 +140,8 @@ public class GameManager : MonoBehaviour
 
                 if (isDead)
                 {
-                    state = GameState.WON;
-                    EndBattle();
+                    enemySelected.gameObject.SetActive(false);
                 }
-            }
-            else
-            {
-                dialogueText.text = "No Target";
             }
         }
         else
@@ -181,8 +178,7 @@ public class GameManager : MonoBehaviour
 
             if (isDead)
             {
-                state = GameState.LOST;
-                EndBattle();
+                playerSelected.gameObject.SetActive(false);
             }
             else
             {
