@@ -9,19 +9,13 @@ public class UI : MonoBehaviour
     public Slider moveSlider;
     public Slider healthSlider;
 
-    public void SetHUD(PirateCrew pirate)
+    public void SetHUD(Unit unit)
     {
-        moveSlider.maxValue = pirate._moveSpeed;
-        moveSlider.value = pirate._movement;
+        moveSlider.maxValue = unit.moveSpeed;
+        moveSlider.value = unit.movement;
 
-        healthSlider.maxValue = pirate._maxHealth;
-        healthSlider.value = pirate._currentHealth;
-    }
-
-    public void SetHUD(EnemyCrew enemy)
-    {
-        healthSlider.maxValue = enemy._maxHealth;
-        healthSlider.value = enemy._currentHealth;
+        healthSlider.maxValue = unit.maxHealth;
+        healthSlider.value = unit.currentHealth;
     }
 
     public void SetHP(int hp)

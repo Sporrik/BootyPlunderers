@@ -20,8 +20,16 @@ public class GameManager : MonoBehaviour
     public Transform treasureSpawnB;
     public Transform treasureSpawnC;
 
-    private PirateCrew playerUnit;
-    private EnemyCrew enemyUnit;
+    private Unit playerUnitA;
+    private Unit playerUnitB;
+    private Unit playerUnitC;
+    private Unit enemyUnitA;
+    private Unit enemyUnitB;
+    private Unit enemyUnitC;
+
+    private Unit playerSelected;
+    private Unit enemySelected;
+    public Unit[] turnOrder;
 
     public TextMeshProUGUI dialogueText;
 
@@ -38,21 +46,21 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Mouse1) && playerUnit._movement > 0 && state == GameState.PLAYERTURN)
+        if (Input.GetKeyUp(KeyCode.Mouse1) && playerSelected.movement > 0 && state == GameState.PLAYERTURN)
         {
-            playerUnit._targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            StartCoroutine(playerUnit.MoveCharacter()); 
+            playerSelected.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            StartCoroutine(playerSelected.MoveUnit()); 
         }
 
-        if (Input.GetKeyUp(KeyCode.Mouse0) && !playerUnit.hasAttacked && state == GameState.PLAYERTURN)
+        if (Input.GetKeyUp(KeyCode.Mouse0) && !playerSelected.hasAttacked && state == GameState.PLAYERTURN)
         {
-            playerUnit._attackTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            playerSelected.attackTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             StartCoroutine(PlayerAttack());
         }
 
-        playerHUD.SetMove(playerUnit._movement);
+        playerHUD.SetMove(playerSelected.movement);
 
-        if (playerUnit.collectedTreasure == maxTreasure)
+        if (playerSelected.collectedTreasure == maxTreasure)
         {
             state = GameState.WON;
             EndBattle();
@@ -61,11 +69,20 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SetupGame()
     {
-        GameObject playerGO = Instantiate(playerPrefab, playerSpawn);
-        playerUnit = playerGO.GetComponent<PirateCrew>();
+        GameObject playerGO_A = Instantiate(playerPrefab, playerSpawn);
+        playerUnitA = playerGO_A.GetComponent<Unit>();
+        GameObject playerGO_B = Instantiate(playerPrefab, playerSpawn);
+        playerUnitB = playerGO_B.GetComponent<Unit>();
+        GameObject playerGO_C = Instantiate(playerPrefab, playerSpawn);
+        playerUnitC = playerGO_C.GetComponent<Unit>();
 
-        GameObject enemyGO = Instantiate(enemyPrefab, enemySpawn);
-        enemyUnit = enemyGO.GetComponent<EnemyCrew>();
+
+        GameObject enemyGO_A = Instantiate(enemyPrefab, enemySpawn);
+        enemyUnitA = enemyGO_A.GetComponent<Unit>();
+        GameObject enemyGO_B = Instantiate(enemyPrefab, enemySpawn);
+        enemyUnitB = enemyGO_B.GetComponent<Unit>();
+        GameObject enemyGO_C = Instantiate(enemyPrefab, enemySpawn);
+        enemyUnitC = enemyGO_C.GetComponent<Unit>();
 
         Instantiate(treasurePrefab, treasureSpawnA);
         Instantiate(treasurePrefab, treasureSpawnB);
@@ -73,10 +90,21 @@ public class GameManager : MonoBehaviour
 
         dialogueText.text = "Plunder their Booty!";
 
-        playerHUD.SetHUD(playerUnit);
-        enemyHUD.SetHUD(enemyUnit);
+        playerHUD.SetHUD(playerUnitA);
+        enemyHUD.SetHUD(enemyUnitA);
 
         yield return new WaitForSeconds(2f);
+
+        //Set turn order
+        playerUnitA.initiative = Random.Range(1, 10);
+        playerUnitB.initiative = Random.Range(1, 10);
+        playerUnitC.initiative = Random.Range(1, 10);
+
+        enemyUnitA.initiative = Random.Range(1, 10);
+        enemyUnitB.initiative = Random.Range(1, 10);
+        enemyUnitC.initiative = Random.Range(1, 10);
+
+        
 
         state = GameState.PLAYERTURN;
         StartCoroutine(PlayerTurn());
@@ -86,23 +114,23 @@ public class GameManager : MonoBehaviour
     {
         dialogueText.text = "Your Turn";
 
-        playerUnit.hasAttacked = false;
-        playerUnit._movement = playerUnit._moveSpeed;
-        playerHUD.SetMove(playerUnit._movement);
+        playerSelected.hasAttacked = false;
+        playerSelected.movement = playerSelected.moveSpeed;
+        playerHUD.SetMove(playerSelected.movement);
 
         yield return new WaitForSeconds(2f);
     }
 
     IEnumerator PlayerAttack()
     {
-        if (playerUnit._currentHex.DistanceTo(playerUnit._attackTarget.ToHex()) < 4)
+        if (playerSelected.currentHex.DistanceTo(playerSelected.attackTarget.ToHex()) < 4)
         {
-            if (playerUnit._attackTarget.ToHex().DistanceTo(enemyUnit._currentHex) == 0)
+            if (playerSelected.attackTarget.ToHex().DistanceTo(enemySelected.currentHex) == 0)
             {
-                playerUnit.hasAttacked = true;
+                playerSelected.hasAttacked = true;
 
-                bool isDead = enemyUnit.TakeDamage(playerUnit._damage);
-                enemyHUD.SetHP(enemyUnit._currentHealth);
+                bool isDead = enemySelected.TakeDamage(playerSelected.damage);
+                enemyHUD.SetHP(enemySelected.currentHealth);
 
                 dialogueText.text = "Attack!";
 
@@ -130,24 +158,24 @@ public class GameManager : MonoBehaviour
 
     IEnumerator EnemyTurn()
     {
-        enemyUnit._movement = enemyUnit._moveSpeed;
+        enemySelected.movement = enemySelected.moveSpeed;
 
-        enemyUnit._targetPosition = playerUnit.transform.position;
+        enemySelected.targetPosition = playerSelected.transform.position;
 
-        if (enemyUnit._currentHex.DistanceTo(enemyUnit._targetPosition.ToHex()) > 1)
+        if (enemySelected.currentHex.DistanceTo(enemySelected.targetPosition.ToHex()) > 1)
         {
-            StartCoroutine(enemyUnit.MoveEnemy());
+            StartCoroutine(enemySelected.MoveUnit());
         }
 
-        if (enemyUnit._currentHex.DistanceTo(enemyUnit._targetPosition.ToHex()) < 4)
+        if (enemySelected.currentHex.DistanceTo(enemySelected.targetPosition.ToHex()) < 4)
         {
             dialogueText.text = "Enemy Attacks!";
 
             yield return new WaitForSeconds(2f);
 
-            bool isDead = playerUnit.TakeDamage(enemyUnit._damage);
+            bool isDead = playerSelected.TakeDamage(enemySelected.damage);
 
-            playerHUD.SetHP(playerUnit._currentHealth);
+            playerHUD.SetHP(playerSelected.currentHealth);
 
             yield return new WaitForSeconds(2f);
 
