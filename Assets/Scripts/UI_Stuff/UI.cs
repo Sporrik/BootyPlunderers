@@ -32,7 +32,7 @@ public class UI : MonoBehaviour
     }
 
     public void SetCoins()
-    {
+    {  
         coins.text = "Coins: " + coinCount.ToString();
-    }
+    }    
 }
