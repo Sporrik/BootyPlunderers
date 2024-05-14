@@ -1904,8 +1904,8 @@ GameObject:
   - component: {fileID: 388779571}
   - component: {fileID: 388779575}
   - component: {fileID: 388779574}
+  - component: {fileID: 388779576}
   - component: {fileID: 388779573}
-  - component: {fileID: 388779572}
   m_Layer: 5
   m_Name: EnemyHUD
   m_TagString: Untagged
@@ -1933,20 +1933,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &388779572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388779570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bd9d6975810b74b8662e23138bf188, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSlider: {fileID: 58817785}
-  healthSlider: {fileID: 1421097410}
 --- !u!114 &388779573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2010,6 +1996,22 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &388779576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388779570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: affe467b23a68b94bb5c1f9687a3f487, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSlider: {fileID: 58817785}
+  healthSlider: {fileID: 1421097410}
+  coins: {fileID: 0}
+  coinCount: 0
 --- !u!1 &395855067
 GameObject:
   m_ObjectHideFlags: 0
@@ -2243,8 +2245,8 @@ GameObject:
   - component: {fileID: 494579294}
   - component: {fileID: 494579298}
   - component: {fileID: 494579297}
+  - component: {fileID: 494579299}
   - component: {fileID: 494579296}
-  - component: {fileID: 494579295}
   m_Layer: 5
   m_Name: PlayerHUD
   m_TagString: Untagged
@@ -2272,20 +2274,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &494579295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 494579293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bd9d6975810b74b8662e23138bf188, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSlider: {fileID: 628526728}
-  healthSlider: {fileID: 802739021}
 --- !u!114 &494579296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2349,6 +2337,22 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &494579299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 494579293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: affe467b23a68b94bb5c1f9687a3f487, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSlider: {fileID: 628526728}
+  healthSlider: {fileID: 802739021}
+  coins: {fileID: 0}
+  coinCount: 0
 --- !u!1 &495910219
 GameObject:
   m_ObjectHideFlags: 0
@@ -8505,9 +8509,10 @@ MonoBehaviour:
   treasureSpawnA: {fileID: 1068631125}
   treasureSpawnB: {fileID: 237426594}
   treasureSpawnC: {fileID: 216269119}
+  turnOrder: []
   dialogueText: {fileID: 830851824}
-  playerHUD: {fileID: 494579295}
-  enemyHUD: {fileID: 388779572}
+  playerHUD: {fileID: 0}
+  enemyHUD: {fileID: 0}
 --- !u!4 &1632510537
 Transform:
   m_ObjectHideFlags: 0
