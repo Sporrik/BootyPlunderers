@@ -1,215 +1,196 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.UI;
 
-public enum GameState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
+public enum GameState { START, P1_TURN, P2_TURN, END };
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
     public GameState state;
 
-    public GameObject playerPrefab;
-    public GameObject enemyPrefab;
+    public GameObject piratePrefab;
     public GameObject treasurePrefab;
 
-    public Transform playerSpawn;
-    public Transform enemySpawn;
-    public Transform treasureSpawnA;
-    public Transform treasureSpawnB;
-    public Transform treasureSpawnC;
+    public Transform[] p1Spawns;
+    public Transform[] p2Spawns;
+    public Transform[] treasureSpawns;
 
-    private Unit playerUnitA;
-    private Unit playerUnitB;
-    private Unit playerUnitC;
-    private Unit enemyUnitA;
-    private Unit enemyUnitB;
-    private Unit enemyUnitC;
+    private Unit[] p1Crew;
+    private Unit[] p2Crew;
+    private GameObject[] treasureChests;
 
-    private Unit playerSelected;
-    private Unit enemySelected;
-    public Unit[] turnOrder;
+    private Unit selectedPirate;
+    private Unit selectedEnemy;
 
     public TextMeshProUGUI dialogueText;
 
-    public UI playerHUD;
-    public UI enemyHUD;
+    //public UI p1HUD;
+    //public UI p2HUD;
 
-    private int maxTreasure = 3;
+    private int maxTreasure;
 
-    private void Start()
+    private void Awake()
     {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
         state = GameState.START;
         StartCoroutine(SetupGame());
     }
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Mouse1) && playerSelected.movement > 0 && state == GameState.PLAYERTURN)
+        if (Input.GetMouseButtonDown(0))
         {
-            playerSelected.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            StartCoroutine(playerSelected.MoveUnit()); 
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hitInfo))
+            {
+                Debug.Log(hitInfo.ToString());
+
+                if (DoesThisBelongToYou(hitInfo))
+                {
+                    selectedPirate = hitInfo.collider.GetComponent<Unit>();
+                    selectedPirate.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    StartCoroutine(selectedPirate.MoveUnit());
+                }
+            }            
         }
 
-        if (Input.GetKeyUp(KeyCode.Mouse0) && !playerSelected.hasAttacked && state == GameState.PLAYERTURN)
+        if (Input.GetMouseButtonDown(1))
         {
-            playerSelected.attackTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            StartCoroutine(PlayerAttack());
-        }
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        playerHUD.SetMove(playerSelected.movement);
-
-        if (playerSelected.collectedTreasure == maxTreasure)
-        {
-            state = GameState.WON;
-            EndBattle();
+            if (Physics.Raycast(ray, out RaycastHit hitInfo))
+            {
+                if (IsThisAnEnemy(hitInfo))
+                {
+                    selectedEnemy = hitInfo.collider.GetComponent<Unit>();
+                    Attack();
+                }
+            }
         }
     }
 
     IEnumerator SetupGame()
     {
-        GameObject playerGO_A = Instantiate(playerPrefab, playerSpawn);
-        playerUnitA = playerGO_A.GetComponent<Unit>();
-        GameObject playerGO_B = Instantiate(playerPrefab, playerSpawn);
-        playerUnitB = playerGO_B.GetComponent<Unit>();
-        GameObject playerGO_C = Instantiate(playerPrefab, playerSpawn);
-        playerUnitC = playerGO_C.GetComponent<Unit>();
-
-
-        GameObject enemyGO_A = Instantiate(enemyPrefab, enemySpawn);
-        enemyUnitA = enemyGO_A.GetComponent<Unit>();
-        GameObject enemyGO_B = Instantiate(enemyPrefab, enemySpawn);
-        enemyUnitB = enemyGO_B.GetComponent<Unit>();
-        GameObject enemyGO_C = Instantiate(enemyPrefab, enemySpawn);
-        enemyUnitC = enemyGO_C.GetComponent<Unit>();
-
-        Instantiate(treasurePrefab, treasureSpawnA);
-        Instantiate(treasurePrefab, treasureSpawnB);
-        Instantiate(treasurePrefab, treasureSpawnC);
-
-        dialogueText.text = "Plunder their Booty!";
-
-        playerHUD.SetHUD(playerSelected);
-        enemyHUD.SetHUD(enemySelected);
-
-        yield return new WaitForSeconds(2f);
-
-        //Set turn order
-        playerUnitA.initiative = Random.Range(1, 10);
-        playerUnitB.initiative = Random.Range(1, 10);
-        playerUnitC.initiative = Random.Range(1, 10);
-
-        enemyUnitA.initiative = Random.Range(1, 10);
-        enemyUnitB.initiative = Random.Range(1, 10);
-        enemyUnitC.initiative = Random.Range(1, 10);
-
-        
-
-        state = GameState.PLAYERTURN;
-        StartCoroutine(PlayerTurn());
-    }
-
-    IEnumerator PlayerTurn()
-    {
-        dialogueText.text = "Your Turn";
-
-        playerSelected.hasAttacked = false;
-        playerSelected.movement = playerSelected.moveSpeed;
-
-        playerHUD.SetHP(playerSelected.movement);
-        playerHUD.SetMove(playerSelected.movement);
-
-        yield return new WaitForSeconds(2f);
-    }
-
-    IEnumerator PlayerAttack()
-    {
-        if (playerSelected.currentHex.DistanceTo(playerSelected.attackTarget.ToHex()) < 4)
+        p1Crew = new Unit[p1Spawns.Length];
+        for (int i = 0; i < p1Spawns.Length; i++)
         {
-            if (playerSelected.attackTarget.ToHex().DistanceTo(enemySelected.currentHex) == 0)
-            {
-                playerSelected.hasAttacked = true;
+            var p1 = Instantiate(piratePrefab, p1Spawns[i]);
+            p1Crew[i] = p1.GetComponent<Unit>();
+        }
 
-                bool isDead = enemySelected.TakeDamage(playerSelected.damage);
-                enemyHUD.SetHP(enemySelected.currentHealth);
+        p2Crew = new Unit[p2Spawns.Length];
+        for (int i = 0; i < p2Spawns.Length; i++)
+        {
+            var p2 = Instantiate(piratePrefab, p2Spawns[i]);
+            p2Crew[i] = p2.GetComponent<Unit>();
+        }
 
+        treasureChests = new GameObject[treasureSpawns.Length];
+        for (int i = 0; i < treasureSpawns.Length; i++)
+        {
+            treasureChests[i] = Instantiate(treasurePrefab, treasureSpawns[i]);
+        }
+
+        dialogueText.text = "Plunder their Booty";
+
+        yield return new WaitForSeconds(2f);
+
+        state = GameState.P1_TURN;
+        P1_Turn();
+    }
+
+    private void P1_Turn()
+    {
+        dialogueText.text = "Player 1 Turn";
+
+        foreach (Unit p in p1Crew)
+        {
+            //reset crew stats
+        }
+    }
+
+    private void P2_Turn()
+    {
+        dialogueText.text = "Player 2 Turn";
+
+        foreach (Unit p in p2Crew)
+        {
+            //reset crew stats
+        }
+    }
+
+    private bool IsInRange()
+    {
+        return (selectedPirate.currentHex.DistanceTo(selectedEnemy.transform.position.ToHex()) < 4);
+    }
+
+
+    IEnumerator Attack()
+    {
+        if (IsInRange())
+        {
+                selectedPirate.hasAttacked = true;
+    
+                bool isDead = selectedEnemy.TakeDamage(selectedPirate.damage);
+                //enemyHUD.SetHP(enemySelected.currentHealth);
+    
                 dialogueText.text = "Attack!";
-
+    
                 yield return new WaitForSeconds(2f);
-
+    
                 if (isDead)
                 {
-                    enemySelected.gameObject.SetActive(false);
+                    selectedEnemy.gameObject.SetActive(false);
                 }
-            }
         }
         else
         {
             dialogueText.text = "Out of Range";
         }
-
+    
         yield return new WaitForSeconds(2f);
         dialogueText.text = "Your Turn";
     }
 
-    IEnumerator EnemyTurn()
+    public void EndBattle()
     {
-        enemySelected.movement = enemySelected.moveSpeed;
-
-        enemySelected.targetPosition = playerSelected.transform.position;
-
-        if (enemySelected.currentHex.DistanceTo(enemySelected.targetPosition.ToHex()) > 1)
-        {
-            StartCoroutine(enemySelected.MoveUnit());
-        }
-
-        if (enemySelected.currentHex.DistanceTo(enemySelected.targetPosition.ToHex()) < 4)
-        {
-            dialogueText.text = "Enemy Attacks!";
-
-            yield return new WaitForSeconds(2f);
-
-            bool isDead = playerSelected.TakeDamage(enemySelected.damage);
-
-            playerHUD.SetHP(playerSelected.currentHealth);
-
-            yield return new WaitForSeconds(2f);
-
-            if (isDead)
-            {
-                playerSelected.gameObject.SetActive(false);
-            }
-            else
-            {
-                state = GameState.PLAYERTURN;
-                StartCoroutine(PlayerTurn());
-            }
-        }
-
-        state = GameState.PLAYERTURN;
-        StartCoroutine(PlayerTurn());
-    }
-
-    void EndBattle()
-    {
-        if (state == GameState.WON)
-        {
-            dialogueText.text = "Victory!";
-        }
-        else if (state == GameState.LOST)
-        {
-            dialogueText.text = "Defeat!";
-        }
+        //end battle
     }
 
     public void EndTurnButton()
     {
-        if (state != GameState.PLAYERTURN) return;
+        switch (state)
+        {
+            case GameState.P1_TURN:
+                state = GameState.P2_TURN;
+                P2_Turn();
+                break;
+            case GameState.P2_TURN:
+                state = GameState.P1_TURN;
+                P1_Turn();
+                break;
+        }
+    }
 
-        state = GameState.ENEMYTURN;
-        StartCoroutine(EnemyTurn());
+    private bool DoesThisBelongToYou(RaycastHit hit)
+    {
+        return ((state == GameState.P1_TURN && hit.collider.gameObject.CompareTag("P1_Crew")) || (state == GameState.P2_TURN && hit.collider.gameObject.CompareTag("P2_Crew")));
+    }
+
+    private bool IsThisAnEnemy(RaycastHit hit)
+    {
+        return ((state == GameState.P1_TURN && hit.collider.gameObject.CompareTag("P2_Crew")) || (state == GameState.P2_TURN && hit.collider.gameObject.CompareTag("P1_Crew")));
     }
 }
-
-

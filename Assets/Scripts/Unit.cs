@@ -11,8 +11,6 @@ public class Unit : MonoBehaviour
     public int movement, moveSpeed;
     public int damage;
 
-    public int initiative;
-
     public int collectedTreasure;
     public GameObject heldObject;
 
@@ -45,7 +43,6 @@ public class Unit : MonoBehaviour
         {
             currentHex = transform.position.ToHex();
 
-            //Player check collision
             if (gameObject.tag == "Pirate")
             {
                 if (isOnBad)
@@ -61,21 +58,6 @@ public class Unit : MonoBehaviour
                     GetComponent<Node>().ApplyTransform();
                     StopCoroutine(MoveUnit());
                 }
-            }
-
-
-            //Enemy check collision
-            if (gameObject.tag == "Enemy")
-            {
-                if (currentHex.DistanceTo(targetPosition.ToHex()) < 2)
-                {
-                    targetHex = currentHex;
-                    transform.position = currentHex.ToWorld();
-                    movement++;
-
-                    GetComponent<Node>().ApplyTransform();
-                    StopCoroutine(MoveUnit());
-                }     
             }
 
             var direction = targetHex - currentHex;
