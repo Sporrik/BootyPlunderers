@@ -8,6 +8,9 @@ TagManager:
   - Enemy
   - ClaimPoint
   - Border
+  - Miss
+  - Shot
+  - Headshot
   layers:
   - Default
   - TransparentFX
