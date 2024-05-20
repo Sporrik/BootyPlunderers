@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: -8938116849080982098}
   - component: {fileID: 5515064266271289343}
   m_Layer: 0
-  m_Name: Enemy
-  m_TagString: Enemy
+  m_Name: P2_Crew
+  m_TagString: P2_Crew
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,7 +104,6 @@ MonoBehaviour:
   movement: 0
   moveSpeed: 0
   damage: 0
-  initiative: 0
   collectedTreasure: 0
   heldObject: {fileID: 0}
   isOnBad: 0

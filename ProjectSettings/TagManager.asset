@@ -11,6 +11,8 @@ TagManager:
   - Miss
   - Shot
   - Headshot
+  - P1_Crew
+  - P2_Crew
   layers:
   - Default
   - TransparentFX

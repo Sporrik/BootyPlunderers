@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour
 
     public GameState state;
 
-    public GameObject piratePrefab;
+    public GameObject p1CrewPrefab;
+    public GameObject p2CrewPrefab;
     public GameObject treasurePrefab;
 
     public Transform[] p1Spawns;
@@ -53,15 +54,13 @@ public class GameManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hitInfo))
-            {
-                Debug.Log(hitInfo.ToString());
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-                if (DoesThisBelongToYou(hitInfo))
+            if (hit.collider)
+            {
+                if (DoesThisBelongToYou(hit))
                 {
-                    selectedPirate = hitInfo.collider.GetComponent<Unit>();
-                    selectedPirate.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    StartCoroutine(selectedPirate.MoveUnit());
+                    selectedPirate = hit.collider.GetComponent<Unit>();
                 }
             }            
         }
@@ -69,14 +68,20 @@ public class GameManager : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-            if (Physics.Raycast(ray, out RaycastHit hitInfo))
+            if (hit.collider)
             {
-                if (IsThisAnEnemy(hitInfo))
+                if (IsThisAnEnemy(hit))
                 {
-                    selectedEnemy = hitInfo.collider.GetComponent<Unit>();
+                    selectedEnemy = hit.collider.GetComponent<Unit>();
                     Attack();
                 }
+            }
+            else
+            {
+                selectedPirate.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                StartCoroutine(selectedPirate.MoveUnit());
             }
         }
     }
@@ -86,14 +91,14 @@ public class GameManager : MonoBehaviour
         p1Crew = new Unit[p1Spawns.Length];
         for (int i = 0; i < p1Spawns.Length; i++)
         {
-            var p1 = Instantiate(piratePrefab, p1Spawns[i]);
+            var p1 = Instantiate(p1CrewPrefab, p1Spawns[i]);
             p1Crew[i] = p1.GetComponent<Unit>();
         }
 
         p2Crew = new Unit[p2Spawns.Length];
         for (int i = 0; i < p2Spawns.Length; i++)
         {
-            var p2 = Instantiate(piratePrefab, p2Spawns[i]);
+            var p2 = Instantiate(p2CrewPrefab, p2Spawns[i]);
             p2Crew[i] = p2.GetComponent<Unit>();
         }
 
@@ -184,12 +189,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private bool DoesThisBelongToYou(RaycastHit hit)
+    private bool DoesThisBelongToYou(RaycastHit2D hit)
     {
         return ((state == GameState.P1_TURN && hit.collider.gameObject.CompareTag("P1_Crew")) || (state == GameState.P2_TURN && hit.collider.gameObject.CompareTag("P2_Crew")));
     }
 
-    private bool IsThisAnEnemy(RaycastHit hit)
+    private bool IsThisAnEnemy(RaycastHit2D hit)
     {
         return ((state == GameState.P1_TURN && hit.collider.gameObject.CompareTag("P2_Crew")) || (state == GameState.P2_TURN && hit.collider.gameObject.CompareTag("P1_Crew")));
     }
