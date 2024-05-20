@@ -29,8 +29,8 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI dialogueText;
 
-    //public UI p1HUD;
-    //public UI p2HUD;
+    public UI[] p1HUD;
+    public UI[] p2HUD;
 
     private int maxTreasure;
 
@@ -51,6 +51,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (state != GameState.START)
+        {
+            UpdateUI(p1Crew, p1HUD);
+            UpdateUI(p2Crew, p2HUD);
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -78,7 +84,7 @@ public class GameManager : MonoBehaviour
                     Attack();
                 }
             }
-            else
+            else if (selectedPirate)
             {
                 selectedPirate.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 StartCoroutine(selectedPirate.MoveUnit());
@@ -108,6 +114,16 @@ public class GameManager : MonoBehaviour
             treasureChests[i] = Instantiate(treasurePrefab, treasureSpawns[i]);
         }
 
+        for (int i = 0; i < p1Crew.Length; i++)
+        {
+            p1HUD[i].SetHUD(p1Crew[i]);
+        }
+
+        for (int i = 0; i < p2Crew.Length; i++)
+        {
+            p2HUD[i].SetHUD(p2Crew[i]);
+        }
+
         dialogueText.text = "Plunder their Booty";
 
         yield return new WaitForSeconds(2f);
@@ -122,7 +138,7 @@ public class GameManager : MonoBehaviour
 
         foreach (Unit p in p1Crew)
         {
-            //reset crew stats
+            p.Reset();
         }
     }
 
@@ -132,7 +148,7 @@ public class GameManager : MonoBehaviour
 
         foreach (Unit p in p2Crew)
         {
-            //reset crew stats
+            p.Reset();
         }
     }
 
@@ -176,6 +192,9 @@ public class GameManager : MonoBehaviour
 
     public void EndTurnButton()
     {
+        selectedPirate = null;
+        selectedEnemy = null;
+
         switch (state)
         {
             case GameState.P1_TURN:
@@ -197,5 +216,14 @@ public class GameManager : MonoBehaviour
     private bool IsThisAnEnemy(RaycastHit2D hit)
     {
         return ((state == GameState.P1_TURN && hit.collider.gameObject.CompareTag("P2_Crew")) || (state == GameState.P2_TURN && hit.collider.gameObject.CompareTag("P1_Crew")));
+    }
+
+    private void UpdateUI(Unit[] unitArray, UI[] uiArray)
+    {
+        for (int i = 0; i < unitArray.Length; i++)
+        {
+            uiArray[i].SetHP(unitArray[i].currentHealth);
+            uiArray[i].SetMove(unitArray[i].movement);
+        }
     }
 }

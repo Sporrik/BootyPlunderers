@@ -132,4 +132,10 @@ public class Unit : MonoBehaviour
         if (currentHealth <= 0) return true;
         else return false;
     }
+
+    public void Reset()
+    {
+        movement = moveSpeed;
+        hasAttacked = false;
+    }
 }
