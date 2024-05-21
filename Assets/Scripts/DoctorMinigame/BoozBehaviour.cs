@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
-public class ParrotBehaviour : MonoBehaviour
+public class BoozeBehaviour : MonoBehaviour
 {
     public bool _isCaught = false;
-    public bool _isPaused = false;
-    
+    public bool _isPaused = false;   
 
-    [SerializeField]
-    Camera _mainCamera;
+    public Camera _mainCamera;
 
     [SerializeField]
     private float _maxSpeed = 20f,
@@ -21,8 +19,7 @@ public class ParrotBehaviour : MonoBehaviour
                    _UpperRightCorner;
 
     private Collider2D _collider;
-    private bool _isCollidingWithMouth;
-    
+    private bool _isCollidingWithMouth;    
 
     private Vector3 _velocity;
 
@@ -89,19 +86,19 @@ public class ParrotBehaviour : MonoBehaviour
     private void GoingOffScreen()
     {
         SpriteRenderer sR = GetComponent<SpriteRenderer>();
-        if (transform.position.x < _bottomLeftCorner.x - sR.size.x * 10)
+        if (transform.position.x < _bottomLeftCorner.x - sR.size.x)
         {
             transform.position = new Vector3(_UpperRightCorner.x, transform.position.y, transform.position.z);
         }
-        if (transform.position.x > _UpperRightCorner.x + sR.size.x * 10)
+        if (transform.position.x > _UpperRightCorner.x + sR.size.x)
         {
             transform.position = new Vector3(_bottomLeftCorner.x, transform.position.y, transform.position.z);
         }
-        if (transform.position.y < _bottomLeftCorner.y - sR.size.y * 10)
+        if (transform.position.y < _bottomLeftCorner.y - sR.size.y)
         {
             transform.position = new Vector3(transform.position.x, _UpperRightCorner.y, transform.position.z);
         }
-        if (transform.position.y > _UpperRightCorner.y + sR.size.y * 10)
+        if (transform.position.y > _UpperRightCorner.y + sR.size.y)
         {
             transform.position = new Vector3(transform.position.x, _bottomLeftCorner.y, transform.position.z);
         }
@@ -156,6 +153,7 @@ public class ParrotBehaviour : MonoBehaviour
         speed = UnityEngine.Random.Range(_minSpeed, _maxSpeed);
         return speed;
     }
+
     private void GetRandomPosOnScreen()
     {
         Vector3 viewportPos = Vector3.zero;
@@ -164,6 +162,7 @@ public class ParrotBehaviour : MonoBehaviour
 
         transform.position = _mainCamera.ViewportToScreenPoint(viewportPos);
     }
+
     private void GetEdgesOfTheScreen()
     {
         _bottomLeftCorner = new Vector3(0, 0, _mainCamera.nearClipPlane);
@@ -192,7 +191,4 @@ public class ParrotBehaviour : MonoBehaviour
             _isCollidingWithMouth = false;
         }
     }
-
-
-
 }
