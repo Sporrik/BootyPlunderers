@@ -26,7 +26,7 @@ public class ShootMinigame : MonoBehaviour
     {
         if (!hasShot)
         {
-            pointer.gameObject.transform.position = new Vector3(Mathf.Sin(Time.time * _speed) * 5, 4f, -3f); //*5 for distance
+            pointer.gameObject.transform.position = new Vector3(Mathf.Sin(Time.time * _speed) * 5, 4f, -5f); //*5 for distance
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -40,11 +40,11 @@ public class ShootMinigame : MonoBehaviour
     {
         if (pointer.IsTouching(hit) || pointer.IsTouching(hit2))
         {
-            return 10;
+            return 15;
         }
         else if (pointer.IsTouching(bullseye))
         {
-            return 15;
+            return 30;
         }
         else
         {

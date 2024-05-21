@@ -170,7 +170,6 @@ public class GameManager : MonoBehaviour
         return selectedPirate.currentHex.DistanceTo(selectedEnemy.transform.position.ToHex());
     }
 
-
     void Attack()
     {
         if (state == GameState.P1_TURN)
@@ -222,7 +221,14 @@ public class GameManager : MonoBehaviour
         attackMinigame.gameObject.SetActive(false);
         isAttacking = false;
 
-        dialogueText.text = "Player 1 Turn";
+        if (state == GameState.P1_TURN)
+        {
+            dialogueText.text = "Player 1 Turn";
+        }
+        else if (state == GameState.P2_TURN)
+        {
+            dialogueText.text = "Player 2 Turn";
+        }
     }
 
     public void EndBattle()

@@ -90,9 +90,7 @@ public class Unit : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //if (gameObject.tag != "Pirate") return;
-
-        if (collision.tag == "P1_crew" || collision.tag == "P2_Crew"|| collision.tag == "Border")
+        if (collision.tag == "P1_Crew" || collision.tag == "P2_Crew"|| collision.tag == "Border")
         {
             isOnBad = true;
         }
