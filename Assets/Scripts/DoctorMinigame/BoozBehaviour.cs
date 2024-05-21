@@ -21,7 +21,7 @@ public class ParrotBehaviour : MonoBehaviour
                    _UpperRightCorner;
 
     private Collider2D _collider;
-    private bool _isCollidingWithSack;
+    private bool _isCollidingWithMouth;
     
 
     private Vector3 _velocity;
@@ -52,7 +52,7 @@ public class ParrotBehaviour : MonoBehaviour
 
     private void CheckIfStached()
     {
-        if (_isCollidingWithSack)
+        if (_isCollidingWithMouth)
         {
             if(Input.GetMouseButtonUp(0) && _isCaught)
             {
@@ -61,7 +61,7 @@ public class ParrotBehaviour : MonoBehaviour
         }
         else
         {
-            _isCollidingWithSack = false;
+            _isCollidingWithMouth = false;
         }
     }
 
@@ -111,10 +111,10 @@ public class ParrotBehaviour : MonoBehaviour
     {
         transform.position += _velocity * Time.deltaTime;
         GoingOffScreen();
-        RotateParrot(_velocity);
+        //RotateBottle(_velocity);
     }
 
-    private void RotateParrot(Vector3 velocity)
+    private void RotateBottle(Vector3 velocity)
     {
         SpriteRenderer sR = GetComponent<SpriteRenderer>();
         if (velocity.x < 0)
@@ -180,7 +180,7 @@ public class ParrotBehaviour : MonoBehaviour
 
         if (collision.CompareTag("Finish"))//collision.CompareTag("Finish"))
         {
-            _isCollidingWithSack = true;
+            _isCollidingWithMouth = true;
             Debug.Log("Collided with " + collision.name);
         }
     }
@@ -189,7 +189,7 @@ public class ParrotBehaviour : MonoBehaviour
     {
         if (collision.CompareTag("Finish"))
         {
-            _isCollidingWithSack = false;
+            _isCollidingWithMouth = false;
         }
     }
 

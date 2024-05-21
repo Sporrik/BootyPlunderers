@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5077237589660133316}
   - component: {fileID: 1486100016497036338}
   m_Layer: 0
-  m_Name: Parrot
+  m_Name: Booze
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 359, y: 251, z: 0}
-  m_LocalScale: {x: 24.24, y: 24.24, z: 0}
+  m_LocalScale: {x: 45.73, y: 45.73, z: 0}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isCaught: 0
+  _isPaused: 0
   _mainCamera: {fileID: 0}
   _maxSpeed: 1200
   _minSpeed: 600
@@ -91,7 +92,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e17101ca5981c4c4ba498f0a7d930b55, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4523a02a361f8c944b39dc59aa3c1241, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -138,12 +139,12 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 12.86, y: 10.5}
+    oldSize: {x: 5.12, y: 5.12}
     newSize: {x: 12.86, y: 10.5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 12.86, y: 10.5}
+  m_Size: {x: 5.45, y: 5.8}
   m_EdgeRadius: 0
