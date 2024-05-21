@@ -38,7 +38,9 @@ public class GameManager : MonoBehaviour
 
     private int maxTreasure;
 
-    private ShootMinigame attackMinigame;
+    private bool isAttacking = false;
+
+    public ShootMinigame attackMinigame;
 
     private void Awake()
     {
@@ -95,6 +97,11 @@ public class GameManager : MonoBehaviour
                 selectedPirate.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 StartCoroutine(selectedPirate.MoveUnit());
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && isAttacking)
+        {
+            StartCoroutine(ResolveAttack());
         }
     }
 
@@ -191,14 +198,33 @@ public class GameManager : MonoBehaviour
 
     IEnumerator CommitAttack()
     {
-        selectedPirate.hasAttacked = true;
+        isAttacking = true;
 
+        selectedPirate.hasAttacked = true;
         dialogueText.text = "Attack!";
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
-        attackMinigame.enabled = true;
+        attackMinigame.gameObject.SetActive(true);
     }
+
+    IEnumerator ResolveAttack()
+    {
+        bool isDead = selectedEnemy.TakeDamage(attackMinigame.CheckCollision());
+
+        if (isDead)
+        {
+            selectedEnemy.gameObject.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        attackMinigame.gameObject.SetActive(false);
+        isAttacking = false;
+
+        dialogueText.text = "Player 1 Turn";
+    }
+
     public void EndBattle()
     {
         //end battle
