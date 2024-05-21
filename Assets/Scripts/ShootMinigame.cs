@@ -21,9 +21,11 @@ public class ShootMinigame : MonoBehaviour
         enemyHealth = 100;
         enemyHealthSlider.maxValue = 100;
         enemyHealthSlider.value = enemyHealth;
-        maxShots = 10; //would be the amount of bullets?
+        maxShots = 1; //would be the amount of bullets?
         hitDamage = 10;
         bullseyeDamage = 15;
+
+        this.enabled = false;
     }
 
     void Update()
@@ -35,7 +37,7 @@ public class ShootMinigame : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 CheckCollision();
-                shotCount++;                
+                shotCount++;
             }
         }               
     }
@@ -76,5 +78,10 @@ public class ShootMinigame : MonoBehaviour
             Debug.Log($"Bullseye! Enemy health: {enemyHealth}");
             UpdateSlider(enemyHealth);
         }
+    }
+
+    IEnumerator ResolveAttack()
+    {
+        yield return new WaitForSeconds(2f);
     }
 }

@@ -26,7 +26,7 @@ public class Unit : MonoBehaviour
     private void Awake()
     {
         //Set stats
-        maxHealth = 10;
+        maxHealth = 100;
         currentHealth = maxHealth;
 
         moveSpeed = 3;

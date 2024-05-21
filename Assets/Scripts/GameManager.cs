@@ -32,7 +32,13 @@ public class GameManager : MonoBehaviour
     public UI[] p1HUD;
     public UI[] p2HUD;
 
+    private int p1Ammo;
+    private int p2Ammo;
+    private int selectedAmmo;
+
     private int maxTreasure;
+
+    private ShootMinigame attackMinigame;
 
     private void Awake()
     {
@@ -68,7 +74,7 @@ public class GameManager : MonoBehaviour
                 {
                     selectedPirate = hit.collider.GetComponent<Unit>();
                 }
-            }            
+            }
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -78,7 +84,7 @@ public class GameManager : MonoBehaviour
 
             if (hit.collider)
             {
-                if (IsThisAnEnemy(hit))
+                if (IsThisAnEnemy(hit) && !selectedPirate.hasAttacked)
                 {
                     selectedEnemy = hit.collider.GetComponent<Unit>();
                     Attack();
@@ -152,39 +158,47 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private bool IsInRange()
+    private int CheckRange()
     {
-        return (selectedPirate.currentHex.DistanceTo(selectedEnemy.transform.position.ToHex()) < 4);
+        return selectedPirate.currentHex.DistanceTo(selectedEnemy.transform.position.ToHex());
     }
 
 
-    IEnumerator Attack()
+    void Attack()
     {
-        if (IsInRange())
+        if (state == GameState.P1_TURN)
         {
-                selectedPirate.hasAttacked = true;
-    
-                bool isDead = selectedEnemy.TakeDamage(selectedPirate.damage);
-                //enemyHUD.SetHP(enemySelected.currentHealth);
-    
-                dialogueText.text = "Attack!";
-    
-                yield return new WaitForSeconds(2f);
-    
-                if (isDead)
-                {
-                    selectedEnemy.gameObject.SetActive(false);
-                }
+            selectedAmmo = p1Ammo;
         }
-        else
+        else if (state == GameState.P2_TURN)
         {
-            dialogueText.text = "Out of Range";
+            selectedAmmo = p2Ammo;
         }
-    
-        yield return new WaitForSeconds(2f);
-        dialogueText.text = "Your Turn";
+
+        switch (CheckRange())
+        {
+            case < 1:
+                StartCoroutine(CommitAttack());
+                break;
+            case < 4:
+                StartCoroutine(CommitAttack());
+                break;
+            default:
+                dialogueText.text = "Out of Range";
+                break;
+        }
     }
 
+    IEnumerator CommitAttack()
+    {
+        selectedPirate.hasAttacked = true;
+
+        dialogueText.text = "Attack!";
+
+        yield return new WaitForSeconds(1f);
+
+        attackMinigame.enabled = true;
+    }
     public void EndBattle()
     {
         //end battle
