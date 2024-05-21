@@ -7,6 +7,7 @@ using UnityEngine;
 public class ParrotBehaviour : MonoBehaviour
 {
     public bool _isCaught = false;
+    public bool _isPaused = false;
     
 
     [SerializeField]
@@ -21,6 +22,8 @@ public class ParrotBehaviour : MonoBehaviour
 
     private Collider2D _collider;
     private bool _isCollidingWithSack;
+    
+
     private Vector3 _velocity;
 
     // Start is called before the first frame update
@@ -39,9 +42,12 @@ public class ParrotBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       if (!_isPaused) 
+        {
         CheckIfStached();//Will find if the parrot has been dropped in the sack, Will check if the parrot is caought before the next update for it (since I want to let go of the mouse without it updateing _isCaught to false)
         CheckMouseCollision();
         if (!_isCaught) { ApplyVelocity(); }
+        }
     }
 
     private void CheckIfStached()
@@ -169,15 +175,21 @@ public class ParrotBehaviour : MonoBehaviour
         Debug.Log(_bottomLeftCorner + "," + _UpperRightCorner);
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-         
-        if (collision.name == "Sack")//collision.CompareTag("Finish"))
+
+        if (collision.CompareTag("Finish"))//collision.CompareTag("Finish"))
         {
             _isCollidingWithSack = true;
-            Debug.Log("Collided with Sack");
+            Debug.Log("Collided with " + collision.name);
+        }
+    }
 
-           
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Finish"))
+        {
+            _isCollidingWithSack = false;
         }
     }
 
