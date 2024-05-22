@@ -9,11 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 756987714902651929}
-  - component: {fileID: 2907349978296246241}
   - component: {fileID: 5077237589660133316}
   - component: {fileID: 1486100016497036338}
   m_Layer: 0
-  m_Name: Bomb
+  m_Name: Bomb 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,25 +33,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2907349978296246241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1078628202083805581}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96775cfffed21894c8380ad414a3ab69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isCaught: 0
-  _isPaused: 0
-  _mainCamera: {fileID: 0}
-  _maxSpeed: 10
-  _minSpeed: 5
-  bottleCountText: {fileID: 0}
-  bottleCount: 0
 --- !u!212 &5077237589660133316
 SpriteRenderer:
   m_ObjectHideFlags: 0

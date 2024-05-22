@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
@@ -23,6 +24,9 @@ public class BoozeBehaviour : MonoBehaviour
 
     private Vector3 _velocity;
 
+    public TextMeshProUGUI bottleCountText;
+    public int bottleCount;
+
     void Start()
     {
         if (_mainCamera == null)
@@ -32,7 +36,7 @@ public class BoozeBehaviour : MonoBehaviour
         _collider = GetComponent<Collider2D>();
         GetEdgesOfTheScreen();//done
         GetRandomPosOnScreen();//done (needs checking)
-        SetVelocity();//done (needs checking)
+        SetVelocity();//done (needs checking)        
     }
 
     void Update()
@@ -51,7 +55,18 @@ public class BoozeBehaviour : MonoBehaviour
         {
             if(Input.GetMouseButtonUp(0) && _isCaught)
             {
-                Destroy(gameObject);
+                if (gameObject.name == "Booze(Clone)")
+                {
+                    Destroy(gameObject);
+                    bottleCount++;
+                    bottleCountText.text = bottleCount.ToString();                    
+                }
+                else if (gameObject.name == "Bomb(Clone)")
+                {
+                    Destroy(gameObject);
+                    bottleCount--;
+                    bottleCountText.text = bottleCount.ToString();
+                }                
             }
         }
         else

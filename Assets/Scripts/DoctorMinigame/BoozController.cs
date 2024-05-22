@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using TMPro;
 using UnityEngine;
 
 public class BottleController : MonoBehaviour
@@ -19,9 +20,8 @@ public class BottleController : MonoBehaviour
     private GameObject[] _bombs;
 
     private float _timeSet = 10f,
-                  _timeleft;              
+                  _timeleft;
 
-    // Start is called before the first frame update
     void Start()
     {
         SetTime();
@@ -33,7 +33,6 @@ public class BottleController : MonoBehaviour
         _timeleft -= Time.deltaTime;
     }
 
-    // Update is called once per frame
     void Update()
     {
         UpdateTime();

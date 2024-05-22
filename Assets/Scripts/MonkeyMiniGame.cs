@@ -38,7 +38,7 @@ public class MonkeyMiniGame : MonoBehaviour
         {
             _timer -= Time.deltaTime;
             timerText.text = Mathf.Ceil(_timer).ToString();
-        }        
+        }
 
         if (_timer > 0)
         {
@@ -75,6 +75,7 @@ public class MonkeyMiniGame : MonoBehaviour
                 }
             }            
         }
+
         else if (_timer <= 0)
         {
             _isCounting = false;
@@ -84,8 +85,7 @@ public class MonkeyMiniGame : MonoBehaviour
                 {
                     Destroy(coin);
                 }
-            }
-            
+            }            
             gameOverText.gameObject.SetActive(true);
         }
     }
