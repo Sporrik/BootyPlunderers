@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
     private int maxTreasure;
 
     private bool isAttacking = false;
+    private bool p1SpecialAvailable;
+    private bool p2SpecialAvailable;
 
     public ShootMinigame attackMinigame;
 
@@ -252,6 +254,11 @@ public class GameManager : MonoBehaviour
                 P1_Turn();
                 break;
         }
+    }
+
+    public void SpecialAttack()
+    {
+
     }
 
     private bool DoesThisBelongToYou(RaycastHit2D hit)
