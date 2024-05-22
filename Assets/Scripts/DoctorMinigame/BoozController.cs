@@ -40,19 +40,25 @@ public class BottleController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        UpdateScoring();
         UpdateTime();
-        if (_timeleft < 0)
+        if (_timeleft < 0||_score==_amountCapturedToWin)
         {
-            OnTimerEnd();
+            EndGame();
         }
     }
 
-    private void OnTimerEnd()
+    private void EndGame()
     {
-        UpdateScoring();
+        StopMovement();
+
     }
 
-    
+    private void StopMovement()
+    {
+        throw new NotImplementedException();
+
+    }
 
     private void SetTime()
     {
