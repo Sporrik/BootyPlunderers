@@ -10,10 +10,13 @@ public class BoozeMiniGame : MonoBehaviour
     private Vector3 _bottomLeftCorner, _topRightCorner;
 
     [SerializeField]
-    private float _maxSpeed = 20f,
-                  _minSpeed = 10f;
+    private float _maxSpeed = 10f,
+                  _minSpeed = 5f;
 
-    private int _bottlesInScene, _bombsInScene;
+    private int _maxBottlesInScene = 10,
+                _maxBombsInScene = 7,
+                _bottlesInScene,
+                _bombsInScene;
     public List<GameObject> bottleList, bombList;
 
     void Start()
@@ -24,11 +27,11 @@ public class BoozeMiniGame : MonoBehaviour
         _bottomLeftCorner = new Vector3(-9, -5, 0);
         _topRightCorner = new Vector3(9, 5, 0);
 
-        for (int i = 0; i < _bottlesInScene; i++)
+        for (int i = 0; i < _maxBottlesInScene; i++)
         {
             SpawnBottles();
         }
-        for (int i = 0; i < _bombsInScene; i++)
+        for (int i = 0; i < _maxBombsInScene; i++)
         {
             SpawnBombs();
         }
@@ -64,7 +67,7 @@ public class BoozeMiniGame : MonoBehaviour
     {
         foreach (GameObject obj in list)
         {
-            obj.transform.position += GetVelocity();
+            obj.transform.position += GetVelocity() * Time.deltaTime;
         }
     }
 
