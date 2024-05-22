@@ -67,14 +67,14 @@ public class BoozeMiniGame : MonoBehaviour
     {
         foreach (GameObject obj in list)
         {
-            obj.transform.position += GetVelocity() * Time.deltaTime;
+            obj.transform.position += GetVelocity() * Time.deltaTime; // the get velocity is the problem
         }
     }
 
     public Vector3 GetVelocity()
     {
-        Vector3 direction = GetRandomDirection();
-        float speed = GetRandomSpeed();
+        Vector3 direction = GetRandomDirection(); //THIS IS THE PROBLEM
+        float speed = GetRandomSpeed(); //ALSO THIS
         var velocity = direction * speed;
         return velocity;
     }
