@@ -16,14 +16,13 @@ public class BoozeBehaviour : MonoBehaviour
                   _minSpeed = 10f;
 
     private Vector3 _bottomLeftCorner,
-                   _UpperRightCorner;
+                   _upperRightCorner;
 
     private Collider2D _collider;
     private bool _isCollidingWithMouth;    
 
     private Vector3 _velocity;
 
-    // Start is called before the first frame update
     void Start()
     {
         if (_mainCamera == null)
@@ -36,15 +35,14 @@ public class BoozeBehaviour : MonoBehaviour
         SetVelocity();//done (needs checking)
     }
 
-    // Update is called once per frame
     void Update()
     {
        if (!_isPaused) 
-        {
-        CheckIfStached();//Will find if the parrot has been dropped in the sack, Will check if the parrot is caought before the next update for it (since I want to let go of the mouse without it updateing _isCaught to false)
-        CheckMouseCollision();
-        if (!_isCaught) { ApplyVelocity(); }
-        }
+       {
+            CheckIfStached();//Will find if the parrot has been dropped in the sack, Will check if the parrot is caought before the next update for it (since I want to let go of the mouse without it updateing _isCaught to false)
+            CheckMouseCollision();
+            if (!_isCaught) { ApplyVelocity(); }
+       }
     }
 
     private void CheckIfStached()
@@ -85,25 +83,26 @@ public class BoozeBehaviour : MonoBehaviour
 
     private void GoingOffScreen()
     {
-        SpriteRenderer sR = GetComponent<SpriteRenderer>();
-        if (transform.position.x < _bottomLeftCorner.x - sR.size.x)
+        if (transform.position.x < _bottomLeftCorner.x - 1)
         {
-            transform.position = new Vector3(_UpperRightCorner.x, transform.position.y, transform.position.z);
-        }
-        if (transform.position.x > _UpperRightCorner.x + sR.size.x)
+            transform.position = new Vector3(_upperRightCorner.x + 1, transform.position.y, transform.position.z);
+        }        
+        if (transform.position.x > _upperRightCorner.x + 1)
         {
-            transform.position = new Vector3(_bottomLeftCorner.x, transform.position.y, transform.position.z);
+            transform.position = new Vector3(_bottomLeftCorner.x - 1, transform.position.y, transform.position.z);
         }
-        if (transform.position.y < _bottomLeftCorner.y - sR.size.y)
+        
+        if (transform.position.y < _bottomLeftCorner.y - 1)
         {
-            transform.position = new Vector3(transform.position.x, _UpperRightCorner.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x, _upperRightCorner.y + 1, transform.position.z);
         }
-        if (transform.position.y > _UpperRightCorner.y + sR.size.y)
+        
+        if (transform.position.y > _upperRightCorner.y + 1)
         {
-            transform.position = new Vector3(transform.position.x, _bottomLeftCorner.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x, _bottomLeftCorner.y - 1, transform.position.z);
         }
-
     }
+
     private void ApplyVelocity()
     {
         transform.position += _velocity * Time.deltaTime;
@@ -142,8 +141,8 @@ public class BoozeBehaviour : MonoBehaviour
     private Vector3 GetRandomDirection()
     {
         Vector3 direction;
-        direction.x = UnityEngine.Random.Range(-1.0f, 1.0f); ;
-        direction.y = UnityEngine.Random.Range(-1.0f, 1.0f); ;
+        direction.x = UnityEngine.Random.Range(-1.0f, 1.0f);
+        direction.y = UnityEngine.Random.Range(-1.0f, 1.0f); 
         direction.z = 0;
         return direction;
     }
@@ -156,27 +155,22 @@ public class BoozeBehaviour : MonoBehaviour
 
     private void GetRandomPosOnScreen()
     {
-        Vector3 viewportPos = Vector3.zero;
-        viewportPos.x = UnityEngine.Random.Range(0.0f, 1.0f);
-        viewportPos.y = UnityEngine.Random.Range(0.0f, 1.0f);
+        Vector3 startingPos = Vector3.zero;
+        startingPos.x = UnityEngine.Random.Range(_bottomLeftCorner.x, _upperRightCorner.x);
+        startingPos.y = UnityEngine.Random.Range(_bottomLeftCorner.y, _upperRightCorner.y);
 
-        transform.position = _mainCamera.ViewportToScreenPoint(viewportPos);
+        transform.position = startingPos;
     }
 
     private void GetEdgesOfTheScreen()
     {
-        _bottomLeftCorner = new Vector3(0, 0, _mainCamera.nearClipPlane);
-        _UpperRightCorner = new Vector3(1, 1, _mainCamera.nearClipPlane);
-        Debug.Log(_bottomLeftCorner + "," + _UpperRightCorner);
-
-        _bottomLeftCorner = _mainCamera.ViewportToScreenPoint(_bottomLeftCorner);
-        _UpperRightCorner = _mainCamera.ViewportToScreenPoint(_UpperRightCorner);
-        Debug.Log(_bottomLeftCorner + "," + _UpperRightCorner);
+        _bottomLeftCorner = new Vector3(-9, -5, 0);
+        _upperRightCorner = new Vector3(9, 5, 0);
+        Debug.Log(_bottomLeftCorner + "," + _upperRightCorner);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (collision.CompareTag("Finish"))//collision.CompareTag("Finish"))
         {
             _isCollidingWithMouth = true;

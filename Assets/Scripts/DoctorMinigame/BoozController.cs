@@ -16,7 +16,7 @@ public class BottleController : MonoBehaviour
                 _amountCapturedToWin = 10;
     public int score = 0;
     private GameObject [] _bottles;
-    private GameObject[] _bombs; 
+    private GameObject[] _bombs;
 
     private float _timeSet = 10f,
                   _timeleft;              
@@ -52,6 +52,7 @@ public class BottleController : MonoBehaviour
     {
         _timeleft = _timeSet;
     }
+
     private void SpawnObjects()
     {
         _bottles = new GameObject[_amountOfBottles];
