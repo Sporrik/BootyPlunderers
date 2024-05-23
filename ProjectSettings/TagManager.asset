@@ -13,6 +13,8 @@ TagManager:
   - Headshot
   - P1_Crew
   - P2_Crew
+  - Coin
+  - Bomb
   layers:
   - Default
   - TransparentFX

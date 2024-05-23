@@ -38,7 +38,11 @@ public class GameManager : MonoBehaviour
 
     private int maxTreasure;
 
-    private ShootMinigame attackMinigame;
+    private bool isAttacking = false;
+    private bool p1SpecialAvailable;
+    private bool p2SpecialAvailable;
+
+    public ShootMinigame attackMinigame;
 
     private void Awake()
     {
@@ -95,6 +99,11 @@ public class GameManager : MonoBehaviour
                 selectedPirate.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 StartCoroutine(selectedPirate.MoveUnit());
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && isAttacking)
+        {
+            StartCoroutine(ResolveAttack());
         }
     }
 
@@ -163,7 +172,6 @@ public class GameManager : MonoBehaviour
         return selectedPirate.currentHex.DistanceTo(selectedEnemy.transform.position.ToHex());
     }
 
-
     void Attack()
     {
         if (state == GameState.P1_TURN)
@@ -191,14 +199,40 @@ public class GameManager : MonoBehaviour
 
     IEnumerator CommitAttack()
     {
-        selectedPirate.hasAttacked = true;
+        isAttacking = true;
 
+        selectedPirate.hasAttacked = true;
         dialogueText.text = "Attack!";
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
-        attackMinigame.enabled = true;
+        attackMinigame.gameObject.SetActive(true);
     }
+
+    IEnumerator ResolveAttack()
+    {
+        bool isDead = selectedEnemy.TakeDamage(attackMinigame.CheckCollision());
+
+        if (isDead)
+        {
+            selectedEnemy.gameObject.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        attackMinigame.gameObject.SetActive(false);
+        isAttacking = false;
+
+        if (state == GameState.P1_TURN)
+        {
+            dialogueText.text = "Player 1 Turn";
+        }
+        else if (state == GameState.P2_TURN)
+        {
+            dialogueText.text = "Player 2 Turn";
+        }
+    }
+
     public void EndBattle()
     {
         //end battle
@@ -220,6 +254,11 @@ public class GameManager : MonoBehaviour
                 P1_Turn();
                 break;
         }
+    }
+
+    public void SpecialAttack()
+    {
+
     }
 
     private bool DoesThisBelongToYou(RaycastHit2D hit)
