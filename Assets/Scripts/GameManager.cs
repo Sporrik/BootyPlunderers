@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -306,7 +307,7 @@ public class GameManager : MonoBehaviour
 
     public void SpecialAttackP2()
     {
-        if (!p1SpecialAvailable || state != GameState.P2_TURN) return;
+        if (!p2SpecialAvailable || state != GameState.P2_TURN) return;
 
         p2SpecialAvailable = false;
 
@@ -342,19 +343,41 @@ public class GameManager : MonoBehaviour
         
         mainCam.enabled = true;
 
-        switch (p1FirstMateMinigame)
+        switch (state)
         {
-            case "monkeyMinigame":
-                monkeyMinigame.gameObject.SetActive(false);
-                monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
+            case GameState.P1_TURN:
+                switch (p1FirstMateMinigame)
+                {
+                    case "MonkeyMiniGame":
+                        monkeyMinigame.gameObject.SetActive(false);
+                        monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
+                        break;
+                    case "ParrotMiniGame":
+                        //disable parrot minigame
+                        break;
+                    case "BoozeMiniGame":
+                        //Disable booze minigame
+                        break;
+                    default:
+                        break;
+                }
                 break;
-            case "parrotMinigame":
-                //disable parrot minigame
-                break;
-            case "boozeMinigame":
-                //Disable booze minigame
-                break;
-            default:
+            case GameState.P2_TURN:
+                switch (p2FirstMateMinigame)
+                {
+                    case "MonkeyMiniGame":
+                        monkeyMinigame.gameObject.SetActive(false);
+                        monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
+                        break;
+                    case "ParrotMiniGame":
+                        //disable parrot minigame
+                        break;
+                    case "BoozeMiniGame":
+                        //Disable booze minigame
+                        break;
+                    default:
+                        break;
+                }
                 break;
         }
     }
