@@ -304,6 +304,17 @@ public class GameManager : MonoBehaviour
         mainCam.enabled = false;
     }
 
+    public void SpecialAttackP2()
+    {
+        if (!p1SpecialAvailable || state != GameState.P2_TURN) return;
+
+        p2SpecialAvailable = false;
+
+        monkeyMinigame.gameObject.SetActive(true);
+        monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
+        mainCam.enabled = false;
+    }
+
     private bool DoesThisBelongToYou(RaycastHit2D hit)
     {
         return ((state == GameState.P1_TURN && hit.collider.gameObject.CompareTag("P1_Crew")) || (state == GameState.P2_TURN && hit.collider.gameObject.CompareTag("P2_Crew")));
