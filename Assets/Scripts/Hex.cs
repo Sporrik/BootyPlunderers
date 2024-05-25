@@ -180,5 +180,4 @@ public struct Hex
     {
         return "(" + q + ";" + r + ")";
     }
-
 }
