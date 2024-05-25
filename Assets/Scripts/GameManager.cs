@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum GameState { START, P1_TURN, P2_TURN, END };
 
@@ -27,10 +30,9 @@ public class GameManager : MonoBehaviour
     private Unit selectedPirate;
     private Unit selectedEnemy;
 
-    public TextMeshProUGUI dialogueText;
-
     public UI[] p1HUD;
     public UI[] p2HUD;
+    public TextMeshProUGUI dialogueText;
 
     private int p1Ammo;
     private int p2Ammo;
@@ -42,7 +44,17 @@ public class GameManager : MonoBehaviour
     private bool p1SpecialAvailable;
     private bool p2SpecialAvailable;
 
+    private Camera mainCam;
     public ShootMinigame attackMinigame;
+    public MonkeyMiniGame monkeyMinigame;
+
+    private string p1FirstMateMinigame;
+    private string p2FirstMateMinigame;
+    private int minigameCount;
+
+    public int sceneCount;
+
+    private int currentLevel;
 
     private void Awake()
     {
@@ -55,12 +67,26 @@ public class GameManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
+        p1FirstMateMinigame = "MonkeyMiniGame";
+        p2FirstMateMinigame = "MonkeyMiniGame";
+
+        p1SpecialAvailable = true;
+        p2SpecialAvailable = true;
+
+        p1Spawns = new Transform[3];
+        p2Spawns = new Transform[3];
+
+        currentLevel = 1;
+
         state = GameState.START;
         StartCoroutine(SetupGame());
     }
 
     private void Update()
     {
+
+        sceneCount = SceneManager.loadedSceneCount;
+
         if (state != GameState.START)
         {
             UpdateUI(p1Crew, p1HUD);
@@ -109,6 +135,18 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SetupGame()
     {
+        mainCam = Camera.main;
+
+        for (int i = 0; i < p1Spawns.Length; i++)
+        {
+            p1Spawns[i] = GameObject.Find("p1Spawn" + i).transform;
+        }
+
+        for (int i = 0; i < p2Spawns.Length; i++)
+        {
+            p2Spawns[i] = GameObject.Find("p2Spawn" + i).transform;
+        }
+
         p1Crew = new Unit[p1Spawns.Length];
         for (int i = 0; i < p1Spawns.Length; i++)
         {
@@ -256,9 +294,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SpecialAttack()
+    public void SpecialAttackP1()
     {
+        if (!p1SpecialAvailable || state != GameState.P1_TURN) return;
 
+        p1SpecialAvailable = false;
+
+        monkeyMinigame.gameObject.SetActive(true);
+        monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
+        mainCam.enabled = false;
+    }
+
+    public void SpecialAttackP2()
+    {
+        if (!p2SpecialAvailable || state != GameState.P2_TURN) return;
+
+        p2SpecialAvailable = false;
+
+        monkeyMinigame.gameObject.SetActive(true);
+        monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
+        mainCam.enabled = false;
     }
 
     private bool DoesThisBelongToYou(RaycastHit2D hit)
@@ -277,6 +332,53 @@ public class GameManager : MonoBehaviour
         {
             uiArray[i].SetHP(unitArray[i].currentHealth);
             uiArray[i].SetMove(unitArray[i].movement);
+        }
+    }
+
+    public void EndMinigame(int score)
+    {
+        minigameCount = score;
+
+        monkeyMinigame.gameObject.SetActive(true);
+        
+        mainCam.enabled = true;
+
+        switch (state)
+        {
+            case GameState.P1_TURN:
+                switch (p1FirstMateMinigame)
+                {
+                    case "MonkeyMiniGame":
+                        monkeyMinigame.gameObject.SetActive(false);
+                        monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
+                        break;
+                    case "ParrotMiniGame":
+                        //disable parrot minigame
+                        break;
+                    case "BoozeMiniGame":
+                        //Disable booze minigame
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case GameState.P2_TURN:
+                switch (p2FirstMateMinigame)
+                {
+                    case "MonkeyMiniGame":
+                        monkeyMinigame.gameObject.SetActive(false);
+                        monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
+                        break;
+                    case "ParrotMiniGame":
+                        //disable parrot minigame
+                        break;
+                    case "BoozeMiniGame":
+                        //Disable booze minigame
+                        break;
+                    default:
+                        break;
+                }
+                break;
         }
     }
 }

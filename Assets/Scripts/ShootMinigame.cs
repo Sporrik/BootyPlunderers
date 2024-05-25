@@ -19,6 +19,7 @@ public class ShootMinigame : MonoBehaviour
 
     private void OnEnable()
     {
+        pointer.attachedRigidbody.isKinematic = true;
         hasShot = false;
     }
 
@@ -26,10 +27,11 @@ public class ShootMinigame : MonoBehaviour
     {
         if (!hasShot)
         {
-            pointer.gameObject.transform.position = new Vector3(Mathf.Sin(Time.time * _speed) * 5, 4f, -5f); //*5 for distance
+            pointer.gameObject.transform.position = new Vector3(Mathf.Sin(Time.time * _speed) * 9.6f, 0f, -5f); //*5 for distance
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                pointer.attachedRigidbody.isKinematic = false;
                 CheckCollision();
                 hasShot = true;
             }
