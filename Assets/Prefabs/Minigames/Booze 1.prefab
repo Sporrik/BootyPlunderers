@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 756987714902651929}
   - component: {fileID: 5077237589660133316}
   - component: {fileID: 1486100016497036338}
+  - component: {fileID: -6902351686596526401}
   m_Layer: 0
   m_Name: Booze 1
-  m_TagString: Untagged
+  m_TagString: Booze
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -130,3 +131,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.9689221, y: 5.2223945}
   m_EdgeRadius: 0
+--- !u!114 &-6902351686596526401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078628202083805581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7afc5b0642a8a5469bbbdb7ba2925c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isMoving: 0

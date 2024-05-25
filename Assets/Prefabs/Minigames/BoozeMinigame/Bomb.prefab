@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2907349978296246241}
   - component: {fileID: 5077237589660133316}
   - component: {fileID: 1486100016497036338}
+  - component: {fileID: 4894074284413666875}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Untagged
@@ -51,6 +52,8 @@ MonoBehaviour:
   _mainCamera: {fileID: 0}
   _maxSpeed: 1200
   _minSpeed: 600
+  bottleCountText: {fileID: 0}
+  bottleCount: 0
 --- !u!212 &5077237589660133316
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -148,3 +151,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 15.19, y: 17.42}
   m_EdgeRadius: 0
+--- !u!114 &4894074284413666875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078628202083805581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7afc5b0642a8a5469bbbdb7ba2925c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isMoving: 0

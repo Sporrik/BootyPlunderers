@@ -15,6 +15,7 @@ TagManager:
   - P2_Crew
   - Coin
   - Bomb
+  - Booze
   layers:
   - Default
   - TransparentFX
