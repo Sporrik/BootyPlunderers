@@ -3,25 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class ParrotCharacter : MonoBehaviour
 {
+
     [SerializeField]
     private float _jumpHeight = 100.0f;// The height that the player should reach
     private bool _gameEnded = false;
 
-   
-
     [SerializeField]
-    Vector2 _startingPoint = new Vector2 (100,Screen.height/2);
+    private float _fallGravityScale = 0.5f;
+
+    private Vector3 _bottomLeft, _topRight;
+
+    private Vector2 _startingPoint;
 
     private Rigidbody2D _rb;
 
     // Start is called before the first frame update
     void Start()
     {
+        _bottomLeft = Camera.main.ViewportToScreenPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
+        _topRight = Camera.main.ViewportToScreenPoint(new Vector3(1, 1, Camera.main.nearClipPlane));
+        _startingPoint = Camera.main.ScreenToWorldPoint(new Vector2(_topRight.x / 6, _topRight.y / 2));
         transform.position = _startingPoint;
         _rb = GetComponent<Rigidbody2D>();
+        _rb.gravityScale = _fallGravityScale;
     }
 
     // Update is called once per frame
@@ -31,13 +39,21 @@ public class ParrotCharacter : MonoBehaviour
         {
             CheckInput();
         }
-            LimitCharacterToScreen();//Maybe change it to finish game if player touches the bottom 
+        LimitCharacterToScreen();//Maybe change it to finish game if player touches the bottom 
     }
 
 
     private void LimitCharacterToScreen()
     {
-        transform.position = new Vector2 (transform.position.x,Mathf.Clamp(transform.position.y,0 ,Screen.height));
+        Vector3 _bottomLeftworld = Camera.main.ScreenToWorldPoint(_bottomLeft);
+        Vector3 _topRightworld = Camera.main.ScreenToWorldPoint(_topRight);
+        Vector3 position= transform.position;
+        position.y = Mathf.Clamp(position.y, _bottomLeftworld.y, _topRightworld.y);
+        
+        transform.position = position;
+
+        //Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
+        //Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.nearClipPlane));
     }
 
     private void CheckInput()
@@ -59,5 +75,6 @@ public class ParrotCharacter : MonoBehaviour
     private void FinishGame()
     {
         _gameEnded = true;
+        transform.rotation = Quaternion.Euler(0, 0, -90);
     }
 }

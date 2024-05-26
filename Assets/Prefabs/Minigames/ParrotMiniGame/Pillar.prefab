@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3175519651826265956}
   - component: {fileID: 1730486825489728561}
   - component: {fileID: 5209957311303197104}
+  - component: {fileID: 4449326066735731061}
   m_Layer: 0
   m_Name: Pillar
   m_TagString: Finish
@@ -27,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 2591961765307393790}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 586, y: 47, z: -52.94055}
-  m_LocalScale: {x: 258.25, y: 258.25, z: 0}
+  m_LocalPosition: {x: 586.1351, y: 48.4855, z: -52.94055}
+  m_LocalScale: {x: 1.9313233, y: 1.9313233, z: 0}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -114,7 +115,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -130,3 +131,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.18, y: 0.32}
   m_EdgeRadius: 0
+--- !u!114 &4449326066735731061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2591961765307393790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccd716b3a710f4a4d9844ab1a8244126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
