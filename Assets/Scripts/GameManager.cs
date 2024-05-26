@@ -54,8 +54,6 @@ public class GameManager : MonoBehaviour
 
     public int sceneCount;
 
-    private int currentLevel;
-
     private void Awake()
     {
         if (instance != null)
@@ -75,8 +73,6 @@ public class GameManager : MonoBehaviour
 
         p1Spawns = new Transform[3];
         p2Spawns = new Transform[3];
-
-        currentLevel = 1;
 
         state = GameState.START;
         StartCoroutine(SetupGame());

@@ -29,7 +29,7 @@ public class Unit : MonoBehaviour
         maxHealth = 100;
         currentHealth = maxHealth;
 
-        moveSpeed = 3;
+        moveSpeed = 300;
         movement = moveSpeed;
 
         currentHex = transform.position.ToHex();
