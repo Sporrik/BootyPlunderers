@@ -88,7 +88,7 @@ public class ParrotMinigameManager : MonoBehaviour
             if (pillar.transform.position.x <= _player.transform.position.x)
             {
                 _score++;
-                _pillar.
+                //_pillar.
                 //foreach (Pillar child in pillar.transform)
                 //{
                 //    if (!child._WasScored)

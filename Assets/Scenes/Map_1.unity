@@ -1088,8 +1088,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1564959695}
   - {fileID: 441472057}
+  - {fileID: 1564959695}
   - {fileID: 1668422992}
   - {fileID: 534815929}
   m_Father: {fileID: 0}
@@ -1506,7 +1506,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 664050008052890843, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -826.51
+      value: -826.5101
       objectReference: {fileID: 0}
     - target: {fileID: 705980480719586546, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1742,11 +1742,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7167823296883657408, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -826.52
+      value: -826.5201
       objectReference: {fileID: 0}
     - target: {fileID: 7869797399242452802, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -826.52
+      value: -826.5201
       objectReference: {fileID: 0}
     - target: {fileID: 8572247554944363711, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
       propertyPath: m_AnchorMax.x
