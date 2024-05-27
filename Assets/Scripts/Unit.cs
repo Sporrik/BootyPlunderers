@@ -1,9 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Unit : MonoBehaviour
 {
@@ -33,6 +29,7 @@ public class Unit : MonoBehaviour
         movement = moveSpeed;
 
         currentHex = transform.position.ToHex();
+        previousHex = currentHex;
     }
 
     public IEnumerator MoveUnit()
@@ -43,21 +40,18 @@ public class Unit : MonoBehaviour
         {
             currentHex = transform.position.ToHex();
 
-            if (gameObject.tag == "Pirate")
+            if (isOnBad)
             {
-                if (isOnBad)
-                {
-                    isOnBad = false;
+                isOnBad = false;
 
-                    targetHex = previousHex;
-                    currentHex = previousHex;
+                targetHex = previousHex;
+                currentHex = previousHex;
 
-                    transform.position = previousHex.ToWorld();
-                    movement++;
+                transform.position = previousHex.ToWorld();
+                movement++;
 
-                    GetComponent<Node>().ApplyTransform();
-                    StopCoroutine(MoveUnit());
-                }
+                GetComponent<Node>().ApplyTransform();
+                StopCoroutine(MoveUnit());
             }
 
             var direction = targetHex - currentHex;
@@ -101,6 +95,7 @@ public class Unit : MonoBehaviour
             {
                 Debug.Log("Player collides with treasure!");
                 var treasure = collision.gameObject;
+                Destroy(collision);
                 treasure.transform.localScale = new Vector2(0.5f, 0.5f);
                 treasure.transform.SetParent(transform);
                 treasure.transform.position += Vector3.up * 0.5f;
@@ -114,7 +109,7 @@ public class Unit : MonoBehaviour
             {
                 ++collectedTreasure;
                 Debug.Log("Player collides with Claim Point!");
-                var claimPoint = collision.gameObject;
+
                 Destroy(heldObject);
                 heldObject = null;
             }

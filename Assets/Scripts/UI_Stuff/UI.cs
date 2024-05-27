@@ -10,7 +10,6 @@ public class UI : MonoBehaviour
     public Slider healthSlider;
 
     public TextMeshProUGUI coins;
-    public int coinCount;
 
     public Image healthSliderFill;
     public Color green, yellow, red;
@@ -51,9 +50,9 @@ public class UI : MonoBehaviour
         moveSlider.value = move;
     }
 
-    public void SetCoins()
+    public void SetCoins(int coinCount)
     {  
-        coins.text = "Coins: " + coinCount.ToString();
+        coins.text = coinCount.ToString();
     }
 
     private void UpdateSliderColor(int health)

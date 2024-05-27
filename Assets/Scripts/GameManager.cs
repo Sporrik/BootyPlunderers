@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -38,6 +39,12 @@ public class GameManager : MonoBehaviour
     private int p2Ammo;
     private int selectedAmmo;
 
+    private int p1Alive;
+    private int p2Alive;
+
+
+    private int p1Coins;
+    private int p2Coins;
     private int maxTreasure;
 
     private bool isAttacking = false;
@@ -51,8 +58,6 @@ public class GameManager : MonoBehaviour
     private string p1FirstMateMinigame;
     private string p2FirstMateMinigame;
     private int minigameCount;
-
-    public int sceneCount;
 
     private void Awake()
     {
@@ -80,9 +85,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-
-        sceneCount = SceneManager.loadedSceneCount;
-
         if (state != GameState.START)
         {
             UpdateUI(p1Crew, p1HUD);
@@ -108,18 +110,38 @@ public class GameManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-            if (hit.collider)
+            if (hit.collider && IsThisAnEnemy(hit) && !selectedPirate.hasAttacked)
             {
-                if (IsThisAnEnemy(hit) && !selectedPirate.hasAttacked)
-                {
                     selectedEnemy = hit.collider.GetComponent<Unit>();
                     Attack();
-                }
             }
             else if (selectedPirate)
             {
                 selectedPirate.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 StartCoroutine(selectedPirate.MoveUnit());
+            }
+        }
+
+        if (selectedPirate != null && selectedPirate.collectedTreasure != 0)
+        {
+            selectedPirate.collectedTreasure = 0;
+            maxTreasure--;
+
+            switch (state)
+            {
+                case GameState.P1_TURN:
+                    p1Coins += 50;
+                    p1HUD[0].SetCoins(p1Coins);
+                    break;
+                case GameState.P2_TURN:
+                    p2Coins += 50;
+                    p2HUD[0].SetCoins(p2Coins);
+                    break;
+            }
+
+            if (maxTreasure == 0)
+            {
+                StartCoroutine(EndBattle());
             }
         }
 
@@ -132,6 +154,10 @@ public class GameManager : MonoBehaviour
     IEnumerator SetupGame()
     {
         mainCam = Camera.main;
+        maxTreasure = 3;
+
+        p1Alive = p1Spawns.Length;
+        p2Alive = p2Spawns.Length;
 
         for (int i = 0; i < p1Spawns.Length; i++)
         {
@@ -249,7 +275,22 @@ public class GameManager : MonoBehaviour
 
         if (isDead)
         {
-            selectedEnemy.gameObject.SetActive(false);
+            Destroy(selectedEnemy.gameObject);
+
+            switch (state)
+            {
+                case GameState.P1_TURN:
+                    p2Alive--;
+                    break;
+                case GameState.P2_TURN:
+                    p1Alive--;
+                    break;
+            }
+        }
+
+        if (p1Alive == 0 || p2Alive == 0)
+        {
+            StartCoroutine(EndBattle());
         }
 
         yield return new WaitForSeconds(2f);
@@ -267,9 +308,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void EndBattle()
+    IEnumerator EndBattle()
     {
-        //end battle
+        dialogueText.text = "Level Complete";
+
+        switch (state)
+        { 
+            case GameState.P1_TURN:
+                p1Coins += maxTreasure * 50;
+                p1HUD[0].SetCoins(p1Coins);
+                break;
+            case GameState.P2_TURN:
+                p2Coins += maxTreasure * 50;
+                p2HUD[0].SetCoins(p2Coins);
+                break;
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        SceneManager.LoadScene("Island");
     }
 
     public void EndTurnButton()
@@ -347,6 +404,10 @@ public class GameManager : MonoBehaviour
                     case "MonkeyMiniGame":
                         monkeyMinigame.gameObject.SetActive(false);
                         monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
+
+                        p1Coins += score;
+                        p1HUD[0].SetCoins(p1Coins);
+
                         break;
                     case "ParrotMiniGame":
                         //disable parrot minigame
@@ -364,6 +425,10 @@ public class GameManager : MonoBehaviour
                     case "MonkeyMiniGame":
                         monkeyMinigame.gameObject.SetActive(false);
                         monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
+
+                        p2Coins += score;
+                        p2HUD[0].SetCoins(p2Coins);
+
                         break;
                     case "ParrotMiniGame":
                         //disable parrot minigame
