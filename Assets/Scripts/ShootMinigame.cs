@@ -8,7 +8,7 @@ public class ShootMinigame : MonoBehaviour
 {
     public Collider2D miss, miss2, hit, hit2, bullseye, pointer;
 
-    private int _speed = 1;
+    private int _speed = 2;
 
     private bool hasShot;
 
@@ -19,7 +19,7 @@ public class ShootMinigame : MonoBehaviour
 
     private void OnEnable()
     {
-        pointer.attachedRigidbody.isKinematic = true;
+        pointer.attachedRigidbody.isKinematic = false;
         hasShot = false;
     }
 
@@ -32,7 +32,7 @@ public class ShootMinigame : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 CheckCollision();
-                //pointer.attachedRigidbody.isKinematic = false;
+                pointer.attachedRigidbody.isKinematic = true;
                 hasShot = true;
             }
         }               
