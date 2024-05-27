@@ -27,7 +27,7 @@ public class ShootMinigame : MonoBehaviour
     {
         if (!hasShot)
         {
-            pointer.gameObject.transform.position = new Vector3(Mathf.Sin(Time.time * _speed) * 9.6f - 0.78f, 10f, -5f); //*5 for distance
+            pointer.gameObject.transform.position = new Vector3(Mathf.Sin(Time.time * _speed) * 9.6f, 10f, -5f); //*5 for distance
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
