@@ -7,10 +7,10 @@ using UnityEngine.UIElements;
 
 public class ParrotCharacter : MonoBehaviour
 {
-
+    public bool _isPaused  = false; 
     [SerializeField]
     private float _jumpHeight = 100.0f;// The height that the player should reach
-    private bool _gameEnded = false;
+    public bool _gameEnded = false;
 
     [SerializeField]
     private float _fallGravityScale = 0.5f;
@@ -35,7 +35,7 @@ public class ParrotCharacter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!_gameEnded)
+        if (!_gameEnded || !_isPaused)
         {
             CheckInput();
         }

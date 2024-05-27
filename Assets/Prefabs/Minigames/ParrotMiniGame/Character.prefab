@@ -47,9 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa9208723b96f742b740be1256c5347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _jumpHeight: 133
+  _jumpHeight: 7
+  _gameEnded: 0
   _fallGravityScale: 1
-  _startingPoint: {x: 88, y: 478}
 --- !u!50 &244557085915444244
 Rigidbody2D:
   serializedVersion: 4

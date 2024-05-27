@@ -9,37 +9,37 @@ using UnityEngine.SocialPlatforms.Impl;
 
 public class ParrotMinigameManager : MonoBehaviour
 {
+
     [SerializeField]
     private float _timer = 0;
 
-    private bool _GameEnded = false;
+    private bool _GameEnded = false,
+                 _PlayerWon = false,
+                 _isPaused = false;
 
     [SerializeField]
     GameObject _pillarParent,
                _pillar,
                _player;
 
-    [SerializeField]
-    private float _offScreen; //Used to determin where to spawn and destroy the pillars
-    [SerializeField]
-    private float _centerPointOffset = 0f; //Used so that the gap wont be at the edges of the screen
-    private int _score = 0;
     private List<GameObject> _pillars = new List<GameObject>();
 
     [SerializeField]
-    private float _spaceBetweenPillars = 200.0f;//Space between top and bottom Spillars, not between each set 
-    [SerializeField]
-    private float _timeBetweenSpawns = 2.0f;
-    [SerializeField]
-    private float _pillarMoveSpeed = 40.0f;
+    private int _scoreToWin = 10;
+    private int _score = 0;
 
     [SerializeField]
-    private TextMeshPro _scoreText;
+    private float _offScreen,//Used to determin where to spawn and destroy the pillars
+                  _centerPointOffset = 0f,//Used so that the gap wont be at the edges of the screen
+                  _spaceBetweenPillars = 200.0f,//Space between top and bottom Spillars, not between each set 
+                  _timeBetweenSpawns = 2.0f,
+                  _pillarMoveSpeed = 40.0f;
 
     private Vector3 _bottomLeft,//WorldPoint
                     _topRight;//WorldPoint
 
-
+    [SerializeField]
+    private TextMeshPro _scoreText;
 
 
     private void Start()
@@ -51,57 +51,46 @@ public class ParrotMinigameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckEndGame();
-        if (!_GameEnded)
+        if (!_PlayerWon)
         {
-            UpdateTime();
-            if (_timer > _timeBetweenSpawns)//ok
+            CheckEndGame();
+            if (!_GameEnded)
             {
-                SpawnPillars();//ok
-                _timer = 0;
+                UpdateTime();
+                if (_timer > _timeBetweenSpawns)//ok
+                {
+                    SpawnPillars();//ok
+                    _timer = 0;
+                }
+                MovePillars();//ok
+                UpdateScore(); //If were gonna calculate score like that
+                DespawnPillars();//ok
             }
-            MovePillars();//ok
-            UpdateScore(); //If were gonna calculate score like that
-            DespawnPillars();//ok
         }
+        else { Debug.Log("Player Won!"); }
     }
 
     private void CheckEndGame()
     {
-        foreach (GameObject pillar in _pillars)
+        if (_score == _scoreToWin)
         {
-            foreach(Pillar child in pillar.transform)
-            {
-                if (child._TouchedPlayer)
-                {
-                    _GameEnded = true;
-                }
-            }
+            _PlayerWon = true;
         }
-        Debug.Log(_GameEnded);
+        if (_player.GetComponent<ParrotCharacter>()._gameEnded == true)
+        {
+            _GameEnded = true;
+        }
     }
 
     private void UpdateScore()
     {
         foreach (GameObject pillar in _pillars)
         {
-            if (pillar.transform.position.x <= _player.transform.position.x)
+            if (pillar.transform.position.x < _player.transform.position.x && !pillar.GetComponent<PillarParent>()._WasScored)
             {
                 _score++;
-                //_pillar.
-                //foreach (Pillar child in pillar.transform)
-                //{
-                //    if (!child._WasScored)
-                //    {
-                //        child._WasScored = true;
-                //        _score++;
-
-                //    }
-                //    else
-                //    {
-                //        break; 
-                //    }
-                //}
+                pillar.GetComponent<PillarParent>()._WasScored = true;
+                _scoreText.text = "Score: " + _score; // Update the score text
             }
         }
     }
@@ -114,8 +103,8 @@ public class ParrotMinigameManager : MonoBehaviour
     }
     private GameObject SetPillarParent()
     {
-        float randomY = UnityEngine.Random.Range(_bottomLeft.y + _centerPointOffset + _spaceBetweenPillars / 2,
-                                                _topRight.y - _centerPointOffset - _spaceBetweenPillars / 2);
+        float randomY = UnityEngine.Random.Range(_bottomLeft.y + _centerPointOffset, //+ _spaceBetweenPillars / 2,
+                                                _topRight.y - _centerPointOffset);// - _spaceBetweenPillars / 2);
         float spawnX = _topRight.x + _offScreen; //Spawn the pillars offScreen
         GameObject centerPoint = Instantiate(_pillarParent, new Vector3(spawnX, randomY, 0), Quaternion.identity);
         return centerPoint;
@@ -149,22 +138,7 @@ public class ParrotMinigameManager : MonoBehaviour
                 _pillars.RemoveAt(i);
             }
         }
-        //foreach (GameObject pillar in _pillars)
-        //{
-        //    if (pillar.transform.position.x < _bottomLeft.x - _offScreen)
-        //    {
-        //        Destroy(pillar);
-        //        _pillars.Remove(pillar);
-        //    }
-        //}
-        //for (int i = _pillars.Count - 1; i >= 0; i--)
-        //{
-        //    if (_pillars[i] == null)
-        //    {
-        //        _pillars.RemoveAt(i);
-
-        //    }
-        //}
+        
     }
     private void UpdateTime()
     {
