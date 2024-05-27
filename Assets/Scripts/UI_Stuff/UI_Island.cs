@@ -4,17 +4,17 @@ using TMPro;
 using UnityEngine;
 
 public class UI_Island : MonoBehaviour
-{    
-    public int coinCount, bulletCount, cannonBallsCount, medicineCount;
-    public TextMeshProUGUI coins, bulletsButton, cannonBallsButton, medicineButton, monkeyButton, parrotButton, boozeButton, healButton;
+{
+    public int coinCount, bulletCount, cannonBallsCount;
+    public TextMeshProUGUI coins, bulletsButton, cannonBallsButton, monkeyButton, parrotButton, boozeButton, healButton;
 
     public TextMeshProUGUI continueButton;
 
     public GameObject monkeyGuy, parrotGuy, boozeGuy, firstMate;
 
-    public int crewHealth = 1, maxHealth = 100;
+    public int crewHealth = 1, maxHealth = 100; // crew health could be a list
 
-    private int _bulletPrice = 2, _cannonBallPrice = 2, _medicinePrice = 2, _healPrice = 2;
+    private int _bulletPrice = 2, _cannonBallPrice = 2, _healPrice = 2;
 
     private void Start()
     {
@@ -113,7 +113,6 @@ public class UI_Island : MonoBehaviour
         coins.text = "Coins: " + coinCount.ToString();
         bulletsButton.text = "Buy\nBullets\n " + _bulletPrice + " coins\nOwned: " + bulletCount.ToString();
         cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + cannonBallsCount.ToString();
-        medicineButton.text = "Buy\nMedicine\n " + _medicinePrice + " coins\nOwned: " + medicineCount.ToString();
 
         if (crewHealth == maxHealth)
         {
@@ -155,18 +154,4 @@ public class UI_Island : MonoBehaviour
         }
     }
 
-    public void BuyMedicine()
-    {
-        if (coinCount >= _medicinePrice)
-        {
-            medicineCount++;
-            coinCount -= _medicinePrice;
-            coins.text = "Coins: " + coinCount.ToString();
-            medicineButton.text = "Buy\nMedicine\n " + _medicinePrice + " coins\n Owned: " + medicineCount.ToString();
-        }
-        else
-        {
-            Debug.Log("Too poor!");
-        }
-    }
 }
