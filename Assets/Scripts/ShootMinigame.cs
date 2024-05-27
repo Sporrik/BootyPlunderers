@@ -27,12 +27,12 @@ public class ShootMinigame : MonoBehaviour
     {
         if (!hasShot)
         {
-            pointer.gameObject.transform.position = new Vector3(Mathf.Sin(Time.time * _speed) * 9.6f, 0f, -5f); //*5 for distance
+            pointer.gameObject.transform.position = new Vector3(Mathf.Sin(Time.time * _speed) * 9.6f - 0.78f, 10f, -5f); //*5 for distance
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                pointer.attachedRigidbody.isKinematic = false;
                 CheckCollision();
+                //pointer.attachedRigidbody.isKinematic = false;
                 hasShot = true;
             }
         }               
@@ -42,14 +42,17 @@ public class ShootMinigame : MonoBehaviour
     {
         if (pointer.IsTouching(hit) || pointer.IsTouching(hit2))
         {
+            Debug.Log("15 Damage");
             return 15;
         }
         else if (pointer.IsTouching(bullseye))
         {
+            Debug.Log("30 Damage");
             return 30;
         }
         else
         {
+            Debug.Log("0 Damage");
             return 0;
         }
     }
