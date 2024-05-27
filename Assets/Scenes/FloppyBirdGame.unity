@@ -579,9 +579,9 @@ MonoBehaviour:
   _scoreToWin: 10
   _offScreen: 6
   _centerPointOffset: 10
-  _spaceBetweenPillars: 9.69
+  _spaceBetweenPillars: 14.1
   _timeBetweenSpawns: 2
-  _pillarMoveSpeed: 10
+  _pillarMoveSpeed: 8.09
   _scoreText: {fileID: 0}
 --- !u!1001 &1826741004
 PrefabInstance:
@@ -593,11 +593,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2656002416656363137, guid: e8d5f7d5da62d9848bc7ab15dabe7497, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.19
+      value: 0.16480981
       objectReference: {fileID: 0}
     - target: {fileID: 2656002416656363137, guid: e8d5f7d5da62d9848bc7ab15dabe7497, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.19
+      value: 0.16480981
       objectReference: {fileID: 0}
     - target: {fileID: 2656002416656363137, guid: e8d5f7d5da62d9848bc7ab15dabe7497, type: 3}
       propertyPath: m_LocalScale.z
