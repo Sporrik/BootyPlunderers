@@ -16,47 +16,41 @@ public class GameManager : MonoBehaviour
 
     public GameState state;
 
-    public GameObject p1CrewPrefab;
-    public GameObject p2CrewPrefab;
+    public struct Player
+    {
+        public int coins;
+        public int ammo;
+        public string firstMate;
+        public GameObject crewPrefab;
+
+        public Transform[] spawns;
+        public Unit[] crew;
+        public UI[] HUD;
+
+        public int alive;
+        public bool isSpecialAvailable;
+    }
+
+    public Player player1;
+    public Player player2;
+
     public GameObject treasurePrefab;
-
-    public Transform[] p1Spawns;
-    public Transform[] p2Spawns;
     public Transform[] treasureSpawns;
-
-    private Unit[] p1Crew;
-    private Unit[] p2Crew;
     private GameObject[] treasureChests;
+    private int maxTreasure;
 
     private Unit selectedPirate;
     private Unit selectedEnemy;
 
-    public UI[] p1HUD;
-    public UI[] p2HUD;
     public TextMeshProUGUI dialogueText;
 
-    private int p1Ammo;
-    private int p2Ammo;
     private int selectedAmmo;
-
-    private int p1Alive;
-    private int p2Alive;
-
-
-    private int p1Coins;
-    private int p2Coins;
-    private int maxTreasure;
-
     private bool isAttacking = false;
-    private bool p1SpecialAvailable;
-    private bool p2SpecialAvailable;
 
     private Camera mainCam;
     public ShootMinigame attackMinigame;
     public MonkeyMiniGame monkeyMinigame;
 
-    private string p1FirstMateMinigame;
-    private string p2FirstMateMinigame;
     private int minigameCount;
 
     private void Awake()
@@ -70,14 +64,14 @@ public class GameManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-        p1FirstMateMinigame = "MonkeyMiniGame";
-        p2FirstMateMinigame = "MonkeyMiniGame";
+        player1.firstMate = "MonkeyMiniGame";
+        player2.firstMate = "MonkeyMiniGame";
 
-        p1SpecialAvailable = true;
-        p2SpecialAvailable = true;
+        player1.isSpecialAvailable = true;
+        player2.isSpecialAvailable = true;
 
-        p1Spawns = new Transform[3];
-        p2Spawns = new Transform[3];
+        player1.spawns = new Transform[3];
+        player2.spawns = new Transform[3];
 
         state = GameState.START;
         StartCoroutine(SetupGame());
@@ -87,8 +81,8 @@ public class GameManager : MonoBehaviour
     {
         if (state != GameState.START)
         {
-            UpdateUI(p1Crew, p1HUD);
-            UpdateUI(p2Crew, p2HUD);
+            UpdateUI(player1.crew, player1.HUD);
+            UpdateUI(player2.crew, player2.HUD);
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -130,12 +124,12 @@ public class GameManager : MonoBehaviour
             switch (state)
             {
                 case GameState.P1_TURN:
-                    p1Coins += 50;
-                    p1HUD[0].SetCoins(p1Coins);
+                    player1.coins += 50;
+                    player1.HUD[0].SetCoins(player1.coins);
                     break;
                 case GameState.P2_TURN:
-                    p2Coins += 50;
-                    p2HUD[0].SetCoins(p2Coins);
+                    player2.coins += 50;
+                    player2.HUD[0].SetCoins(player2.coins);
                     break;
             }
 
@@ -156,31 +150,31 @@ public class GameManager : MonoBehaviour
         mainCam = Camera.main;
         maxTreasure = 3;
 
-        p1Alive = p1Spawns.Length;
-        p2Alive = p2Spawns.Length;
+        player1.alive = player1.spawns.Length;
+        player2.alive = player2.spawns.Length;
 
-        for (int i = 0; i < p1Spawns.Length; i++)
+        for (int i = 0; i < player1.spawns.Length; i++)
         {
-            p1Spawns[i] = GameObject.Find("p1Spawn" + i).transform;
+            player1.spawns[i] = GameObject.Find("p1Spawn" + i).transform;
         }
 
-        for (int i = 0; i < p2Spawns.Length; i++)
+        for (int i = 0; i < player2.spawns.Length; i++)
         {
-            p2Spawns[i] = GameObject.Find("p2Spawn" + i).transform;
+            player2.spawns[i] = GameObject.Find("p2Spawn" + i).transform;
         }
 
-        p1Crew = new Unit[p1Spawns.Length];
-        for (int i = 0; i < p1Spawns.Length; i++)
+        player1.crew = new Unit[player1.spawns.Length];
+        for (int i = 0; i < player1.spawns.Length; i++)
         {
-            var p1 = Instantiate(p1CrewPrefab, p1Spawns[i]);
-            p1Crew[i] = p1.GetComponent<Unit>();
+            var p1 = Instantiate(player1.crewPrefab, player1.spawns[i]);
+            player1.crew[i] = p1.GetComponent<Unit>();
         }
 
-        p2Crew = new Unit[p2Spawns.Length];
-        for (int i = 0; i < p2Spawns.Length; i++)
+        player2.crew = new Unit[player2.spawns.Length];
+        for (int i = 0; i < player2.spawns.Length; i++)
         {
-            var p2 = Instantiate(p2CrewPrefab, p2Spawns[i]);
-            p2Crew[i] = p2.GetComponent<Unit>();
+            var p2 = Instantiate(player2.crewPrefab, player2.spawns[i]);
+            player2.crew[i] = p2.GetComponent<Unit>();
         }
 
         treasureChests = new GameObject[treasureSpawns.Length];
@@ -189,14 +183,14 @@ public class GameManager : MonoBehaviour
             treasureChests[i] = Instantiate(treasurePrefab, treasureSpawns[i]);
         }
 
-        for (int i = 0; i < p1Crew.Length; i++)
+        for (int i = 0; i < player1.crew.Length; i++)
         {
-            p1HUD[i].SetHUD(p1Crew[i]);
+            player1.HUD[i].SetHUD(player1.crew[i]);
         }
 
-        for (int i = 0; i < p2Crew.Length; i++)
+        for (int i = 0; i < player2.crew.Length; i++)
         {
-            p2HUD[i].SetHUD(p2Crew[i]);
+            player2.HUD[i].SetHUD(player2.crew[i]);
         }
 
         dialogueText.text = "Plunder their Booty";
@@ -211,7 +205,7 @@ public class GameManager : MonoBehaviour
     {
         dialogueText.text = "Player 1 Turn";
 
-        foreach (Unit p in p1Crew)
+        foreach (Unit p in player1.crew)
         {
             p.Reset();
         }
@@ -221,7 +215,7 @@ public class GameManager : MonoBehaviour
     {
         dialogueText.text = "Player 2 Turn";
 
-        foreach (Unit p in p2Crew)
+        foreach (Unit p in player2.crew)
         {
             p.Reset();
         }
@@ -236,11 +230,11 @@ public class GameManager : MonoBehaviour
     {
         if (state == GameState.P1_TURN)
         {
-            selectedAmmo = p1Ammo;
+            selectedAmmo = player1.ammo;
         }
         else if (state == GameState.P2_TURN)
         {
-            selectedAmmo = p2Ammo;
+            selectedAmmo = player2.ammo;
         }
 
         switch (CheckRange())
@@ -280,15 +274,15 @@ public class GameManager : MonoBehaviour
             switch (state)
             {
                 case GameState.P1_TURN:
-                    p2Alive--;
+                    player2.alive--;
                     break;
                 case GameState.P2_TURN:
-                    p1Alive--;
+                    player1.alive--;
                     break;
             }
         }
 
-        if (p1Alive == 0 || p2Alive == 0)
+        if (player1.alive == 0 || player2.alive == 0)
         {
             StartCoroutine(EndBattle());
         }
@@ -315,12 +309,12 @@ public class GameManager : MonoBehaviour
         switch (state)
         { 
             case GameState.P1_TURN:
-                p1Coins += maxTreasure * 50;
-                p1HUD[0].SetCoins(p1Coins);
+                player1.coins += maxTreasure * 50;
+                player1.HUD[0].SetCoins(player1.coins);
                 break;
             case GameState.P2_TURN:
-                p2Coins += maxTreasure * 50;
-                p2HUD[0].SetCoins(p2Coins);
+                player2.coins += maxTreasure * 50;
+                player2.HUD[0].SetCoins(player2.coins);
                 break;
         }
 
@@ -331,6 +325,7 @@ public class GameManager : MonoBehaviour
 
     public void EndTurnButton()
     {
+        StartCoroutine (EndBattle());
         selectedPirate = null;
         selectedEnemy = null;
 
@@ -349,9 +344,9 @@ public class GameManager : MonoBehaviour
 
     public void SpecialAttackP1()
     {
-        if (!p1SpecialAvailable || state != GameState.P1_TURN) return;
+        if (!player1.isSpecialAvailable || state != GameState.P1_TURN) return;
 
-        p1SpecialAvailable = false;
+        player1.isSpecialAvailable = false;
 
         monkeyMinigame.gameObject.SetActive(true);
         monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
@@ -360,9 +355,9 @@ public class GameManager : MonoBehaviour
 
     public void SpecialAttackP2()
     {
-        if (!p2SpecialAvailable || state != GameState.P2_TURN) return;
+        if (!player2.isSpecialAvailable || state != GameState.P2_TURN) return;
 
-        p2SpecialAvailable = false;
+        player2.isSpecialAvailable = false;
 
         monkeyMinigame.gameObject.SetActive(true);
         monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
@@ -399,14 +394,14 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case GameState.P1_TURN:
-                switch (p1FirstMateMinigame)
+                switch (player1.firstMate)
                 {
                     case "MonkeyMiniGame":
                         monkeyMinigame.gameObject.SetActive(false);
                         monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
 
-                        p1Coins += score;
-                        p1HUD[0].SetCoins(p1Coins);
+                        player1.coins += score;
+                        player1.HUD[0].SetCoins(player1.coins);
 
                         break;
                     case "ParrotMiniGame":
@@ -420,14 +415,14 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameState.P2_TURN:
-                switch (p2FirstMateMinigame)
+                switch (player2.firstMate)
                 {
                     case "MonkeyMiniGame":
                         monkeyMinigame.gameObject.SetActive(false);
                         monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
 
-                        p2Coins += score;
-                        p2HUD[0].SetCoins(p2Coins);
+                        player2.coins += score;
+                        player2.HUD[0].SetCoins(player2.coins);
 
                         break;
                     case "ParrotMiniGame":

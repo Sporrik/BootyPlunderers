@@ -42,18 +42,15 @@ public class ShootMinigame : MonoBehaviour
     {
         if (pointer.IsTouching(hit) || pointer.IsTouching(hit2))
         {
-            Debug.Log("15 Damage");
             return 15;
         }
         else if (pointer.IsTouching(bullseye))
         {
-            Debug.Log("30 Damage");
             return 30;
         }
         else
         {
-            Debug.Log("0 Damage");
-            return 100;
+            return 0;
         }
     }
 }

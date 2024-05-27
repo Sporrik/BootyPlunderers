@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+public enum IslandState { P1_TURN, P2_TURN }
+
 public class UI_Island : MonoBehaviour
 {
     public int coinCount, bulletCount, cannonBallsCount;
@@ -16,11 +18,19 @@ public class UI_Island : MonoBehaviour
 
     private int _bulletPrice = 2, _cannonBallPrice = 2, _healPrice = 2;
 
+    private IslandState state;
+    private GameManager gameManager;
+
     private void Start()
     {
+        gameManager = FindAnyObjectByType<GameManager>();
+
+        state = IslandState.P1_TURN;
+
         firstMate = monkeyGuy; //change later
         SetButtonText();
         SetFirstMateButtons();
+        SetCoins();
     }
 
     public void HealCrew()
@@ -104,7 +114,15 @@ public class UI_Island : MonoBehaviour
 
     public void SetCoins()
     {
-        coinCount++;
+        switch (state)
+        {
+            case IslandState.P1_TURN:
+                coinCount = gameManager.p1Coins;
+                break;
+            case IslandState.P2_TURN:
+                coinCount = gameManager.p2Coins;
+                break;
+        }
         coins.text = "Coins: " + coinCount.ToString();
     }
 
