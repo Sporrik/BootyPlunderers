@@ -7,14 +7,12 @@ public enum IslandState { P1_TURN, P2_TURN }
 
 public class UI_Island : MonoBehaviour
 {
-    public int coinCount, bulletCount, cannonBallsCount;
+    public int coinCount;
     public TextMeshProUGUI coins, bulletsButton, cannonBallsButton, monkeyButton, parrotButton, boozeButton, healButton;
 
     public TextMeshProUGUI continueButton;
 
     public GameObject monkeyGuy, parrotGuy, boozeGuy, firstMate;
-
-    public int crewHealth = 1, maxHealth = 100; // crew health could be a list
 
     private int _bulletPrice = 2, _cannonBallPrice = 2, _healPrice = 2;
 
@@ -35,19 +33,21 @@ public class UI_Island : MonoBehaviour
 
     public void HealCrew()
     {
-        if (crewHealth < maxHealth && coinCount >= _healPrice)
+        switch (state)
         {
-            coinCount -= _healPrice;
-            crewHealth = maxHealth;
-            healButton.text = "Heal\nCrew\n[Healed]";
-        }
-        else if (crewHealth == maxHealth)
-        {
-            Debug.Log("The crew's health is full!");
-        }   
-        else if(coinCount < _healPrice)
-        {
-            Debug.Log("Too poor!");
+            case IslandState.P1_TURN:
+                if (CheckHealth(gameManager.player1.crew) && CanAfford(_healPrice))
+                {
+                    HealCrew(gameManager.player1.crew);
+                }
+
+                break;
+            case IslandState.P2_TURN:
+                if (CheckHealth(gameManager.player2.crew))
+                {
+                    HealCrew(gameManager.player2.crew);
+                }
+                break;
         }
     }
 
@@ -117,10 +117,10 @@ public class UI_Island : MonoBehaviour
         switch (state)
         {
             case IslandState.P1_TURN:
-                coinCount = gameManager.p1Coins;
+                coinCount = gameManager.player1.coins;
                 break;
             case IslandState.P2_TURN:
-                coinCount = gameManager.p2Coins;
+                coinCount = gameManager.player2.coins;
                 break;
         }
         coins.text = "Coins: " + coinCount.ToString();
@@ -128,48 +128,112 @@ public class UI_Island : MonoBehaviour
 
     private void SetButtonText()
     {
-        coins.text = "Coins: " + coinCount.ToString();
-        bulletsButton.text = "Buy\nBullets\n " + _bulletPrice + " coins\nOwned: " + bulletCount.ToString();
-        cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + cannonBallsCount.ToString();
+        switch (state)
+        {
+            case IslandState.P1_TURN:
+                if (CheckHealth(gameManager.player1.crew))
+                {
+                    healButton.text = "Heal\nCrew\n[Healed]";
+                }
+                else
+                {
+                    healButton.text = "Heal\nCrew\n " + _healPrice + " coins";
+                }
+                
+                SetCoins();
+                bulletsButton.text = "Buy\nBullets\n " + _bulletPrice + " coins\nOwned: " + gameManager.player1.ammo.ToString();
+                cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player1.cannonballs.ToString();
 
-        if (crewHealth == maxHealth)
-        {
-            healButton.text = "Heal\nCrew\n[Healed]";
-        }
-        else if (crewHealth < maxHealth)
-        {
-            healButton.text = "Heal\nCrew\n " + _healPrice + " coins";
-        }        
+                break;
+            case IslandState.P2_TURN:
+                if (CheckHealth(gameManager.player2.crew))
+                {
+                    healButton.text = "Heal\nCrew\n[Healed]";
+                }
+                else
+                {
+                    healButton.text = "Heal\nCrew\n " + _healPrice + " coins";
+                }
+
+                SetCoins();
+                bulletsButton.text = "Buy\nBullets\n " + _bulletPrice + " coins\nOwned: " + gameManager.player2.ammo.ToString();
+                cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player2.cannonballs.ToString();
+
+                break;
+        }     
     }
 
     public void BuyBullets()
     {
-        if (coinCount >= _bulletPrice)
+        if (CanAfford(_bulletPrice))
         {
-            bulletCount++;
-            coinCount -= _bulletPrice;
-            coins.text = "Coins: " + coinCount.ToString();
-            bulletsButton.text = "Buy\nBullets\n " + _bulletPrice + " coins\nOwned: " + bulletCount.ToString();
-        }
-        else
-        {
-            Debug.Log("Too poor!");
+            switch (state)
+            {
+                case IslandState.P1_TURN:
+                    gameManager.player1.ammo++;
+                    cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player1.ammo.ToString();
+                    break;
+                case IslandState.P2_TURN:
+                    gameManager.player2.ammo++;
+                    cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player2.ammo.ToString();
+                    break;
+            }
+
+            coinCount -= _cannonBallPrice;
+            SetCoins();
         }
     }
 
     public void BuyCannonBalls()
     {
-        if (coinCount >= _cannonBallPrice)
+        if (CanAfford(_cannonBallPrice))
         {
-            cannonBallsCount++;
+            switch (state)
+            {
+                case IslandState.P1_TURN:
+                    gameManager.player1.cannonballs++;
+                    cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player1.cannonballs.ToString();
+                    break;
+                case IslandState.P2_TURN:
+                    gameManager.player2.cannonballs++;
+                    cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player2.cannonballs.ToString();
+                    break;
+            }
+
             coinCount -= _cannonBallPrice;
-            coins.text = "Coins: " + coinCount.ToString();
-            cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + cannonBallsCount.ToString();
-        }
-        else
-        {
-            Debug.Log("Too poor!");
+            SetCoins();
         }
     }
 
+    private bool CheckHealth(Unit[] crewArray)
+    {
+        foreach (Unit unit in crewArray)
+        {
+            if (unit.currentHealth < unit.maxHealth)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void HealCrew(Unit[] crewArray)
+    {
+        foreach (Unit unit in crewArray)
+        {
+            if (unit.currentHealth < unit.maxHealth)
+            {
+                unit.currentHealth = unit.maxHealth;
+            }  
+        }
+
+        coinCount -= _healPrice;
+        healButton.text = "Heal\nCrew\n[Healed]";
+    }
+
+    private bool CanAfford(int cost)
+    {
+        return (coinCount <= cost);
+    }
 }

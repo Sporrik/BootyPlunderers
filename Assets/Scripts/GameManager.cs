@@ -16,10 +16,12 @@ public class GameManager : MonoBehaviour
 
     public GameState state;
 
+    [Serializable]
     public struct Player
     {
         public int coins;
         public int ammo;
+        public int cannonballs;
         public string firstMate;
         public GameObject crewPrefab;
 
