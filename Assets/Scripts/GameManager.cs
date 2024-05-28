@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public struct Player
     {
         public int coins;
+        
         public int ammo;
         public string firstMate;
         public GameObject crewPrefab;
@@ -30,7 +31,8 @@ public class GameManager : MonoBehaviour
         public int alive;
         public bool isSpecialAvailable;
     }
-
+    public int p1Coins;
+    public int p2Coins;
     public Player player1;
     public Player player2;
 
