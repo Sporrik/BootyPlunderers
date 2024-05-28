@@ -25,7 +25,7 @@ public class ParrotMinigameManager : MonoBehaviour
     private List<GameObject> _pillars = new List<GameObject>();
 
     [SerializeField]
-    private int _scoreToWin = 10;
+    private int _scoreToWin = 2;
     private int _score = 0;
 
     [SerializeField]
@@ -39,7 +39,10 @@ public class ParrotMinigameManager : MonoBehaviour
                     _topRight;//WorldPoint
 
     [SerializeField]
-    private TextMeshPro _scoreText;
+    private TMP_Text _scoreText,
+                     _middleText;
+
+
 
 
     private void Start()
@@ -62,23 +65,49 @@ public class ParrotMinigameManager : MonoBehaviour
                     SpawnPillars();//ok
                     _timer = 0;
                 }
-                MovePillars();//ok
                 UpdateScore(); //If were gonna calculate score like that
+                MovePillars();//ok
                 DespawnPillars();//ok
             }
         }
-        else { Debug.Log("Player Won!"); }
+        else
+        {
+            CheckEndGame();
+            MovePillars();//ok
+            MoveAtEnd();
+            DespawnPillars();//ok
+            DespawnParrot();
+        }
+    }
+
+    private void DespawnParrot()
+    {
+        if (_player.transform.position.x > _topRight.x)
+        {
+            Destroy(_player.gameObject);
+        }
+    }
+
+    private void MoveAtEnd()
+    {
+        _player.GetComponent<Rigidbody2D>().isKinematic = true;
+        _player.GetComponent<ParrotCharacter>()._gameWon = true;
+        _player.transform.position += new Vector3(10, 0, 0) * Time.deltaTime;
     }
 
     private void CheckEndGame()
     {
-        if (_score == _scoreToWin)
+        if (_score >= _scoreToWin)
         {
             _PlayerWon = true;
+            _middleText.gameObject.SetActive(true);
+            _middleText.text = "You Win!";
         }
         if (_player.GetComponent<ParrotCharacter>()._gameEnded == true)
         {
             _GameEnded = true;
+            _middleText.gameObject.SetActive(true);
+            _middleText.text = "Game Over!";
         }
     }
 
@@ -138,7 +167,7 @@ public class ParrotMinigameManager : MonoBehaviour
                 _pillars.RemoveAt(i);
             }
         }
-        
+
     }
     private void UpdateTime()
     {

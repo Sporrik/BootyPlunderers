@@ -10,7 +10,8 @@ public class ParrotCharacter : MonoBehaviour
     public bool _isPaused  = false; 
     [SerializeField]
     private float _jumpHeight = 100.0f;// The height that the player should reach
-    public bool _gameEnded = false;
+    public bool _gameEnded = false,
+                _gameWon = false;
 
     [SerializeField]
     private float _fallGravityScale = 0.5f;
@@ -75,6 +76,9 @@ public class ParrotCharacter : MonoBehaviour
     private void FinishGame()
     {
         _gameEnded = true;
-        transform.rotation = Quaternion.Euler(0, 0, -90);
+        if (!_gameWon)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, -90);
+        }
     }
 }
