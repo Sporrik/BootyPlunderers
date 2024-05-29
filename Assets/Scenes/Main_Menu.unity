@@ -258,6 +258,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7788326946622540425, guid: da1e4cf153914d148ba323ff79ed87da, type: 3}
+      propertyPath: m_TargetDisplay
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -362,6 +366,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7231641030301871457, guid: c15deb1dc3e0bcd4dbdac4e65d24a72e, type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231641030301871457, guid: c15deb1dc3e0bcd4dbdac4e65d24a72e, type: 3}
+      propertyPath: m_TargetDisplay
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
@@ -470,6 +478,8 @@ MonoBehaviour:
   monkeyMinigame: {fileID: 1911833685}
   parrotMinigame: {fileID: 550907904}
   boozeMinigame: {fileID: 247023923}
+  parrotCamera: {fileID: 1408111885}
+  boozeCamera: {fileID: 1308083231}
 --- !u!4 &282501950
 Transform:
   m_ObjectHideFlags: 0
@@ -603,6 +613,10 @@ PrefabInstance:
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 282501949}
+    - target: {fileID: 3119131960325023972, guid: 09c14f8697c73f446b93955592a0c27f, type: 3}
+      propertyPath: m_TargetDisplay
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7992225024156941765, guid: 09c14f8697c73f446b93955592a0c27f, type: 3}
       propertyPath: m_Name
       value: parrotMinigame
