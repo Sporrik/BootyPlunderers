@@ -19,7 +19,6 @@ public struct Player
     public string firstMate;
     public GameObject crewPrefab;
 
-    public Transform[] spawns;
     public Unit[] crew;
     public UI[] HUD;
 
@@ -39,6 +38,7 @@ public class GameManager : MonoBehaviour
     public GameObject treasurePrefab;
     public Transform[] treasureSpawns;
     private GameObject[] treasureChests;
+
 
     private int maxTreasure;
     private int treasureValue = 10;
@@ -85,92 +85,94 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (state != GameState.START)
+        if (state == GameState.P1_TURN || state == GameState.P2_TURN)
         {
             UpdateUI(player1.crew, player1.HUD);
             UpdateUI(player2.crew, player2.HUD);
-        }
+            player1.HUD[0].SetCoins(player1.coins);
+            player2.HUD[0].SetCoins(player2.coins);
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-
-            if (hit.collider)
+            if (Input.GetMouseButtonDown(0))
             {
-                if (DoesThisBelongToYou(hit))
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                if (hit.collider)
                 {
-                    selectedPirate = hit.collider.GetComponent<Unit>();
+                    if (DoesThisBelongToYou(hit))
+                    {
+                        selectedPirate = hit.collider.GetComponent<Unit>();
+                    }
                 }
             }
-        }
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-
-            if (hit.collider && IsThisAnEnemy(hit) && !selectedPirate.hasAttacked)
+            if (Input.GetMouseButtonDown(1))
             {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                if (hit.collider && IsThisAnEnemy(hit) && !selectedPirate.hasAttacked)
+                {
                     selectedEnemy = hit.collider.GetComponent<Unit>();
                     Attack();
+                }
+                else if (selectedPirate)
+                {
+                    selectedPirate.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    StartCoroutine(selectedPirate.MoveUnit());
+                }
             }
-            else if (selectedPirate)
+
+            if (selectedPirate != null && selectedPirate.collectedTreasure != 0)
             {
-                selectedPirate.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                StartCoroutine(selectedPirate.MoveUnit());
+                selectedPirate.collectedTreasure = 0;
+                maxTreasure--;
+
+                switch (state)
+                {
+                    case GameState.P1_TURN:
+                        player1.coins += treasureValue;
+                        player1.HUD[0].SetCoins(player1.coins);
+                        break;
+                    case GameState.P2_TURN:
+                        player2.coins += treasureValue;
+                        player2.HUD[0].SetCoins(player2.coins);
+                        break;
+                }
+
+                if (maxTreasure == 0)
+                {
+                    StartCoroutine(EndBattle());
+                }
             }
-        }
 
-        if (selectedPirate != null && selectedPirate.collectedTreasure != 0)
-        {
-            selectedPirate.collectedTreasure = 0;
-            maxTreasure--;
-
-            switch (state)
+            if (Input.GetKeyDown(KeyCode.Space) && isAttacking)
             {
-                case GameState.P1_TURN:
-                    player1.coins += treasureValue;
-                    player1.HUD[0].SetCoins(player1.coins);
-                    break;
-                case GameState.P2_TURN:
-                    player2.coins += treasureValue;
-                    player2.HUD[0].SetCoins(player2.coins);
-                    break;
+                StartCoroutine(ResolveAttack());
             }
-
-            if (maxTreasure == 0)
-            {
-                StartCoroutine(EndBattle());
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space) && isAttacking)
-        {
-            StartCoroutine(ResolveAttack());
-        }
+        } 
     }
 
     private void InitialSetup()
     {
         maxTreasure = 3;
 
-        player1.alive = player1.spawns.Length;
-        player2.alive = player2.spawns.Length;
+        player1.crew = new Unit[3];
+        player2.crew = new Unit[3];
 
-        player1.crew = new Unit[player1.spawns.Length];
-        player2.crew = new Unit[player2.spawns.Length];
+        player1.alive = player1.crew.Length;
+        player2.alive = player2.crew.Length;
 
-        for (int i = 0; i < player1.spawns.Length; i++)
+        for (int i = 0; i < player1.crew.Length; i++)
         {
-            var p1 = Instantiate(player1.crewPrefab, player1.spawns[i]);
-            player1.crew[i] = p1.GetComponent<Unit>();
+            var p2 = Instantiate(player1.crewPrefab, gameObject.transform);
+            player1.crew[i] = p2.GetComponent<Unit>();
             player1.crew[i].transform.position = new Vector3(-100, -100, -100);
         }
 
-        for (int i = 0; i < player2.spawns.Length; i++)
+        for (int i = 0; i < player2.crew.Length; i++)
         {
-            var p2 = Instantiate(player2.crewPrefab, player2.spawns[i]);
+            var p2 = Instantiate(player2.crewPrefab, gameObject.transform);
             player2.crew[i] = p2.GetComponent<Unit>();
             player2.crew[i].transform.position = new Vector3(-100, -100, -100);
         }
@@ -198,36 +200,28 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SetupGame()
     {
-        //Find spawns and populate array
-        for (int i = 0; i < player1.spawns.Length; i++)
-        {
-            player1.spawns[i].position = GameObject.Find("p1SpawnLocation" + i).transform.position;
-        }
-
-        for (int i = 0; i < player2.spawns.Length; i++)
-        {
-            player2.spawns[i].position = GameObject.Find("p2SpawnLocation" + i).transform.position;
-        }
-
+        UpdateUI(player1.crew, player1.HUD);
+        UpdateUI(player2.crew, player2.HUD);
+        
         //Move crew to spawn points
-        for (int i = 0; i < player1.spawns.Length; i++)
+        for (int i = 0; i < player1.crew.Length; i++)
         {
-            player1.crew[i].transform.position = player1.spawns[i].position;
+            player1.crew[i].transform.position = GameObject.Find("p1Spawn" + i.ToString()).transform.position;
             player1.crew[i].currentHex = player1.crew[i].transform.position.ToHex();
             player1.crew[i].previousHex = player1.crew[i].currentHex;
         }
 
-        for (int i = 0; i < player1.spawns.Length; i++)
+        for (int i = 0; i < player1.crew.Length; i++)
         {
-            player2.crew[i].transform.position = player2.spawns[i].position;
+            player2.crew[i].transform.position = GameObject.Find("p2Spawn" + i.ToString()).transform.position;
             player2.crew[i].currentHex = player2.crew[i].transform.position.ToHex();
             player2.crew[i].previousHex = player2.crew[i].currentHex;
         }
 
-        treasureChests = new GameObject[treasureSpawns.Length];
-        for (int i = 0; i < treasureSpawns.Length; i++)
+        treasureChests = new GameObject[maxTreasure];
+        for (int i = 0; i < treasureChests.Length; i++)
         {
-            treasureChests[i] = Instantiate(treasurePrefab, treasureSpawns[i]);
+            treasureChests[i] = Instantiate(treasurePrefab, GameObject.Find("treasureSpawn" + i.ToString()).transform.position, Quaternion.identity);
         }
 
         for (int i = 0; i < player1.crew.Length; i++)
@@ -375,7 +369,6 @@ public class GameManager : MonoBehaviour
 
     public void EndTurnButton()
     {
-        StartCoroutine (EndBattle());
         selectedPirate = null;
         selectedEnemy = null;
 
