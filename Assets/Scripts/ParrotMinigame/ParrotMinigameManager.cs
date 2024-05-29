@@ -53,7 +53,6 @@ public class ParrotMinigameManager : MonoBehaviour
     {
         _bottomLeft = parrotCam.ViewportToWorldPoint(new Vector3(0, 0, parrotCam.nearClipPlane));
         _topRight = parrotCam.ViewportToWorldPoint(new Vector3(1, 1, parrotCam.nearClipPlane));
-
     }
     
     void Update()
@@ -176,7 +175,6 @@ public class ParrotMinigameManager : MonoBehaviour
                 _pillars.RemoveAt(i);
             }
         }
-
     }
 
     private void UpdateTime()
