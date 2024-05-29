@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public enum GameState { START, P1_TURN, P2_TURN, END };
+public enum GameState { START, P1_TURN, P2_TURN, END, CANNON};
 
 [Serializable]
 public struct Player
@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
 
     private int minigameCount;
     private int currentLevel = 0;
+    private Transform cannonTarget;
 
     private void Awake()
     {
@@ -161,7 +162,16 @@ public class GameManager : MonoBehaviour
             {
                 StartCoroutine(ResolveAttack());
             }
-        } 
+        }
+
+        if (state == GameState.CANNON)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                cannonTarget.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                ResolveAttack();
+            }
+        }
     }
 
     private void InitialSetup()
@@ -390,7 +400,14 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        SceneManager.LoadScene("Island");
+        if (currentLevel != 3)
+        {
+            SceneManager.LoadScene("Island");
+        }
+        else
+        {
+            SceneManager.LoadScene("EndScreen");
+        }
     }
 
     public void EndTurnButton()
@@ -409,6 +426,33 @@ public class GameManager : MonoBehaviour
                 P1_Turn();
                 break;
         }
+    }
+
+    public void CannonButton()
+    {
+        state = GameState.CANNON;
+        dialogueText.text = "Click to fire\nDamages ALL units in radius 3";
+    }
+
+    private void ResolveCannon()
+    {
+        foreach (Unit unit in player1.crew)
+        {
+            if (unit.currentHex.DistanceTo(cannonTarget.position.ToHex()) < 4)
+            {
+                unit.currentHealth -= 20;
+            }
+        }
+
+        foreach (Unit unit in player2.crew)
+        {
+            if (unit.currentHex.DistanceTo(cannonTarget.position.ToHex()) < 4)
+            {
+                unit.currentHealth -= 20;
+            }
+        }
+
+        dialogueText.text = "Left click a pirate to move";
     }
 
     public void SpecialAttack()
