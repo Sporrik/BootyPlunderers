@@ -577,11 +577,11 @@ MonoBehaviour:
   _pillarParent: {fileID: 448180268382208066, guid: c808ae0df6e4917419118dcd532b87bd, type: 3}
   _pillar: {fileID: 2591961765307393790, guid: 5cfbe8e569e95ae4f81d0bd8102b2495, type: 3}
   _player: {fileID: 324844066}
-  _scoreToWin: 1
+  _scoreToWin: 10
   _offScreen: 6
   _centerPointOffset: 10
-  _spaceBetweenPillars: 14.1
-  _timeBetweenSpawns: 3
+  _spaceBetweenPillars: 13
+  _timeBetweenSpawns: 1.5
   _pillarMoveSpeed: 8.09
   _scoreText: {fileID: 1526523307}
   _middleText: {fileID: 1647102607}
