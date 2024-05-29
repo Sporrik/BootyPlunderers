@@ -2411,7 +2411,7 @@ MonoBehaviour:
 
     Crew
 
-    [Healed]'
+    [Price]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a6dbafcbccedd4643ab311a5a02ea02e, type: 2}
   m_sharedMaterial: {fileID: -734742533646384833, guid: a6dbafcbccedd4643ab311a5a02ea02e, type: 2}

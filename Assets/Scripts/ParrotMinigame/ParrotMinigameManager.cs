@@ -14,8 +14,7 @@ public class ParrotMinigameManager : MonoBehaviour
     private float _timer = 0;
 
     private bool _GameEnded = false,
-                 _PlayerWon = false,
-                 _isPaused = false;
+                 _PlayerWon = false;
 
     [SerializeField]
     GameObject _pillarParent,
@@ -42,13 +41,18 @@ public class ParrotMinigameManager : MonoBehaviour
     private TMP_Text _scoreText,
                      _middleText;
 
+    public Camera parrotCam;
 
 
 
     private void Start()
     {
-        _bottomLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
-        _topRight = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, Camera.main.nearClipPlane));
+        parrotCam.enabled = false;
+    }
+    private void OnEnable()
+    {
+        _bottomLeft = parrotCam.ViewportToWorldPoint(new Vector3(0, 0, parrotCam.nearClipPlane));
+        _topRight = parrotCam.ViewportToWorldPoint(new Vector3(1, 1, parrotCam.nearClipPlane));
 
     }
     // Update is called once per frame

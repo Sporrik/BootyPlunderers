@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1230735911368676722}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.926258, y: -2.1131814, z: -0.9999003}
+  m_LocalPosition: {x: 0, y: -2.1131814, z: -0.9999003}
   m_LocalScale: {x: 0.058620002, y: 0.06128, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -275,6 +275,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7452398505240826905}
+  - component: {fileID: 6553766019553324148}
   m_Layer: 0
   m_Name: MonkeyMinigame
   m_TagString: Untagged
@@ -297,11 +298,28 @@ Transform:
   m_Children:
   - {fileID: 6637978085176851104}
   - {fileID: 2626901233029144086}
-  - {fileID: 5108020411223894048}
   - {fileID: 538975859516868416}
   - {fileID: 9145438007472785550}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6553766019553324148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5942293877634894002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d701d6d3988cfd4ea8b0426a402894e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monkeyCollider: {fileID: 3374808673596050745}
+  coinPrefab: {fileID: 3073278259728162758, guid: ee8650db46b4f2b41ae767902fb9ba69, type: 3}
+  _collectedCoins: 0
+  coinsCollectedText: {fileID: 6122023605839220724}
+  timerText: {fileID: 8910877257256273748}
+  gameOverText: {fileID: 7806739960999134347}
 --- !u!1 &6174846585018767836
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,7 +346,7 @@ Transform:
   m_GameObject: {fileID: 6174846585018767836}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.9273446, y: 0.15571856, z: 91.0001}
+  m_LocalPosition: {x: 0, y: 0, z: 90}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -520,56 +538,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &6427603041366654661
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5108020411223894048}
-  - component: {fileID: 7383526662067749756}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5108020411223894048
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6427603041366654661}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.520128, y: -0.4544809, z: 848.6223}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7452398505240826905}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7383526662067749756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6427603041366654661}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d701d6d3988cfd4ea8b0426a402894e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  monkeyCollider: {fileID: 3374808673596050745}
-  coinPrefab: {fileID: 3073278259728162758, guid: ee8650db46b4f2b41ae767902fb9ba69, type: 3}
-  _collectedCoins: 0
-  coinsCollectedText: {fileID: 6122023605839220724}
-  timerText: {fileID: 8910877257256273748}
-  gameOverText: {fileID: 7806739960999134347}
 --- !u!1 &8520701561153014499
 GameObject:
   m_ObjectHideFlags: 0
@@ -821,8 +789,8 @@ GameObject:
   - component: {fileID: 9145438007472785550}
   - component: {fileID: 7788326946622540425}
   m_Layer: 0
-  m_Name: Main Camera
-  m_TagString: MainCamera
+  m_Name: Camera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -836,7 +804,7 @@ Transform:
   m_GameObject: {fileID: 9149784031179189794}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.926258, y: 1.4268186, z: -9.9999}
+  m_LocalPosition: {x: 0, y: 1.4268186, z: -9.9999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

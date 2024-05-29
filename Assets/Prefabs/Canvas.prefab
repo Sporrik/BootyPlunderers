@@ -413,7 +413,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SpecialAttackP2
+        m_MethodName: SpecialAttack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1207,6 +1207,8 @@ MonoBehaviour:
   moveSlider: {fileID: 6466464624795401417}
   healthSlider: {fileID: 1018739044875065470}
   coins: {fileID: 2504563303816014384}
+  ammo: {fileID: 9057549547203663661}
+  ball: {fileID: 0}
   healthSliderFill: {fileID: 5509552486177003542}
   green: {r: 0, g: 0, b: 0, a: 0}
   yellow: {r: 0, g: 0, b: 0, a: 0}
@@ -3092,6 +3094,8 @@ MonoBehaviour:
   moveSlider: {fileID: 594988686399868922}
   healthSlider: {fileID: 1773180729350306271}
   coins: {fileID: 0}
+  ammo: {fileID: 0}
+  ball: {fileID: 0}
   healthSliderFill: {fileID: 6542902818457794999}
   green: {r: 0, g: 0, b: 0, a: 0}
   yellow: {r: 0, g: 0, b: 0, a: 0}
@@ -4349,6 +4353,8 @@ MonoBehaviour:
   moveSlider: {fileID: 4023113663310135017}
   healthSlider: {fileID: 3827317751089404720}
   coins: {fileID: 0}
+  ammo: {fileID: 0}
+  ball: {fileID: 0}
   healthSliderFill: {fileID: 8596184488375032664}
   green: {r: 0, g: 0, b: 0, a: 0}
   yellow: {r: 0, g: 0, b: 0, a: 0}
@@ -4687,6 +4693,8 @@ MonoBehaviour:
   moveSlider: {fileID: 7844640018333000044}
   healthSlider: {fileID: 629636105108365542}
   coins: {fileID: 0}
+  ammo: {fileID: 0}
+  ball: {fileID: 0}
   healthSliderFill: {fileID: 5398267546905649294}
   green: {r: 0, g: 0, b: 0, a: 0}
   yellow: {r: 0, g: 0, b: 0, a: 0}
@@ -5440,6 +5448,8 @@ MonoBehaviour:
   moveSlider: {fileID: 2836459649037287330}
   healthSlider: {fileID: 4350663615121728777}
   coins: {fileID: 0}
+  ammo: {fileID: 0}
+  ball: {fileID: 0}
   healthSliderFill: {fileID: 9094523059949675873}
   green: {r: 0, g: 0, b: 0, a: 0}
   yellow: {r: 0, g: 0, b: 0, a: 0}
@@ -5889,6 +5899,8 @@ MonoBehaviour:
   moveSlider: {fileID: 8712604530369871211}
   healthSlider: {fileID: 8220434633432344824}
   coins: {fileID: 7158024451721121908}
+  ammo: {fileID: 6723201518627607844}
+  ball: {fileID: 0}
   healthSliderFill: {fileID: 3477426210079221904}
   green: {r: 0, g: 0, b: 0, a: 0}
   yellow: {r: 0, g: 0, b: 0, a: 0}

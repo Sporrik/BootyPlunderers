@@ -59,8 +59,10 @@ public class GameManager : MonoBehaviour
     private bool isAttacking = false;
 
     private Camera mainCam;
-    public ShootMinigame attackMinigame;
-    public MonkeyMiniGame monkeyMinigame;
+    public GameObject attackMinigame;
+    public GameObject monkeyMinigame;
+    public GameObject parrotMinigame;
+    public GameObject boozeMinigame;
 
     private int minigameCount;
     private int currentLevel = 0;
@@ -222,8 +224,8 @@ public class GameManager : MonoBehaviour
             player2.HUD[i].SetHUD(player2.crew[i]);
         }
 
-        player1.HUD[0].SetAmmo(selectedAmmo);
-        player2.HUD[0].SetAmmo(selectedAmmo);
+        player1.HUD[0].SetAmmo(player1.ammo);
+        player2.HUD[0].SetAmmo(player2.ammo);
 
         dialogueText.text = "Plunder their Booty";
 
@@ -271,7 +273,7 @@ public class GameManager : MonoBehaviour
 
         switch (CheckRange())
         {
-            case < 1:
+            case < 2:
                 StartCoroutine(CommitAttack());
                 break;
             case < 4:
@@ -280,11 +282,13 @@ public class GameManager : MonoBehaviour
                     selectedAmmo--;
                     if (state == GameState.P1_TURN)
                     {
-                        player1.HUD[0].SetAmmo(selectedAmmo);
+                        player1.ammo = selectedAmmo;
+                        player1.HUD[0].SetAmmo(player1.ammo);
                     }
                     else if (state == GameState.P2_TURN)
                     {
-                        player2.HUD[0].SetAmmo(selectedAmmo);
+                        player2.ammo = selectedAmmo;
+                        player2.HUD[0].SetAmmo(player2.ammo);
                     }
                     StartCoroutine(CommitAttack());
                 }
@@ -313,7 +317,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ResolveAttack()
     {
-        bool isDead = selectedEnemy.TakeDamage(attackMinigame.CheckCollision());
+        bool isDead = selectedEnemy.TakeDamage(attackMinigame.GetComponent<ShootMinigame>().CheckCollision());
 
         if (isDead)
         {
@@ -417,12 +421,16 @@ public class GameManager : MonoBehaviour
                 switch (player1.firstMate)
                 {
                     case "Banana Joe":
-                        monkeyMinigame.gameObject.SetActive(true);
+                        monkeyMinigame.SetActive(true);
                         monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
                         break;
                     case "Parrotmancer":
+                        parrotMinigame.SetActive(true);
+                        parrotMinigame.GetComponentInChildren<Camera>().enabled = true;
                         break;
                     case "The Doctor":
+                        boozeMinigame.SetActive(true);
+                        boozeMinigame.GetComponentInChildren<Camera>().enabled = true;
                         break;
                 }
 
@@ -436,12 +444,16 @@ public class GameManager : MonoBehaviour
                 switch (player2.firstMate)
                 {
                     case "Banana Joe":
-                        monkeyMinigame.gameObject.SetActive(true);
+                        monkeyMinigame.SetActive(true);
                         monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
                         break;
                     case "Parrotmancer":
+                        parrotMinigame.SetActive(true);
+                        parrotMinigame.GetComponentInChildren<Camera>().enabled = true;
                         break;
                     case "The Doctor":
+                        boozeMinigame.SetActive(true);
+                        boozeMinigame.GetComponentInChildren<Camera>().enabled = true;
                         break;
                 }
 
@@ -481,7 +493,7 @@ public class GameManager : MonoBehaviour
                 switch (player1.firstMate)
                 {
                     case "Banana Joe":
-                        monkeyMinigame.gameObject.SetActive(false);
+                        monkeyMinigame.SetActive(false);
                         monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
 
                         player1.coins += score;
@@ -489,10 +501,20 @@ public class GameManager : MonoBehaviour
 
                         break;
                     case "Parrotmancer":
-                        //disable parrot minigame
+                        parrotMinigame.SetActive(false);
+                        parrotMinigame.GetComponentInChildren<Camera>().enabled = false;
+
+                        //change this to dealing damage
+                        player1.coins += score;
+                        player1.HUD[0].SetCoins(player1.coins);
                         break;
                     case "The Doctor":
-                        //Disable booze minigame
+                        boozeMinigame.SetActive(false);
+                        boozeMinigame.GetComponentInChildren<Camera>().enabled = false;
+
+                        //change this to healing
+                        player1.coins += score;
+                        player1.HUD[0].SetCoins(player1.coins);
                         break;
                 }
                 break;
@@ -500,18 +522,28 @@ public class GameManager : MonoBehaviour
                 switch (player2.firstMate)
                 {
                     case "Banana Joe":
-                        monkeyMinigame.gameObject.SetActive(false);
+                        monkeyMinigame.SetActive(false);
                         monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
 
                         player2.coins += score;
-                        player2.HUD[0].SetCoins(player2.coins);
+                        player2.HUD[0].SetCoins(player1.coins);
 
                         break;
                     case "Parrotmancer":
-                        //disable parrot minigame
+                        parrotMinigame.SetActive(false);
+                        parrotMinigame.GetComponentInChildren<Camera>().enabled = false;
+
+                        //change this to dealing damage
+                        player2.coins += score;
+                        player2.HUD[0].SetCoins(player1.coins);
                         break;
                     case "The Doctor":
-                        //Disable booze minigame
+                        boozeMinigame.SetActive(false);
+                        boozeMinigame.GetComponentInChildren<Camera>().enabled = false;
+
+                        //change this to healing
+                        player2.coins += score;
+                        player2.HUD[0].SetCoins(player1.coins);
                         break;
                 }
                 break;

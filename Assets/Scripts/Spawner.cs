@@ -15,20 +15,20 @@ public class Spawner : MonoBehaviour
 
         for (int i = 0; i < levelSpawns.player1Spawns.Length; i++)
         {
-            gameManager.player1.crew[i].transform.position = Vector3.zero;
             gameManager.player1.crew[i].transform.position = levelSpawns.player1Spawns[i].transform.position;
             gameManager.player1.crew[i].currentHex = gameManager.player1.crew[i].transform.position.ToHex();
             gameManager.player1.crew[i].previousHex = gameManager.player1.crew[i].currentHex;
-            gameManager.player1.crew[i].GetComponent<Node>().ApplyTransform();
+            gameManager.player1.crew[i].targetPosition = levelSpawns.player1Spawns[i].transform.position;
+            StartCoroutine(gameManager.player1.crew[i].MoveUnit());
         }
 
         for (int i = 0; i < levelSpawns.player2Spawns.Length; i++)
         {
-            gameManager.player1.crew[i].transform.position = Vector3.zero;
             gameManager.player2.crew[i].transform.position = levelSpawns.player2Spawns[i].transform.position;
             gameManager.player2.crew[i].currentHex = gameManager.player2.crew[i].transform.position.ToHex();
             gameManager.player2.crew[i].previousHex = gameManager.player2.crew[i].currentHex;
-            gameManager.player2.crew[i].GetComponent<Node>().ApplyTransform();
+            gameManager.player2.crew[i].targetPosition = levelSpawns.player2Spawns[i].transform.position;
+            StartCoroutine(gameManager.player2.crew[i].MoveUnit());
         }
 
         for (int i = 0; i < levelSpawns.treasureSpawns.Length; i++)
