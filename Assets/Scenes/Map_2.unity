@@ -14905,33 +14905,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  p1CrewPrefab: {fileID: 7455965175477509173, guid: 9870c6ca7e7c274489a2b18debf0818f, type: 3}
-  p2CrewPrefab: {fileID: 2112369260278511487, guid: a7e0af1c721b18c47889d2257d3c1858, type: 3}
+  player1:
+    coins: 0
+    ammo: 0
+    cannonballs: 0
+    firstMate: 
+    crewPrefab: {fileID: 7455965175477509173, guid: 9870c6ca7e7c274489a2b18debf0818f, type: 3}
+    spawns: []
+    crew: []
+    HUD:
+    - {fileID: 938256353}
+    - {fileID: 938256352}
+    - {fileID: 938256351}
+    alive: 0
+    isSpecialAvailable: 0
+  player2:
+    coins: 0
+    ammo: 0
+    cannonballs: 0
+    firstMate: 
+    crewPrefab: {fileID: 2112369260278511487, guid: a7e0af1c721b18c47889d2257d3c1858, type: 3}
+    spawns: []
+    crew: []
+    HUD:
+    - {fileID: 938256350}
+    - {fileID: 938256349}
+    - {fileID: 938256348}
+    alive: 0
+    isSpecialAvailable: 0
   treasurePrefab: {fileID: 1683946411947725258, guid: f6d2aef5f93ef0d48ad47fefe6df0e83, type: 3}
-  p1Spawns:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  p2Spawns:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   treasureSpawns:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  p1HUD:
-  - {fileID: 938256353}
-  - {fileID: 938256352}
-  - {fileID: 938256351}
-  p2HUD:
-  - {fileID: 938256350}
-  - {fileID: 938256349}
-  - {fileID: 938256348}
   dialogueText: {fileID: 938256345}
   attackMinigame: {fileID: 75619271}
   monkeyMinigame: {fileID: 1601689160}
-  sceneCount: 0
 --- !u!4 &2032972002
 Transform:
   m_ObjectHideFlags: 0
