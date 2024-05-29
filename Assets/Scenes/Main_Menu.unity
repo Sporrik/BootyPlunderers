@@ -315,6 +315,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: boozeMinigame
       objectReference: {fileID: 0}
+    - target: {fileID: 7231641030301871457, guid: c15deb1dc3e0bcd4dbdac4e65d24a72e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

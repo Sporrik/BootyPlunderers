@@ -28,7 +28,14 @@ public class BoozeMiniGame : MonoBehaviour
     private float _bombTimer, _timer;
     private bool _isCounting = true;
 
-    void Start()
+    public GameManager gameManager;
+
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
     {
         _timer = _timeOfRound;
         DisplayScore();
@@ -64,11 +71,11 @@ public class BoozeMiniGame : MonoBehaviour
         else if (_timer <= _timeOfRound )
         {
             _isCounting = false;
-            EndGame();
+            StartCoroutine(EndGame());
         }
     }
 
-    private void EndGame()
+    IEnumerator EndGame()
     {
         gameOverPanel.gameObject.SetActive(true);
         _heldObject.GetComponent<BoozeMiniGameMovement>().isMoving = true;
@@ -79,7 +86,11 @@ public class BoozeMiniGame : MonoBehaviour
         else
         {
             finalScoreText.text = $"{_score} HP";
-        }        
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        gameManager.EndMinigame(_score);
     }
 
     private void CheckCollisionObject()

@@ -42,20 +42,21 @@ public class ParrotMinigameManager : MonoBehaviour
                      _middleText;
 
     public Camera parrotCam;
-
-
+    public GameManager gameManager;
 
     private void Start()
     {
+        gameObject.SetActive(false);
         parrotCam.enabled = false;
     }
+
     private void OnEnable()
     {
         _bottomLeft = parrotCam.ViewportToWorldPoint(new Vector3(0, 0, parrotCam.nearClipPlane));
         _topRight = parrotCam.ViewportToWorldPoint(new Vector3(1, 1, parrotCam.nearClipPlane));
 
     }
-    // Update is called once per frame
+    
     void Update()
     {
         if (!_PlayerWon)
@@ -81,6 +82,7 @@ public class ParrotMinigameManager : MonoBehaviour
             MoveAtEnd();
             DespawnPillars();//ok
             DespawnParrot();
+            StartCoroutine(EndGame());
         }
     }
 
@@ -134,6 +136,7 @@ public class ParrotMinigameManager : MonoBehaviour
         SetpillarChildren(pillar);
         _pillars.Add(pillar);
     }
+
     private GameObject SetPillarParent()
     {
         float randomY = UnityEngine.Random.Range(_bottomLeft.y + _centerPointOffset, //+ _spaceBetweenPillars / 2,
@@ -142,6 +145,7 @@ public class ParrotMinigameManager : MonoBehaviour
         GameObject centerPoint = Instantiate(_pillarParent, new Vector3(spawnX, randomY, 0), Quaternion.identity);
         return centerPoint;
     }
+
     private void SetpillarChildren(GameObject newPillar)
     {
         GameObject topPillar = Instantiate(_pillar, new Vector3(newPillar.transform.position.x, newPillar.transform.position.y + _spaceBetweenPillars / 2, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
@@ -150,6 +154,7 @@ public class ParrotMinigameManager : MonoBehaviour
         GameObject bottomPillar = Instantiate(_pillar, new Vector3(newPillar.transform.position.x, newPillar.transform.position.y - _spaceBetweenPillars / 2, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
         bottomPillar.transform.SetParent(newPillar.transform);
     }
+
     private void MovePillars()
     {
         foreach (GameObject pillarSet in _pillars)
@@ -161,6 +166,7 @@ public class ParrotMinigameManager : MonoBehaviour
         //    pillarSet.transform.position -= new Vector3(_pillarMoveSpeed, 0, 0) * Time.deltaTime;
         //}
     }
+
     private void DespawnPillars()
     {
         for (int i = _pillars.Count - 1; i >= 0; i--)
@@ -173,8 +179,16 @@ public class ParrotMinigameManager : MonoBehaviour
         }
 
     }
+
     private void UpdateTime()
     {
         _timer += Time.deltaTime;
+    }
+
+    IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(2f);
+
+        gameManager.EndMinigame(_score);
     }
 }
