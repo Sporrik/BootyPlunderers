@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -244,6 +242,9 @@ public class GameManager : MonoBehaviour
         player1.HUD[0].SetAmmo(player1.ammo);
         player2.HUD[0].SetAmmo(player2.ammo);
 
+        player1.HUD[0].SetBalls(player1.cannonballs);
+        player2.HUD[0].SetBalls(player2.cannonballs);
+
         dialogueText.text = "Plunder their Booty";
 
         yield return new WaitForSeconds(2f);
@@ -435,9 +436,23 @@ public class GameManager : MonoBehaviour
 
     public void CannonButton()
     {
-        saveState = (int)state;
-        state = GameState.CANNON;
-        dialogueText.text = "Click to fire\n Damages ALL units\nin range 3";
+        if (state == GameState.P1_TURN && player1.cannonballs > 0)
+        {
+            player1.cannonballs--;
+            player1.HUD[0].SetBalls(player1.cannonballs);
+            saveState = (int)state;
+            state = GameState.CANNON;
+            dialogueText.text = "Click to fire\n Damages ALL units\nin range 3";
+        }
+
+        if (state == GameState.P2_TURN && player2.cannonballs > 0)
+        {
+            player2.cannonballs--;
+            player2.HUD[0].SetBalls(player2.cannonballs);
+            saveState = (int)state;
+            state = GameState.CANNON;
+            dialogueText.text = "Click to fire\n Damages ALL units\nin range 3";
+        }
     }
 
     private void ResolveCannon()

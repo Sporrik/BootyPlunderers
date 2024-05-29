@@ -127,7 +127,7 @@ public class UI_Island : MonoBehaviour
             selectedPlayer.ammo++;
             bulletsButton.text = "Bullets\n " + _bulletPrice + " coins\nOwned: " + selectedPlayer.ammo.ToString();
 
-            selectedPlayer.coins -= _cannonBallPrice;
+            selectedPlayer.coins -= _bulletPrice;
             SetCoins();
         }
     }

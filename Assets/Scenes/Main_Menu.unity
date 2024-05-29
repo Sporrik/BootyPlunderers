@@ -1909,6 +1909,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8194259794053751094, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
+      propertyPath: ball
+      value: 
+      objectReference: {fileID: 2081365181}
     - target: {fileID: 8572247554944363711, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1933,6 +1937,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8762448887358344045, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
+      propertyPath: ball
+      value: 
+      objectReference: {fileID: 624604982}
     - target: {fileID: 9013055465260406192, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
       propertyPath: m_fontSize
       value: 23
