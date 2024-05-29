@@ -6023,29 +6023,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  p1CrewPrefab: {fileID: 7455965175477509173, guid: 9870c6ca7e7c274489a2b18debf0818f, type: 3}
-  p2CrewPrefab: {fileID: 2112369260278511487, guid: a7e0af1c721b18c47889d2257d3c1858, type: 3}
+  player1:
+    coins: 0
+    ammo: 0
+    cannonballs: 0
+    firstMate: 
+    crewPrefab: {fileID: 7455965175477509173, guid: 9870c6ca7e7c274489a2b18debf0818f, type: 3}
+    spawns: []
+    crew: []
+    HUD:
+    - {fileID: 4934973206022215612}
+    - {fileID: 961600827531280922}
+    - {fileID: 561501096439209807}
+    alive: 0
+    isSpecialAvailable: 0
+  player2:
+    coins: 0
+    ammo: 0
+    cannonballs: 0
+    firstMate: 
+    crewPrefab: {fileID: 2112369260278511487, guid: a7e0af1c721b18c47889d2257d3c1858, type: 3}
+    spawns: []
+    crew: []
+    HUD:
+    - {fileID: 268894484}
+    - {fileID: 809327954}
+    - {fileID: 110933899}
+    alive: 0
+    isSpecialAvailable: 0
   treasurePrefab: {fileID: 1683946411947725258, guid: f6d2aef5f93ef0d48ad47fefe6df0e83, type: 3}
-  p1Spawns:
-  - {fileID: 26113997}
-  - {fileID: 188575703}
-  - {fileID: 850649469}
-  p2Spawns:
-  - {fileID: 1954535630}
-  - {fileID: 1410180932}
-  - {fileID: 227258708}
   treasureSpawns:
   - {fileID: 2146170681}
   - {fileID: 962334842}
   - {fileID: 368725950}
-  p1HUD:
-  - {fileID: 4934973206022215612}
-  - {fileID: 961600827531280922}
-  - {fileID: 561501096439209807}
-  p2HUD:
-  - {fileID: 268894484}
-  - {fileID: 809327954}
-  - {fileID: 110933899}
   dialogueText: {fileID: 7873946137049331055}
   attackMinigame: {fileID: 1668422991}
   monkeyMinigame: {fileID: 534815928}
