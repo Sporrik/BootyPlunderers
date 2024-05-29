@@ -10,6 +10,23 @@ using UnityEngine.UI;
 
 public enum GameState { START, P1_TURN, P2_TURN, END };
 
+[Serializable]
+public struct Player
+{
+    public int coins;
+    public int ammo;
+    public int cannonballs;
+    public string firstMate;
+    public GameObject crewPrefab;
+
+    public Transform[] spawns;
+    public Unit[] crew;
+    public UI[] HUD;
+
+    public int alive;
+    public bool isSpecialAvailable;
+}
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
@@ -22,7 +39,9 @@ public class GameManager : MonoBehaviour
     public GameObject treasurePrefab;
     public Transform[] treasureSpawns;
     private GameObject[] treasureChests;
+
     private int maxTreasure;
+    private int treasureValue = 10;
 
     private Unit selectedPirate;
     private Unit selectedEnemy;
@@ -49,11 +68,11 @@ public class GameManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-        player1.firstMate = "MonkeyMiniGame";
-        player2.firstMate = "MonkeyMiniGame";
-
         player1.isSpecialAvailable = true;
         player2.isSpecialAvailable = true;
+
+        player1.coins = 10;
+        player2.coins = 10;
 
         player1.spawns = new Transform[3];
         player2.spawns = new Transform[3];
@@ -109,11 +128,11 @@ public class GameManager : MonoBehaviour
             switch (state)
             {
                 case GameState.P1_TURN:
-                    player1.coins += 50;
+                    player1.coins += treasureValue;
                     player1.HUD[0].SetCoins(player1.coins);
                     break;
                 case GameState.P2_TURN:
-                    player2.coins += 50;
+                    player2.coins += treasureValue;
                     player2.HUD[0].SetCoins(player2.coins);
                     break;
             }
@@ -294,12 +313,12 @@ public class GameManager : MonoBehaviour
         switch (state)
         { 
             case GameState.P1_TURN:
-                player1.coins += maxTreasure * 50;
+                player1.coins += maxTreasure * treasureValue;
                 player1.HUD[0].SetCoins(player1.coins);
                 dialogueText.text = "Player 1 Wins";
                 break;
             case GameState.P2_TURN:
-                player2.coins += maxTreasure * 50;
+                player2.coins += maxTreasure * treasureValue;
                 player2.HUD[0].SetCoins(player2.coins);
                 dialogueText.text = "Player 2 Wins";
                 break;
@@ -335,8 +354,18 @@ public class GameManager : MonoBehaviour
 
         player1.isSpecialAvailable = false;
 
-        monkeyMinigame.gameObject.SetActive(true);
-        monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
+        switch (player1.firstMate)
+        {
+            case "Banana Joe":
+                monkeyMinigame.gameObject.SetActive(true);
+                monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
+                break;
+            case "Parrotmancer":
+                break;
+            case "The Doctor":
+                break;
+        }
+        
         mainCam.enabled = false;
     }
 
@@ -346,8 +375,18 @@ public class GameManager : MonoBehaviour
 
         player2.isSpecialAvailable = false;
 
-        monkeyMinigame.gameObject.SetActive(true);
-        monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
+        switch (player2.firstMate)
+        {
+            case "Banana Joe":
+                monkeyMinigame.gameObject.SetActive(true);
+                monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
+                break;
+            case "Parrotmancer":
+                break;
+            case "The Doctor":
+                break;
+        }
+
         mainCam.enabled = false;
     }
 
@@ -373,8 +412,6 @@ public class GameManager : MonoBehaviour
     public void EndMinigame(int score)
     {
         minigameCount = score;
-
-        monkeyMinigame.gameObject.SetActive(true);
         
         mainCam.enabled = true;
 
@@ -383,7 +420,7 @@ public class GameManager : MonoBehaviour
             case GameState.P1_TURN:
                 switch (player1.firstMate)
                 {
-                    case "MonkeyMiniGame":
+                    case "Banana Joe":
                         monkeyMinigame.gameObject.SetActive(false);
                         monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
 
@@ -391,20 +428,18 @@ public class GameManager : MonoBehaviour
                         player1.HUD[0].SetCoins(player1.coins);
 
                         break;
-                    case "ParrotMiniGame":
+                    case "Parrotmancer":
                         //disable parrot minigame
                         break;
-                    case "BoozeMiniGame":
+                    case "The Doctor":
                         //Disable booze minigame
-                        break;
-                    default:
                         break;
                 }
                 break;
             case GameState.P2_TURN:
                 switch (player2.firstMate)
                 {
-                    case "MonkeyMiniGame":
+                    case "Banana Joe":
                         monkeyMinigame.gameObject.SetActive(false);
                         monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
 
@@ -412,33 +447,14 @@ public class GameManager : MonoBehaviour
                         player2.HUD[0].SetCoins(player2.coins);
 
                         break;
-                    case "ParrotMiniGame":
+                    case "Parrotmancer":
                         //disable parrot minigame
                         break;
-                    case "BoozeMiniGame":
+                    case "The Doctor":
                         //Disable booze minigame
-                        break;
-                    default:
                         break;
                 }
                 break;
         }
     }
-}
-
-[Serializable]
-public struct Player
-{
-    public int coins;
-    public int ammo;
-    public int cannonballs;
-    public string firstMate;
-    public GameObject crewPrefab;
-
-    public Transform[] spawns;
-    public Unit[] crew;
-    public UI[] HUD;
-
-    public int alive;
-    public bool isSpecialAvailable;
 }

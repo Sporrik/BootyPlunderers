@@ -9,7 +9,7 @@ public class UI_Island : MonoBehaviour
 {
     public TextMeshProUGUI coins, bulletsButton, cannonBallsButton, monkeyButton, parrotButton, boozeButton, healButton;
 
-    public TextMeshProUGUI continueButton;
+    public TextMeshProUGUI continueButton, playerText;
 
     private int _bulletPrice = 2, _cannonBallPrice = 2, _healPrice = 2;
     private bool contButton = false;
@@ -51,17 +51,17 @@ public class UI_Island : MonoBehaviour
         {
             case "Banana Joe":
                 monkeyButton.text = "Banana\nJoe\n[Selected]";
-                parrotButton.text = "Parrotmancer";
+                parrotButton.text = "Parrot\nmancer";
                 boozeButton.text = "The \"Doctor\"";
                 break;
             case "Parrotmancer":
-                parrotButton.text = "Parrotmancer\n[Selected]";
+                parrotButton.text = "Parrot\nmancer\n[Selected]";
                 monkeyButton.text = "Banana\nJoe";
                 boozeButton.text = "The \"Doctor\"";
                 break;
             case "The Doctor":
                 boozeButton.text = "The \"Doctor\"\n[Selected]";
-                parrotButton.text = "Parrotmancer";
+                parrotButton.text = "Parrot\nmancer";
                 monkeyButton.text = "Banana\nJoe";
                 break;
         }
@@ -150,9 +150,15 @@ public class UI_Island : MonoBehaviour
             SetButtonText();
             SetFirstMateButtons();
             SetCoins();
+
+            continueButton.text = "Leave\nIsland";
+            playerText.text = "Player 2";
+
+            gameManager.player1 = selectedPlayer;
         }
         else
         {
+            gameManager.player2 = selectedPlayer;
             SceneManager.LoadScene("Map_1");
         }
     }
@@ -172,6 +178,6 @@ public class UI_Island : MonoBehaviour
 
     private bool CanAfford(int cost)
     {
-        return (selectedPlayer.coins <= cost);
+        return (selectedPlayer.coins >= cost);
     }
 }
