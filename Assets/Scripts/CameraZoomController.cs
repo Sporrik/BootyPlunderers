@@ -19,10 +19,10 @@ public class CameraZoomController : MonoBehaviour
         //IF youre zooming (IN) then lerp and zoom to your mouse position
         if (scroll < 0)
         {
-            Camera.main.transform.position = Vector2.Lerp(Camera.main.transform.position,
-                                                          Camera.main.ScreenToWorldPoint(Input.mousePosition),
-                                                          cameraSpeed * Time.deltaTime);
+            Vector3 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - Camera.main.transform.position;
+            direction.Normalize();
 
+            Camera.main.transform.position += direction * cameraSpeed * Time.deltaTime;
 
             //KEEP THE Z POSITION BEHIND YOUR OBJECTS!
             Camera.main.transform.position = new Vector3(Camera.main.transform.position.x,

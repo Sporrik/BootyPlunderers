@@ -3928,7 +3928,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scroll: 0
   addedSpeed: 0
-  cameraSpeed: 30
+  cameraSpeed: 10
 --- !u!1 &1188657872
 GameObject:
   m_ObjectHideFlags: 0
