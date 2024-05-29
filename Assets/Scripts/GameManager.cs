@@ -64,6 +64,9 @@ public class GameManager : MonoBehaviour
     public GameObject parrotMinigame;
     public GameObject boozeMinigame;
 
+    public Camera parrotCamera;
+    public Camera boozeCamera;
+
     private int minigameCount;
     private int currentLevel = 0;
     private Vector3 cannonTarget;
@@ -480,11 +483,11 @@ public class GameManager : MonoBehaviour
                         break;
                     case "Parrotmancer":
                         parrotMinigame.SetActive(true);
-                        parrotMinigame.GetComponentInChildren<Camera>().enabled = true;
+                        parrotCamera.enabled = true;
                         break;
                     case "The Doctor":
                         boozeMinigame.SetActive(true);
-                        boozeMinigame.transform.GetChild(0).gameObject.SetActive(true);
+                        boozeCamera.gameObject.SetActive(true);
                         break;
                 }
 
@@ -503,11 +506,11 @@ public class GameManager : MonoBehaviour
                         break;
                     case "Parrotmancer":
                         parrotMinigame.SetActive(true);
-                        parrotMinigame.GetComponentInChildren<Camera>().enabled = true;
+                        parrotCamera.enabled = true;
                         break;
                     case "The Doctor":
                         boozeMinigame.SetActive(true);
-                        boozeMinigame.GetComponentInChildren<Camera>().enabled = true;
+                        boozeCamera.enabled = true;
                         break;
                 }
 
@@ -556,7 +559,7 @@ public class GameManager : MonoBehaviour
                         break;
                     case "Parrotmancer":
                         parrotMinigame.SetActive(false);
-                        parrotMinigame.GetComponentInChildren<Camera>().enabled = false;
+                        parrotCamera.enabled = false;
 
                         //change this to dealing damage
                         player1.coins += score;
@@ -564,7 +567,7 @@ public class GameManager : MonoBehaviour
                         break;
                     case "The Doctor":
                         boozeMinigame.SetActive(false);
-                        boozeMinigame.GetComponentInChildren<Camera>().enabled = false;
+                        boozeCamera.enabled = false;
 
                         //change this to healing
                         player1.coins += score;
@@ -585,7 +588,7 @@ public class GameManager : MonoBehaviour
                         break;
                     case "Parrotmancer":
                         parrotMinigame.SetActive(false);
-                        parrotMinigame.GetComponentInChildren<Camera>().enabled = false;
+                        parrotCamera.enabled = false;
 
                         //change this to dealing damage
                         player2.coins += score;
@@ -593,7 +596,7 @@ public class GameManager : MonoBehaviour
                         break;
                     case "The Doctor":
                         boozeMinigame.SetActive(false);
-                        boozeMinigame.GetComponentInChildren<Camera>().enabled = false;
+                        boozeCamera.enabled = false;
 
                         //change this to healing
                         player2.coins += score;
