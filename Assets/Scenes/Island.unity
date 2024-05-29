@@ -766,7 +766,7 @@ MonoBehaviour:
   boozeButton: {fileID: 2068213892}
   healButton: {fileID: 1570404453}
   continueButton: {fileID: 1771067970}
-  playerText: {fileID: 0}
+  playerText: {fileID: 1797174219}
 --- !u!1 &459957387
 GameObject:
   m_ObjectHideFlags: 0
@@ -2411,7 +2411,7 @@ MonoBehaviour:
 
     Crew
 
-    [Price]'
+    [Healed]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a6dbafcbccedd4643ab311a5a02ea02e, type: 2}
   m_sharedMaterial: {fileID: -734742533646384833, guid: a6dbafcbccedd4643ab311a5a02ea02e, type: 2}

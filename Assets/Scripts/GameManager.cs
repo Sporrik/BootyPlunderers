@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
     public MonkeyMiniGame monkeyMinigame;
 
     private int minigameCount;
+    private int currentLevel = 0;
 
     private void Awake()
     {
@@ -74,11 +75,15 @@ public class GameManager : MonoBehaviour
         player1.coins = 10;
         player2.coins = 10;
 
+        mainCam = Camera.main;
+        mainCam.enabled = false;
+
         player1.spawns = new Transform[3];
         player2.spawns = new Transform[3];
 
         state = GameState.START;
-        StartCoroutine(SetupGame());
+
+        InitialSetup();
     }
 
     private void Update()
@@ -149,13 +154,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    IEnumerator SetupGame()
+    private void InitialSetup()
     {
-        mainCam = Camera.main;
         maxTreasure = 3;
 
         player1.alive = player1.spawns.Length;
         player2.alive = player2.spawns.Length;
+
+        player1.crew = new Unit[player1.spawns.Length];
+        player2.crew = new Unit[player2.spawns.Length];
 
         for (int i = 0; i < player1.spawns.Length; i++)
         {
@@ -167,18 +174,70 @@ public class GameManager : MonoBehaviour
             player2.spawns[i] = GameObject.Find("p2Spawn" + i).transform;
         }
 
-        player1.crew = new Unit[player1.spawns.Length];
         for (int i = 0; i < player1.spawns.Length; i++)
         {
             var p1 = Instantiate(player1.crewPrefab, player1.spawns[i]);
             player1.crew[i] = p1.GetComponent<Unit>();
+            DontDestroyOnLoad(player1.crew[i]);
         }
 
-        player2.crew = new Unit[player2.spawns.Length];
         for (int i = 0; i < player2.spawns.Length; i++)
         {
             var p2 = Instantiate(player2.crewPrefab, player2.spawns[i]);
             player2.crew[i] = p2.GetComponent<Unit>();
+            DontDestroyOnLoad(player2.crew[i]);
+        }
+
+        SceneManager.LoadScene("Island");
+    }
+
+    public void NewLevel()
+    {
+        mainCam.enabled = true;
+
+        switch (currentLevel)
+        {
+            case 0:
+                SceneManager.LoadScene("Map_1");
+                break;
+            case 1:
+                SceneManager.LoadScene("Map_2");
+                break;
+            case 2:
+                SceneManager.LoadScene("Map_3");
+                break;
+        }
+
+        currentLevel++;
+        StartCoroutine(SetupGame());
+    }
+
+    IEnumerator SetupGame()
+    {
+        //Find spawns and populate array
+        for (int i = 0; i < player1.spawns.Length; i++)
+        {
+            player1.spawns[i] = GameObject.Find("p1Spawn" + i).transform;
+        }
+
+        for (int i = 0; i < player2.spawns.Length; i++)
+        {
+            player2.spawns[i] = GameObject.Find("p2Spawn" + i).transform;
+        }
+
+        //Move crew to spawn points
+        for (int i = 0; i < player1.spawns.Length; i++)
+        {
+            player1.crew[i].transform.position = player1.spawns[i].transform.position;
+            player1.crew[i].currentHex = player1.crew[i].transform.position.ToHex();
+            player1.crew[i].previousHex = player1.crew[i].currentHex;
+        }
+
+        for (int i = 0; i < player1.spawns.Length; i++)
+        {
+            player2.crew[i].transform.position = player2.spawns[i].transform.position;
+            player2.crew[i].currentHex = player2.crew[i].transform.position.ToHex();
+            player2.crew[i].previousHex = player2.crew[i].currentHex;
         }
 
         treasureChests = new GameObject[treasureSpawns.Length];
@@ -309,6 +368,7 @@ public class GameManager : MonoBehaviour
     IEnumerator EndBattle()
     {
         dialogueText.text = "Level Complete";
+        state = GameState.END;
 
         switch (state)
         { 

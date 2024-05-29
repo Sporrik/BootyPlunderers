@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class UI_StartGame : MonoBehaviour
 {
-    [SerializeField] private string newGameLevel = "Level1";
-    public void NewButton()
-    { SceneManager.LoadScene(newGameLevel); }
+    public void StartGame()
+    {
+        SceneManager.LoadScene("Map_1");
+    }
 }
