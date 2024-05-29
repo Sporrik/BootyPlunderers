@@ -7,6 +7,6 @@ public class UI_StartGame : MonoBehaviour
 {
     public void StartGame()
     {
-        SceneManager.LoadScene("Map_1");
+        SceneManager.LoadScene("Island");
     }
 }

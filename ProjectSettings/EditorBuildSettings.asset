@@ -6,12 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Main_Menu.unity
+    guid: 61079e77077d4d34bb2a9a6e963ed16c
+  - enabled: 1
     path: Assets/Scenes/Island.unity
     guid: 96d65d073f772ff41a2d8d7a12611672
   - enabled: 1
     path: Assets/Scenes/Map_1.unity
     guid: 27110e309a757544685a26a8264342b0
   - enabled: 1
-    path: Assets/Scenes/MonkeyMiniGame.unity
-    guid: f1cb2be8fc61e1b41a9b429d9ada80d8
+    path: Assets/Scenes/Map_2.unity
+    guid: d8a2563ad324e5b4ca4d57716d461f3d
+  - enabled: 1
+    path: Assets/Scenes/Map_3.unity
+    guid: 26936c1626f5ec2429e6c7902af669f5
   m_configObjects: {}

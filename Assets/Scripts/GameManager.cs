@@ -78,9 +78,6 @@ public class GameManager : MonoBehaviour
         mainCam = Camera.main;
         mainCam.enabled = false;
 
-        player1.spawns = new Transform[3];
-        player2.spawns = new Transform[3];
-
         state = GameState.START;
 
         InitialSetup();
@@ -166,35 +163,21 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < player1.spawns.Length; i++)
         {
-            player1.spawns[i] = GameObject.Find("p1Spawn" + i).transform;
-        }
-
-        for (int i = 0; i < player2.spawns.Length; i++)
-        {
-            player2.spawns[i] = GameObject.Find("p2Spawn" + i).transform;
-        }
-
-        for (int i = 0; i < player1.spawns.Length; i++)
-        {
             var p1 = Instantiate(player1.crewPrefab, player1.spawns[i]);
             player1.crew[i] = p1.GetComponent<Unit>();
-            DontDestroyOnLoad(player1.crew[i]);
+            player1.crew[i].transform.position = new Vector3(-100, -100, -100);
         }
 
         for (int i = 0; i < player2.spawns.Length; i++)
         {
             var p2 = Instantiate(player2.crewPrefab, player2.spawns[i]);
             player2.crew[i] = p2.GetComponent<Unit>();
-            DontDestroyOnLoad(player2.crew[i]);
+            player2.crew[i].transform.position = new Vector3(-100, -100, -100);
         }
-
-        SceneManager.LoadScene("Island");
     }
 
     public void NewLevel()
     {
-        mainCam.enabled = true;
-
         switch (currentLevel)
         {
             case 0:
@@ -208,6 +191,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+        mainCam.enabled = true;
         currentLevel++;
         StartCoroutine(SetupGame());
     }
@@ -217,25 +201,25 @@ public class GameManager : MonoBehaviour
         //Find spawns and populate array
         for (int i = 0; i < player1.spawns.Length; i++)
         {
-            player1.spawns[i] = GameObject.Find("p1Spawn" + i).transform;
+            player1.spawns[i].position = GameObject.Find("p1SpawnLocation" + i).transform.position;
         }
 
         for (int i = 0; i < player2.spawns.Length; i++)
         {
-            player2.spawns[i] = GameObject.Find("p2Spawn" + i).transform;
+            player2.spawns[i].position = GameObject.Find("p2SpawnLocation" + i).transform.position;
         }
 
         //Move crew to spawn points
         for (int i = 0; i < player1.spawns.Length; i++)
         {
-            player1.crew[i].transform.position = player1.spawns[i].transform.position;
+            player1.crew[i].transform.position = player1.spawns[i].position;
             player1.crew[i].currentHex = player1.crew[i].transform.position.ToHex();
             player1.crew[i].previousHex = player1.crew[i].currentHex;
         }
 
         for (int i = 0; i < player1.spawns.Length; i++)
         {
-            player2.crew[i].transform.position = player2.spawns[i].transform.position;
+            player2.crew[i].transform.position = player2.spawns[i].position;
             player2.crew[i].currentHex = player2.crew[i].transform.position.ToHex();
             player2.crew[i].previousHex = player2.crew[i].currentHex;
         }

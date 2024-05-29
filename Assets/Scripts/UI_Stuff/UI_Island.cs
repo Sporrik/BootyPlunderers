@@ -64,6 +64,11 @@ public class UI_Island : MonoBehaviour
                 parrotButton.text = "Parrot\nmancer";
                 monkeyButton.text = "Banana\nJoe";
                 break;
+            default:
+                monkeyButton.text = "Banana\nJoe";
+                parrotButton.text = "Parrot\nmancer";
+                boozeButton.text = "The \"Doctor\"";
+                break;
         }
     }
 
