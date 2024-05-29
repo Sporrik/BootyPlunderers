@@ -1,31 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-
-public enum IslandState { P1_TURN, P2_TURN }
+using UnityEngine.SceneManagement;
 
 public class UI_Island : MonoBehaviour
 {
-    public int coinCount;
     public TextMeshProUGUI coins, bulletsButton, cannonBallsButton, monkeyButton, parrotButton, boozeButton, healButton;
 
     public TextMeshProUGUI continueButton;
 
-    public GameObject monkeyGuy, parrotGuy, boozeGuy, firstMate;
-
     private int _bulletPrice = 2, _cannonBallPrice = 2, _healPrice = 2;
+    private bool contButton = false;
 
-    private IslandState state;
     private GameManager gameManager;
+    private Player selectedPlayer;
 
     private void Start()
     {
         gameManager = FindAnyObjectByType<GameManager>();
+        selectedPlayer = gameManager.player1;
 
-        state = IslandState.P1_TURN;
-
-        firstMate = monkeyGuy; //change later
         SetButtonText();
         SetFirstMateButtons();
         SetCoins();
@@ -33,153 +29,100 @@ public class UI_Island : MonoBehaviour
 
     public void HealCrew()
     {
-        switch (state)
+        if (CheckHealth(selectedPlayer.crew) && CanAfford(_healPrice))
         {
-            case IslandState.P1_TURN:
-                if (CheckHealth(gameManager.player1.crew) && CanAfford(_healPrice))
+            foreach (Unit unit in selectedPlayer.crew)
+            {
+                if (unit.currentHealth < unit.maxHealth)
                 {
-                    HealCrew(gameManager.player1.crew);
+                    unit.currentHealth = unit.maxHealth;
                 }
+            }
 
-                break;
-            case IslandState.P2_TURN:
-                if (CheckHealth(gameManager.player2.crew))
-                {
-                    HealCrew(gameManager.player2.crew);
-                }
-                break;
+            selectedPlayer.coins -= _healPrice;
+            SetCoins();
+            healButton.text = "Heal\nCrew\n[Healed]";
         }
     }
 
     private void SetFirstMateButtons()
     {
-        if (firstMate == monkeyGuy)
+        switch (selectedPlayer.firstMate)
         {
-            monkeyButton.text = "Banana\nJoe\n[Selected]";
-            parrotButton.text = "Parrotmancer";
-            boozeButton.text = "The \"Doctor\"";
-        }
-        else if (firstMate == parrotGuy)
-        {
-            parrotButton.text = "Parrotmancer\n[Selected]";
-            monkeyButton.text = "Banana\nJoe";
-            boozeButton.text = "The \"Doctor\"";
-        }
-        else if (firstMate == boozeGuy)
-        {
-            boozeButton.text = "The \"Doctor\"\n[Selected]";
-            parrotButton.text = "Parrotmancer";
-            monkeyButton.text = "Banana\nJoe";
+            case "Banana Joe":
+                monkeyButton.text = "Banana\nJoe\n[Selected]";
+                parrotButton.text = "Parrotmancer";
+                boozeButton.text = "The \"Doctor\"";
+                break;
+            case "Parrotmancer":
+                parrotButton.text = "Parrotmancer\n[Selected]";
+                monkeyButton.text = "Banana\nJoe";
+                boozeButton.text = "The \"Doctor\"";
+                break;
+            case "The Doctor":
+                boozeButton.text = "The \"Doctor\"\n[Selected]";
+                parrotButton.text = "Parrotmancer";
+                monkeyButton.text = "Banana\nJoe";
+                break;
         }
     }
 
     public void SetFirstMateMonkey()
     {
-        if (firstMate != monkeyGuy)
+        if (selectedPlayer.firstMate != "Banana Joe")
         {
-            firstMate = monkeyGuy;
+            selectedPlayer.firstMate = "Banana Joe";
             SetFirstMateButtons();
-        }
-        else
-        {
-            Debug.Log("This is already the first mate!");
         }
     }
 
     public void SetFirstMateParrot()
     {
-        if (firstMate != parrotGuy)
+        if (selectedPlayer.firstMate != "Parrotmancer")
         {
-            firstMate = parrotGuy;
+            selectedPlayer.firstMate = "Parrotmancer";
             SetFirstMateButtons();
-        }
-        else
-        {
-            Debug.Log("This is already the first mate!");
         }
     }
 
     public void SetFirstMateBooze()
     {
-        if (firstMate != boozeGuy)
+        if (selectedPlayer.firstMate != "The Doctor")
         {
-            firstMate = boozeGuy;
+            selectedPlayer.firstMate = "The Doctor";
             SetFirstMateButtons();
-        }
-        else
-        {
-            Debug.Log("This is already the first mate!");
         }
     }
 
     public void SetCoins()
     {
-        switch (state)
-        {
-            case IslandState.P1_TURN:
-                coinCount = gameManager.player1.coins;
-                break;
-            case IslandState.P2_TURN:
-                coinCount = gameManager.player2.coins;
-                break;
-        }
-        coins.text = "Coins: " + coinCount.ToString();
+        coins.text = "Coins: " + selectedPlayer.coins.ToString();
     }
 
     private void SetButtonText()
     {
-        switch (state)
+        if (CheckHealth(selectedPlayer.crew))
         {
-            case IslandState.P1_TURN:
-                if (CheckHealth(gameManager.player1.crew))
-                {
-                    healButton.text = "Heal\nCrew\n[Healed]";
-                }
-                else
-                {
-                    healButton.text = "Heal\nCrew\n " + _healPrice + " coins";
-                }
-                
-                SetCoins();
-                bulletsButton.text = "Bullets\n " + _bulletPrice + " coins\nOwned: " + gameManager.player1.ammo.ToString();
-                cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player1.cannonballs.ToString();
+            healButton.text = "Heal\nCrew\n[Healed]";
+        }
+        else
+        {
+            healButton.text = "Heal\nCrew\n " + _healPrice + " coins";
+        }
 
-                break;
-            case IslandState.P2_TURN:
-                if (CheckHealth(gameManager.player2.crew))
-                {
-                    healButton.text = "Heal\nCrew\n[Healed]";
-                }
-                else
-                {
-                    healButton.text = "Heal\nCrew\n " + _healPrice + " coins";
-                }
-
-                SetCoins();
-                bulletsButton.text = "Bullets\n " + _bulletPrice + " coins\nOwned: " + gameManager.player2.ammo.ToString();
-                cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player2.cannonballs.ToString();
-
-                break;
-        }     
+        SetCoins();
+        bulletsButton.text = "Bullets\n " + _bulletPrice + " coins\nOwned: " + selectedPlayer.ammo.ToString();
+        cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + selectedPlayer.cannonballs.ToString(); 
     }
 
     public void BuyBullets()
     {
         if (CanAfford(_bulletPrice))
         {
-            switch (state)
-            {
-                case IslandState.P1_TURN:
-                    gameManager.player1.ammo++;
-                    cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player1.ammo.ToString();
-                    break;
-                case IslandState.P2_TURN:
-                    gameManager.player2.ammo++;
-                    cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player2.ammo.ToString();
-                    break;
-            }
+            selectedPlayer.ammo++;
+            bulletsButton.text = "Bullets\n " + _bulletPrice + " coins\nOwned: " + selectedPlayer.ammo.ToString();
 
-            coinCount -= _cannonBallPrice;
+            selectedPlayer.coins -= _cannonBallPrice;
             SetCoins();
         }
     }
@@ -188,20 +131,29 @@ public class UI_Island : MonoBehaviour
     {
         if (CanAfford(_cannonBallPrice))
         {
-            switch (state)
-            {
-                case IslandState.P1_TURN:
-                    gameManager.player1.cannonballs++;
-                    cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player1.cannonballs.ToString();
-                    break;
-                case IslandState.P2_TURN:
-                    gameManager.player2.cannonballs++;
-                    cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player2.cannonballs.ToString();
-                    break;
-            }
 
-            coinCount -= _cannonBallPrice;
+            selectedPlayer.cannonballs++;
+            cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + selectedPlayer.cannonballs.ToString();
+
+            selectedPlayer.coins -= _cannonBallPrice;
             SetCoins();
+        }
+    }
+
+    public void Continue()
+    {
+        if (contButton == false)
+        {
+            contButton = true;
+            selectedPlayer = gameManager.player2;
+
+            SetButtonText();
+            SetFirstMateButtons();
+            SetCoins();
+        }
+        else
+        {
+            SceneManager.LoadScene("Map_1");
         }
     }
 
@@ -218,22 +170,8 @@ public class UI_Island : MonoBehaviour
         return false;
     }
 
-    private void HealCrew(Unit[] crewArray)
-    {
-        foreach (Unit unit in crewArray)
-        {
-            if (unit.currentHealth < unit.maxHealth)
-            {
-                unit.currentHealth = unit.maxHealth;
-            }  
-        }
-
-        coinCount -= _healPrice;
-        healButton.text = "Heal\nCrew\n[Healed]";
-    }
-
     private bool CanAfford(int cost)
     {
-        return (coinCount <= cost);
+        return (selectedPlayer.coins <= cost);
     }
 }

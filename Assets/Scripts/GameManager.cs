@@ -16,23 +16,6 @@ public class GameManager : MonoBehaviour
 
     public GameState state;
 
-    [Serializable]
-    public struct Player
-    {
-        public int coins;
-        public int ammo;
-        public int cannonballs;
-        public string firstMate;
-        public GameObject crewPrefab;
-
-        public Transform[] spawns;
-        public Unit[] crew;
-        public UI[] HUD;
-
-        public int alive;
-        public bool isSpecialAvailable;
-    }
-
     public Player player1;
     public Player player2;
 
@@ -313,10 +296,12 @@ public class GameManager : MonoBehaviour
             case GameState.P1_TURN:
                 player1.coins += maxTreasure * 50;
                 player1.HUD[0].SetCoins(player1.coins);
+                dialogueText.text = "Player 1 Wins";
                 break;
             case GameState.P2_TURN:
                 player2.coins += maxTreasure * 50;
                 player2.HUD[0].SetCoins(player2.coins);
+                dialogueText.text = "Player 2 Wins";
                 break;
         }
 
@@ -439,4 +424,21 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+}
+
+[Serializable]
+public struct Player
+{
+    public int coins;
+    public int ammo;
+    public int cannonballs;
+    public string firstMate;
+    public GameObject crewPrefab;
+
+    public Transform[] spawns;
+    public Unit[] crew;
+    public UI[] HUD;
+
+    public int alive;
+    public bool isSpecialAvailable;
 }
