@@ -15,8 +15,8 @@ public class BoozeMiniGameMovement : MonoBehaviour
     }
     private void OnEnable()
     {
-        _bottomLeftCorner = new Vector3(-54, -4, 0);
-        _topRightCorner = new Vector3(-35, -7, 0);
+        _bottomLeftCorner = new Vector3(-54, -4, -50);
+        _topRightCorner = new Vector3(-36, 7, -50);
         isMoving = true;
         _velocity = GetVelocity();        
     }
@@ -64,12 +64,10 @@ public class BoozeMiniGameMovement : MonoBehaviour
         {
             transform.position = new Vector3(_bottomLeftCorner.x - 1, transform.position.y, transform.position.z);
         }
-
         if (transform.position.y < _bottomLeftCorner.y - 1)
         {
             transform.position = new Vector3(transform.position.x, _topRightCorner.y + 1, transform.position.z);
         }
-
         if (transform.position.y > _topRightCorner.y + 1)
         {
             transform.position = new Vector3(transform.position.x, _bottomLeftCorner.y - 1, transform.position.z);

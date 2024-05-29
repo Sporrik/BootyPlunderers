@@ -45,8 +45,8 @@ public class BoozeMiniGame : MonoBehaviour
         bottleList = new List<GameObject>();
         bombList = new List<GameObject>();
 
-        _bottomLeftCorner = new Vector3(-59, -55, -50);
-        _topRightCorner = new Vector3(-41, -45, -50);
+        _bottomLeftCorner = new Vector3(-54, -4, -50);
+        _topRightCorner = new Vector3(-36, 7, -50);
 
         for (int i = 0; i < _maxBottlesInScene; i++)
         {
@@ -167,7 +167,7 @@ public class BoozeMiniGame : MonoBehaviour
 
     private void SpawnBombs()
     {
-        Vector3 startingPos = Vector3.zero;
+        Vector3 startingPos = gameObject.transform.position;
         startingPos.x = UnityEngine.Random.Range(_bottomLeftCorner.x, _topRightCorner.x);
         startingPos.y = UnityEngine.Random.Range(_bottomLeftCorner.y, _topRightCorner.y);
         var bomb = Instantiate(bombPrefab);
@@ -177,7 +177,7 @@ public class BoozeMiniGame : MonoBehaviour
 
     private void SpawnBottles()
     {
-        Vector3 startingPos = Vector3.zero;
+        Vector3 startingPos = gameObject.transform.position;
         startingPos.x = UnityEngine.Random.Range(_bottomLeftCorner.x, _topRightCorner.x);
         startingPos.y = UnityEngine.Random.Range(_bottomLeftCorner.y, _topRightCorner.y);
         var bottle = Instantiate(bottlePrefab);
