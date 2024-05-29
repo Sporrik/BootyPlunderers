@@ -484,7 +484,7 @@ public class GameManager : MonoBehaviour
                         break;
                     case "The Doctor":
                         boozeMinigame.SetActive(true);
-                        boozeMinigame.GetComponentInChildren<Camera>().enabled = true;
+                        boozeMinigame.transform.GetChild(0).gameObject.SetActive(true);
                         break;
                 }
 
