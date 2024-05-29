@@ -159,7 +159,7 @@ public class UI_Island : MonoBehaviour
         else
         {
             gameManager.player2 = selectedPlayer;
-            SceneManager.LoadScene("Map_1");
+            gameManager.NewLevel();
         }
     }
 
