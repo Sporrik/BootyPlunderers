@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
 
     private int minigameCount;
     private int currentLevel = 0;
-    private Transform cannonTarget;
+    private Vector3 cannonTarget;
 
     private void Awake()
     {
@@ -168,8 +168,8 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                cannonTarget.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                ResolveAttack();
+                cannonTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                ResolveCannon();
             }
         }
     }
@@ -438,7 +438,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (Unit unit in player1.crew)
         {
-            if (unit.currentHex.DistanceTo(cannonTarget.position.ToHex()) < 4)
+            if (unit.currentHex.DistanceTo(cannonTarget.ToHex()) < 4)
             {
                 unit.currentHealth -= 20;
             }
@@ -446,7 +446,7 @@ public class GameManager : MonoBehaviour
 
         foreach (Unit unit in player2.crew)
         {
-            if (unit.currentHex.DistanceTo(cannonTarget.position.ToHex()) < 4)
+            if (unit.currentHex.DistanceTo(cannonTarget.ToHex()) < 4)
             {
                 unit.currentHealth -= 20;
             }
