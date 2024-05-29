@@ -311,6 +311,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5938906336614198378, guid: c15deb1dc3e0bcd4dbdac4e65d24a72e, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 282501949}
     - target: {fileID: 6167728446636085634, guid: c15deb1dc3e0bcd4dbdac4e65d24a72e, type: 3}
       propertyPath: m_Name
       value: boozeMinigame
@@ -511,6 +515,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3050207694320081640, guid: 09c14f8697c73f446b93955592a0c27f, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 282501949}
     - target: {fileID: 7992225024156941765, guid: 09c14f8697c73f446b93955592a0c27f, type: 3}
       propertyPath: m_Name
       value: parrotMinigame

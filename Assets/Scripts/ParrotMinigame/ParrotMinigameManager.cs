@@ -47,7 +47,6 @@ public class ParrotMinigameManager : MonoBehaviour
     private void Start()
     {
         gameObject.SetActive(false);
-        parrotCam.enabled = false;
     }
 
     private void OnEnable()

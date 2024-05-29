@@ -37,13 +37,16 @@ public class BoozeMiniGame : MonoBehaviour
 
     private void OnEnable()
     {
+        bottlePrefab.GetComponent<BoozeMiniGameMovement>().enabled = true;
+        bombPrefab.GetComponent<BoozeMiniGameMovement>().enabled = true;
+
         _timer = _timeOfRound;
         DisplayScore();
         bottleList = new List<GameObject>();
         bombList = new List<GameObject>();
 
-        _bottomLeftCorner = new Vector3(-9, -5, 0);
-        _topRightCorner = new Vector3(9, 5, 0);
+        _bottomLeftCorner = new Vector3(-59, -55, -50);
+        _topRightCorner = new Vector3(-41, -45, -50);
 
         for (int i = 0; i < _maxBottlesInScene; i++)
         {
@@ -77,8 +80,14 @@ public class BoozeMiniGame : MonoBehaviour
 
     IEnumerator EndGame()
     {
+        //bottlePrefab.GetComponent<BoozeMiniGameMovement>().enabled = false;
+        //bombPrefab.GetComponent<BoozeMiniGameMovement>().enabled = false;
+
         gameOverPanel.gameObject.SetActive(true);
-        _heldObject.GetComponent<BoozeMiniGameMovement>().isMoving = true;
+        if (_heldObject != null )
+        {
+            _heldObject.GetComponent<BoozeMiniGameMovement>().isMoving = true;
+        }
         if (_score < 0)
         {
             finalScoreText.text = $"0 HP";

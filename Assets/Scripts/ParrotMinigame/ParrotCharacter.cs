@@ -22,12 +22,14 @@ public class ParrotCharacter : MonoBehaviour
 
     private Rigidbody2D _rb;
 
+    public Camera parrotCam;
+
     // Start is called before the first frame update
     void Start()
     {
-        _bottomLeft = Camera.main.ViewportToScreenPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
-        _topRight = Camera.main.ViewportToScreenPoint(new Vector3(1, 1, Camera.main.nearClipPlane));
-        _startingPoint = Camera.main.ScreenToWorldPoint(new Vector2(_topRight.x / 6, _topRight.y / 2));
+        _bottomLeft = parrotCam.ViewportToScreenPoint(new Vector3(0, 0, parrotCam.nearClipPlane));
+        _topRight = parrotCam.ViewportToScreenPoint(new Vector3(1, 1, parrotCam.nearClipPlane));
+        _startingPoint = parrotCam.ScreenToWorldPoint(new Vector2(_topRight.x / 6, _topRight.y / 2));
         transform.position = _startingPoint;
         _rb = GetComponent<Rigidbody2D>();
         _rb.gravityScale = _fallGravityScale;
@@ -46,15 +48,15 @@ public class ParrotCharacter : MonoBehaviour
 
     private void LimitCharacterToScreen()
     {
-        Vector3 _bottomLeftworld = Camera.main.ScreenToWorldPoint(_bottomLeft);
-        Vector3 _topRightworld = Camera.main.ScreenToWorldPoint(_topRight);
+        Vector3 _bottomLeftworld = parrotCam.ScreenToWorldPoint(_bottomLeft);
+        Vector3 _topRightworld = parrotCam.ScreenToWorldPoint(_topRight);
         Vector3 position= transform.position;
         position.y = Mathf.Clamp(position.y, _bottomLeftworld.y, _topRightworld.y);
         
         transform.position = position;
 
-        //Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
-        //Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.nearClipPlane));
+        //Vector3 bottomLeft = parrotCam.ScreenToWorldPoint(new Vector3(0, 0, parrotCam.nearClipPlane));
+        //Vector3 topRight = parrotCam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, parrotCam.nearClipPlane));
     }
 
     private void CheckInput()

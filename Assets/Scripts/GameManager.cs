@@ -74,6 +74,8 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        parrotMinigame.SetActive(false);
+        boozeMinigame.SetActive(false);
 
         instance = this;
         DontDestroyOnLoad(gameObject);

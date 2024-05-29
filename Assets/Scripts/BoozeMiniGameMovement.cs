@@ -7,12 +7,16 @@ public class BoozeMiniGameMovement : MonoBehaviour
     private float _speed, _minSpeed = 10, _maxSpeed = 15;
     private Vector3 _direction, _velocity;
     public bool isMoving;
-    private Vector3 _bottomLeftCorner, _topRightCorner;    
+    private Vector3 _bottomLeftCorner, _topRightCorner;
 
     private void Start()
     {
-        _bottomLeftCorner = new Vector3(-9, -5, 0);
-        _topRightCorner = new Vector3(9, 5, 0);
+        //Destroy(gameObject);
+    }
+    private void OnEnable()
+    {
+        _bottomLeftCorner = new Vector3(-54, -4, 0);
+        _topRightCorner = new Vector3(-35, -7, 0);
         isMoving = true;
         _velocity = GetVelocity();        
     }
