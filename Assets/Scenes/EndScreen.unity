@@ -458,6 +458,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 194168309}
   m_CullTransparentMesh: 1
+--- !u!1 &242256994 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6413802413559055015, guid: fa49fd9d8b5dd5046ac5075c46eca1e4, type: 3}
+  m_PrefabInstance: {fileID: 622318408682583012}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &242256996 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2944315842585845828, guid: fa49fd9d8b5dd5046ac5075c46eca1e4, type: 3}
@@ -762,10 +767,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cd659a5e61611549805287162155f17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerText: {fileID: 0}
-  finalCoins: {fileID: 0}
+  playerText: {fileID: 194168311}
+  finalCoins: {fileID: 2058713338}
   winnerPirate: {fileID: 0}
-  winnerPirateIcon: {fileID: 0}
+  winnerPirateIcon: {fileID: 242256994}
 --- !u!1 &1543416627
 GameObject:
   m_ObjectHideFlags: 0
