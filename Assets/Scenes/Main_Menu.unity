@@ -1443,6 +1443,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 282501949}
+    - target: {fileID: 3248809334563004710, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CannonButton
+      objectReference: {fileID: 0}
     - target: {fileID: 3258097572565522468, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

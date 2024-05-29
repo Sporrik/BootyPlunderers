@@ -75,8 +75,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        parrotMinigame.SetActive(false);
-        boozeMinigame.SetActive(false);
 
         instance = this;
         DontDestroyOnLoad(gameObject);
@@ -438,6 +436,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (Unit unit in player1.crew)
         {
+            Debug.Log(unit.currentHex.DistanceTo(cannonTarget.ToHex()));
             if (unit.currentHex.DistanceTo(cannonTarget.ToHex()) < 4)
             {
                 unit.currentHealth -= 20;
@@ -446,6 +445,7 @@ public class GameManager : MonoBehaviour
 
         foreach (Unit unit in player2.crew)
         {
+            Debug.Log(unit.currentHex.DistanceTo(cannonTarget.ToHex()));
             if (unit.currentHex.DistanceTo(cannonTarget.ToHex()) < 4)
             {
                 unit.currentHealth -= 20;
