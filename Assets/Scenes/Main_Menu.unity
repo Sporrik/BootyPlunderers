@@ -515,6 +515,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2327024402290379018, guid: 09c14f8697c73f446b93955592a0c27f, type: 3}
+      propertyPath: parrotCam
+      value: 
+      objectReference: {fileID: 1408111885}
     - target: {fileID: 3050207694320081640, guid: 09c14f8697c73f446b93955592a0c27f, type: 3}
       propertyPath: gameManager
       value: 
@@ -965,6 +969,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: affe467b23a68b94bb5c1f9687a3f487, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1170372834
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1170372835}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1170372835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170372834}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -35.75, y: 6.54, z: -0.026189296}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1175771486 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3854079609346952982, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
@@ -1184,6 +1219,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: affe467b23a68b94bb5c1f9687a3f487, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!20 &1408111885 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 3119131960325023972, guid: 09c14f8697c73f446b93955592a0c27f, type: 3}
+  m_PrefabInstance: {fileID: 550907902}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1441663216 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8762448887358344045, guid: fe9cb04ca49cd4a44a93117b3180f275, type: 3}
@@ -1943,3 +1983,4 @@ SceneRoots:
   - {fileID: 1260483489}
   - {fileID: 905222732}
   - {fileID: 282501950}
+  - {fileID: 1170372835}
