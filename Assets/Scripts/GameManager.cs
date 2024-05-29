@@ -21,9 +21,18 @@ public struct Player
 
     public Unit[] crew;
     public UI[] HUD;
+    public Spawns spawnLocations;
 
     public int alive;
     public bool isSpecialAvailable;
+}
+
+[Serializable]
+public struct Spawns
+{
+    public Transform[] spawns1;
+    public Transform[] spawns2;
+    public Transform[] spawns3;
 }
 
 public class GameManager : MonoBehaviour
@@ -36,8 +45,10 @@ public class GameManager : MonoBehaviour
     public Player player2;
 
     public GameObject treasurePrefab;
-    public Transform[] treasureSpawns;
-    private GameObject[] treasureChests;
+    public List<Transform> treasureSpawns1;
+    public List<Transform> treasureSpawns2;
+    public List<Transform> treasureSpawns3;
+    private List<GameObject> treasureChests;
 
 
     private int maxTreasure;
@@ -163,6 +174,7 @@ public class GameManager : MonoBehaviour
         player1.alive = player1.crew.Length;
         player2.alive = player2.crew.Length;
 
+
         for (int i = 0; i < player1.crew.Length; i++)
         {
             var p2 = Instantiate(player1.crewPrefab, gameObject.transform);
@@ -203,26 +215,7 @@ public class GameManager : MonoBehaviour
         UpdateUI(player1.crew, player1.HUD);
         UpdateUI(player2.crew, player2.HUD);
         
-        //Move crew to spawn points
-        for (int i = 0; i < player1.crew.Length; i++)
-        {
-            player1.crew[i].transform.position = GameObject.Find("p1Spawn" + i.ToString()).transform.position;
-            player1.crew[i].currentHex = player1.crew[i].transform.position.ToHex();
-            player1.crew[i].previousHex = player1.crew[i].currentHex;
-        }
-
-        for (int i = 0; i < player1.crew.Length; i++)
-        {
-            player2.crew[i].transform.position = GameObject.Find("p2Spawn" + i.ToString()).transform.position;
-            player2.crew[i].currentHex = player2.crew[i].transform.position.ToHex();
-            player2.crew[i].previousHex = player2.crew[i].currentHex;
-        }
-
-        treasureChests = new GameObject[maxTreasure];
-        for (int i = 0; i < treasureChests.Length; i++)
-        {
-            treasureChests[i] = Instantiate(treasurePrefab, GameObject.Find("treasureSpawn" + i.ToString()).transform.position, Quaternion.identity);
-        }
+        
 
         for (int i = 0; i < player1.crew.Length; i++)
         {
@@ -310,7 +303,14 @@ public class GameManager : MonoBehaviour
 
         if (isDead)
         {
-            Destroy(selectedEnemy.gameObject);
+            if (selectedEnemy.heldObject != null)
+            {
+                selectedEnemy.heldObject.transform.localScale = new Vector2(1f, 1f);
+                selectedEnemy.heldObject.transform.SetParent(this.transform, true);
+                selectedEnemy.heldObject.transform.position -= Vector3.up * 0.5f;
+            }
+
+            selectedEnemy.gameObject.transform.position = new Vector3(-100, -100, -100);
 
             switch (state)
             {
@@ -490,6 +490,73 @@ public class GameManager : MonoBehaviour
                     case "The Doctor":
                         //Disable booze minigame
                         break;
+                }
+                break;
+        }
+    }
+
+    private void SpawnObjects()
+    {
+        switch (currentLevel)
+        {
+            case 0:
+                for (int i = 0; i < player1.crew.Length; i++)
+                {
+                    player1.crew[i].transform.position = player1.spawnLocations.spawns1[i].position;
+                    player1.crew[i].currentHex = player1.crew[i].transform.position.ToHex();
+                    player1.crew[i].previousHex = player1.crew[i].currentHex;
+                }
+
+                for (int i = 0; i < player1.crew.Length; i++)
+                {
+                    player2.crew[i].transform.position = player2.spawnLocations.spawns1[i].position;
+                    player2.crew[i].currentHex = player2.crew[i].transform.position.ToHex();
+                    player2.crew[i].previousHex = player2.crew[i].currentHex;
+                }
+
+                for (int i = 0; i < treasureSpawns1.Count; i++)
+                {
+                    treasureChests.Add(Instantiate(treasurePrefab, treasureSpawns1[i]));
+                }
+                break;
+            case 1:
+                for (int i = 0; i < player1.crew.Length; i++)
+                {
+                    player1.crew[i].transform.position = player1.spawnLocations.spawns2[i].position;
+                    player1.crew[i].currentHex = player1.crew[i].transform.position.ToHex();
+                    player1.crew[i].previousHex = player1.crew[i].currentHex;
+                }
+
+                for (int i = 0; i < player1.crew.Length; i++)
+                {
+                    player2.crew[i].transform.position = player2.spawnLocations.spawns2[i].position;
+                    player2.crew[i].currentHex = player2.crew[i].transform.position.ToHex();
+                    player2.crew[i].previousHex = player2.crew[i].currentHex;
+                }
+
+                for (int i = 0; i < treasureSpawns1.Count; i++)
+                {
+                    treasureChests.Add(Instantiate(treasurePrefab, treasureSpawns2[i]));
+                }
+                break;
+            case 2:
+                for (int i = 0; i < player1.crew.Length; i++)
+                {
+                    player1.crew[i].transform.position = player1.spawnLocations.spawns3[i].position;
+                    player1.crew[i].currentHex = player1.crew[i].transform.position.ToHex();
+                    player1.crew[i].previousHex = player1.crew[i].currentHex;
+                }
+
+                for (int i = 0; i < player1.crew.Length; i++)
+                {
+                    player2.crew[i].transform.position = player2.spawnLocations.spawns3[i].position;
+                    player2.crew[i].currentHex = player2.crew[i].transform.position.ToHex();
+                    player2.crew[i].previousHex = player2.crew[i].currentHex;
+                }
+
+                for (int i = 0; i < treasureSpawns1.Count; i++)
+                {
+                    treasureChests.Add(Instantiate(treasurePrefab, treasureSpawns3[i]));
                 }
                 break;
         }
