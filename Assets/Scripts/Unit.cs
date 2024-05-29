@@ -95,7 +95,7 @@ public class Unit : MonoBehaviour
             {
                 Debug.Log("Player collides with treasure!");
                 var treasure = collision.gameObject;
-                Destroy(collision);
+                collision.enabled = false;
                 treasure.transform.localScale = new Vector2(0.5f, 0.5f);
                 treasure.transform.SetParent(transform);
                 treasure.transform.position += Vector3.up * 0.5f;
@@ -120,7 +120,11 @@ public class Unit : MonoBehaviour
     {
         currentHealth -= damage;
 
-        if (currentHealth <= 0) return true;
+        if (currentHealth <= 0)
+        {
+            heldObject.GetComponent<Collider2D>().enabled = true;
+            return true;
+        }
         else return false;
     }
 

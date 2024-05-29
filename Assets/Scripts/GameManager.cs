@@ -21,7 +21,6 @@ public struct Player
 
     public Unit[] crew;
     public UI[] HUD;
-    public Spawns spawnLocations;
 
     public int alive;
     public bool isSpecialAvailable;
@@ -30,9 +29,9 @@ public struct Player
 [Serializable]
 public struct Spawns
 {
-    public Transform[] spawns1;
-    public Transform[] spawns2;
-    public Transform[] spawns3;
+    public Transform[] player1Spawns;
+    public Transform[] player2Spawns;
+    public Transform[] treasureSpawns;
 }
 
 public class GameManager : MonoBehaviour
@@ -45,10 +44,7 @@ public class GameManager : MonoBehaviour
     public Player player2;
 
     public GameObject treasurePrefab;
-    public List<Transform> treasureSpawns1;
-    public List<Transform> treasureSpawns2;
-    public List<Transform> treasureSpawns3;
-    private List<GameObject> treasureChests;
+    public List<GameObject> treasureChests;
 
 
     private int maxTreasure;
@@ -179,34 +175,35 @@ public class GameManager : MonoBehaviour
         {
             var p2 = Instantiate(player1.crewPrefab, gameObject.transform);
             player1.crew[i] = p2.GetComponent<Unit>();
-            player1.crew[i].transform.position = new Vector3(-100, -100, -100);
+            player1.crew[i].transform.position = new Vector3(0f, 0f, 1000f);
         }
 
         for (int i = 0; i < player2.crew.Length; i++)
         {
             var p2 = Instantiate(player2.crewPrefab, gameObject.transform);
             player2.crew[i] = p2.GetComponent<Unit>();
-            player2.crew[i].transform.position = new Vector3(-100, -100, -100);
+            player2.crew[i].transform.position = new Vector3(0f, 0f, 1000f);
         }
     }
 
     public void NewLevel()
     {
+        currentLevel++;
+
         switch (currentLevel)
         {
-            case 0:
+            case 1:
                 SceneManager.LoadScene("Map_1");
                 break;
-            case 1:
+            case 2:
                 SceneManager.LoadScene("Map_2");
                 break;
-            case 2:
+            case 3:
                 SceneManager.LoadScene("Map_3");
                 break;
         }
 
         mainCam.enabled = true;
-        currentLevel++;
         StartCoroutine(SetupGame());
     }
 
@@ -214,8 +211,6 @@ public class GameManager : MonoBehaviour
     {
         UpdateUI(player1.crew, player1.HUD);
         UpdateUI(player2.crew, player2.HUD);
-        
-        
 
         for (int i = 0; i < player1.crew.Length; i++)
         {
@@ -226,6 +221,9 @@ public class GameManager : MonoBehaviour
         {
             player2.HUD[i].SetHUD(player2.crew[i]);
         }
+
+        player1.HUD[0].SetAmmo(selectedAmmo);
+        player2.HUD[0].SetAmmo(selectedAmmo);
 
         dialogueText.text = "Plunder their Booty";
 
@@ -277,7 +275,23 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(CommitAttack());
                 break;
             case < 4:
-                StartCoroutine(CommitAttack());
+                if (selectedAmmo > 0)
+                {
+                    selectedAmmo--;
+                    if (state == GameState.P1_TURN)
+                    {
+                        player1.HUD[0].SetAmmo(selectedAmmo);
+                    }
+                    else if (state == GameState.P2_TURN)
+                    {
+                        player2.HUD[0].SetAmmo(selectedAmmo);
+                    }
+                    StartCoroutine(CommitAttack());
+                }
+                else
+                {
+                    dialogueText.text = "Out of Ammo";
+                }
                 break;
             default:
                 dialogueText.text = "Out of Range";
@@ -348,6 +362,12 @@ public class GameManager : MonoBehaviour
         dialogueText.text = "Level Complete";
         state = GameState.END;
 
+        for (int i = 0; i < player2.crew.Length; i++)
+        {
+            player1.crew[i].transform.position = new Vector3(0f, 0f, 1000f);
+            player2.crew[i].transform.position = new Vector3(0f, 0f, 1000f);
+        }
+
         switch (state)
         { 
             case GameState.P1_TURN:
@@ -385,46 +405,49 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SpecialAttackP1()
+    public void SpecialAttack()
     {
-        if (!player1.isSpecialAvailable || state != GameState.P1_TURN) return;
-
-        player1.isSpecialAvailable = false;
-
-        switch (player1.firstMate)
+        switch (state)
         {
-            case "Banana Joe":
-                monkeyMinigame.gameObject.SetActive(true);
-                monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
-                break;
-            case "Parrotmancer":
-                break;
-            case "The Doctor":
-                break;
-        }
-        
-        mainCam.enabled = false;
-    }
+            case GameState.P1_TURN:
+                if (!player1.isSpecialAvailable || state != GameState.P1_TURN) return;
 
-    public void SpecialAttackP2()
-    {
-        if (!player2.isSpecialAvailable || state != GameState.P2_TURN) return;
+                player1.isSpecialAvailable = false;
 
-        player2.isSpecialAvailable = false;
+                switch (player1.firstMate)
+                {
+                    case "Banana Joe":
+                        monkeyMinigame.gameObject.SetActive(true);
+                        monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
+                        break;
+                    case "Parrotmancer":
+                        break;
+                    case "The Doctor":
+                        break;
+                }
 
-        switch (player2.firstMate)
-        {
-            case "Banana Joe":
-                monkeyMinigame.gameObject.SetActive(true);
-                monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
+                mainCam.enabled = false;
                 break;
-            case "Parrotmancer":
-                break;
-            case "The Doctor":
-                break;
-        }
+            case GameState.P2_TURN:
+                if (!player2.isSpecialAvailable || state != GameState.P2_TURN) return;
 
-        mainCam.enabled = false;
+                player2.isSpecialAvailable = false;
+
+                switch (player2.firstMate)
+                {
+                    case "Banana Joe":
+                        monkeyMinigame.gameObject.SetActive(true);
+                        monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
+                        break;
+                    case "Parrotmancer":
+                        break;
+                    case "The Doctor":
+                        break;
+                }
+
+                mainCam.enabled = false;
+                break;
+        } 
     }
 
     private bool DoesThisBelongToYou(RaycastHit2D hit)
@@ -490,73 +513,6 @@ public class GameManager : MonoBehaviour
                     case "The Doctor":
                         //Disable booze minigame
                         break;
-                }
-                break;
-        }
-    }
-
-    private void SpawnObjects()
-    {
-        switch (currentLevel)
-        {
-            case 0:
-                for (int i = 0; i < player1.crew.Length; i++)
-                {
-                    player1.crew[i].transform.position = player1.spawnLocations.spawns1[i].position;
-                    player1.crew[i].currentHex = player1.crew[i].transform.position.ToHex();
-                    player1.crew[i].previousHex = player1.crew[i].currentHex;
-                }
-
-                for (int i = 0; i < player1.crew.Length; i++)
-                {
-                    player2.crew[i].transform.position = player2.spawnLocations.spawns1[i].position;
-                    player2.crew[i].currentHex = player2.crew[i].transform.position.ToHex();
-                    player2.crew[i].previousHex = player2.crew[i].currentHex;
-                }
-
-                for (int i = 0; i < treasureSpawns1.Count; i++)
-                {
-                    treasureChests.Add(Instantiate(treasurePrefab, treasureSpawns1[i]));
-                }
-                break;
-            case 1:
-                for (int i = 0; i < player1.crew.Length; i++)
-                {
-                    player1.crew[i].transform.position = player1.spawnLocations.spawns2[i].position;
-                    player1.crew[i].currentHex = player1.crew[i].transform.position.ToHex();
-                    player1.crew[i].previousHex = player1.crew[i].currentHex;
-                }
-
-                for (int i = 0; i < player1.crew.Length; i++)
-                {
-                    player2.crew[i].transform.position = player2.spawnLocations.spawns2[i].position;
-                    player2.crew[i].currentHex = player2.crew[i].transform.position.ToHex();
-                    player2.crew[i].previousHex = player2.crew[i].currentHex;
-                }
-
-                for (int i = 0; i < treasureSpawns1.Count; i++)
-                {
-                    treasureChests.Add(Instantiate(treasurePrefab, treasureSpawns2[i]));
-                }
-                break;
-            case 2:
-                for (int i = 0; i < player1.crew.Length; i++)
-                {
-                    player1.crew[i].transform.position = player1.spawnLocations.spawns3[i].position;
-                    player1.crew[i].currentHex = player1.crew[i].transform.position.ToHex();
-                    player1.crew[i].previousHex = player1.crew[i].currentHex;
-                }
-
-                for (int i = 0; i < player1.crew.Length; i++)
-                {
-                    player2.crew[i].transform.position = player2.spawnLocations.spawns3[i].position;
-                    player2.crew[i].currentHex = player2.crew[i].transform.position.ToHex();
-                    player2.crew[i].previousHex = player2.crew[i].currentHex;
-                }
-
-                for (int i = 0; i < treasureSpawns1.Count; i++)
-                {
-                    treasureChests.Add(Instantiate(treasurePrefab, treasureSpawns3[i]));
                 }
                 break;
         }

@@ -150,6 +150,7 @@ public class UI_Island : MonoBehaviour
         if (contButton == false)
         {
             contButton = true;
+            gameManager.player1 = selectedPlayer;
             selectedPlayer = gameManager.player2;
 
             SetButtonText();
@@ -158,8 +159,6 @@ public class UI_Island : MonoBehaviour
 
             continueButton.text = "Leave\nIsland";
             playerText.text = "Player 2";
-
-            gameManager.player1 = selectedPlayer;
         }
         else
         {
