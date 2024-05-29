@@ -55,21 +55,21 @@ public class UI_Island : MonoBehaviour
     {
         if (firstMate == monkeyGuy)
         {
-            monkeyButton.text = "Monkey\nGuy\n[Selected]";
-            parrotButton.text = "Parrot\nGuy";
-            boozeButton.text = "Booze\nGuy\n";
+            monkeyButton.text = "Banana\nJoe\n[Selected]";
+            parrotButton.text = "Parrotmancer";
+            boozeButton.text = "The \"Doctor\"";
         }
         else if (firstMate == parrotGuy)
         {
-            parrotButton.text = "Parrot\nGuy\n[Selected]";
-            monkeyButton.text = "Monkey\nGuy";
-            boozeButton.text = "Booze\nGuy\n";
+            parrotButton.text = "Parrotmancer\n[Selected]";
+            monkeyButton.text = "Banana\nJoe";
+            boozeButton.text = "The \"Doctor\"";
         }
         else if (firstMate == boozeGuy)
         {
-            boozeButton.text = "Booze\nGuy\n[Selected]";
-            parrotButton.text = "Parrot\nGuy";
-            monkeyButton.text = "Monkey\nGuy";
+            boozeButton.text = "The \"Doctor\"\n[Selected]";
+            parrotButton.text = "Parrotmancer";
+            monkeyButton.text = "Banana\nJoe";
         }
     }
 
@@ -141,8 +141,8 @@ public class UI_Island : MonoBehaviour
                 }
                 
                 SetCoins();
-                bulletsButton.text = "Buy\nBullets\n " + _bulletPrice + " coins\nOwned: " + gameManager.player1.ammo.ToString();
-                cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player1.cannonballs.ToString();
+                bulletsButton.text = "Bullets\n " + _bulletPrice + " coins\nOwned: " + gameManager.player1.ammo.ToString();
+                cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player1.cannonballs.ToString();
 
                 break;
             case IslandState.P2_TURN:
@@ -156,8 +156,8 @@ public class UI_Island : MonoBehaviour
                 }
 
                 SetCoins();
-                bulletsButton.text = "Buy\nBullets\n " + _bulletPrice + " coins\nOwned: " + gameManager.player2.ammo.ToString();
-                cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player2.cannonballs.ToString();
+                bulletsButton.text = "Bullets\n " + _bulletPrice + " coins\nOwned: " + gameManager.player2.ammo.ToString();
+                cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player2.cannonballs.ToString();
 
                 break;
         }     
@@ -171,11 +171,11 @@ public class UI_Island : MonoBehaviour
             {
                 case IslandState.P1_TURN:
                     gameManager.player1.ammo++;
-                    cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player1.ammo.ToString();
+                    cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player1.ammo.ToString();
                     break;
                 case IslandState.P2_TURN:
                     gameManager.player2.ammo++;
-                    cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player2.ammo.ToString();
+                    cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player2.ammo.ToString();
                     break;
             }
 
@@ -192,11 +192,11 @@ public class UI_Island : MonoBehaviour
             {
                 case IslandState.P1_TURN:
                     gameManager.player1.cannonballs++;
-                    cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player1.cannonballs.ToString();
+                    cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player1.cannonballs.ToString();
                     break;
                 case IslandState.P2_TURN:
                     gameManager.player2.cannonballs++;
-                    cannonBallsButton.text = "Buy\nCannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player2.cannonballs.ToString();
+                    cannonBallsButton.text = "Cannon Balls\n " + _cannonBallPrice + " coins\nOwned: " + gameManager.player2.cannonballs.ToString();
                     break;
             }
 
