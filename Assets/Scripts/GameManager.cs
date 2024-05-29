@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public enum GameState { START, P1_TURN, P2_TURN, END, CANNON};
+public enum GameState { START, P1_TURN, P2_TURN, END, CANNON, SPECIAL};
 
 [Serializable]
 public struct Player
@@ -67,6 +67,8 @@ public class GameManager : MonoBehaviour
     private int minigameCount;
     private int currentLevel = 0;
     private Vector3 cannonTarget;
+
+    private int saveState;
 
     private void Awake()
     {
@@ -430,8 +432,9 @@ public class GameManager : MonoBehaviour
 
     public void CannonButton()
     {
+        saveState = (int)state;
         state = GameState.CANNON;
-        dialogueText.text = "Click to fire\nDamages ALL units in radius 3";
+        dialogueText.text = "Click to fire\n Damages ALL units\nin range 3";
     }
 
     private void ResolveCannon()
@@ -454,11 +457,14 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        state = (GameState)saveState;
         dialogueText.text = "Left click a pirate to move";
     }
 
     public void SpecialAttack()
     {
+        saveState= (int)state;
+
         switch (state)
         {
             case GameState.P1_TURN:
@@ -596,5 +602,7 @@ public class GameManager : MonoBehaviour
                 }
                 break;
         }
+
+        state = (GameState)saveState;
     }
 }
