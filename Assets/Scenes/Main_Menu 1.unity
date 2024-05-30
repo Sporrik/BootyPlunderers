@@ -218,6 +218,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MonkeyMinigame
       objectReference: {fileID: 0}
+    - target: {fileID: 5942293877634894002, guid: da1e4cf153914d148ba323ff79ed87da, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7452398505240826905, guid: da1e4cf153914d148ba323ff79ed87da, type: 3}
       propertyPath: m_LocalPosition.x
       value: 40
@@ -436,6 +440,8 @@ MonoBehaviour:
   monkeyMinigame: {fileID: 1911833685}
   parrotMinigame: {fileID: 550907904}
   boozeMinigame: {fileID: 247023923}
+  parrotCamera: {fileID: 0}
+  boozeCamera: {fileID: 0}
 --- !u!4 &282501950
 Transform:
   m_ObjectHideFlags: 0
@@ -565,6 +571,10 @@ PrefabInstance:
     - target: {fileID: 7992225024156941765, guid: 09c14f8697c73f446b93955592a0c27f, type: 3}
       propertyPath: m_Name
       value: parrotMinigame
+      objectReference: {fileID: 0}
+    - target: {fileID: 7992225024156941765, guid: 09c14f8697c73f446b93955592a0c27f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
