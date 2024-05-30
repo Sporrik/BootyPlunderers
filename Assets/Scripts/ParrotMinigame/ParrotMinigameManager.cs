@@ -46,7 +46,7 @@ public class ParrotMinigameManager : MonoBehaviour
 
     private void Start()
     {
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     private void OnEnable()

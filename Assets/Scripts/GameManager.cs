@@ -72,6 +72,7 @@ public class GameManager : MonoBehaviour
     private Vector3 cannonTarget;
 
     private int saveState;
+    private bool isInMiniGame;
 
     private void Awake()
     {
@@ -80,8 +81,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        parrotMinigame.SetActive(false);
-        boozeMinigame.SetActive(false);
 
         instance = this;
         DontDestroyOnLoad(gameObject);
@@ -109,36 +108,39 @@ public class GameManager : MonoBehaviour
             player1.HUD[0].SetCoins(player1.coins);
             player2.HUD[0].SetCoins(player2.coins);
 
-            if (Input.GetMouseButtonDown(0))
+            if (!isInMiniGame)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-
-                if (hit.collider)
+                if (Input.GetMouseButtonDown(0))
                 {
-                    if (DoesThisBelongToYou(hit))
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                    if (hit.collider)
                     {
-                        selectedPirate = hit.collider.GetComponent<Unit>();
+                        if (DoesThisBelongToYou(hit))
+                        {
+                            selectedPirate = hit.collider.GetComponent<Unit>();
+                        }
                     }
                 }
-            }
 
-            if (Input.GetMouseButtonDown(1))
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+                if (Input.GetMouseButtonDown(1))
+                {
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-                if (hit.collider && IsThisAnEnemy(hit) && !selectedPirate.hasAttacked)
-                {
-                    selectedEnemy = hit.collider.GetComponent<Unit>();
-                    Attack();
+                    if (hit.collider && IsThisAnEnemy(hit) && !selectedPirate.hasAttacked)
+                    {
+                        selectedEnemy = hit.collider.GetComponent<Unit>();
+                        Attack();
+                    }
+                    else if (selectedPirate)
+                    {
+                        selectedPirate.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        StartCoroutine(selectedPirate.MoveUnit());
+                    }
                 }
-                else if (selectedPirate)
-                {
-                    selectedPirate.targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    StartCoroutine(selectedPirate.MoveUnit());
-                }
-            }
+            }            
 
             if (selectedPirate != null && selectedPirate.collectedTreasure != 0)
             {
@@ -194,6 +196,7 @@ public class GameManager : MonoBehaviour
         {
             var p2 = Instantiate(player1.crewPrefab, gameObject.transform);
             player1.crew[i] = p2.GetComponent<Unit>();
+            player1.crew[i].transform.GetChild(i).gameObject.SetActive(true);
             player1.crew[i].transform.position = new Vector3(0f, 0f, 1000f);
         }
 
@@ -201,6 +204,7 @@ public class GameManager : MonoBehaviour
         {
             var p2 = Instantiate(player2.crewPrefab, gameObject.transform);
             player2.crew[i] = p2.GetComponent<Unit>();
+            player2.crew[i].transform.GetChild(i).gameObject.SetActive(true);
             player2.crew[i].transform.position = new Vector3(0f, 0f, 1000f);
         }
     }
@@ -480,14 +484,17 @@ public class GameManager : MonoBehaviour
                     case "Banana Joe":
                         monkeyMinigame.SetActive(true);
                         monkeyMinigame.GetComponentInChildren<Camera>().enabled = true;
+                        isInMiniGame = true;
                         break;
                     case "Parrotmancer":
                         parrotMinigame.SetActive(true);
                         parrotCamera.enabled = true;
+                        isInMiniGame = true;
                         break;
                     case "The Doctor":
                         boozeMinigame.SetActive(true);
-                        boozeCamera.gameObject.SetActive(true);
+                        boozeCamera.enabled = true;
+                        isInMiniGame = true;
                         break;
                 }
 
@@ -552,6 +559,7 @@ public class GameManager : MonoBehaviour
                     case "Banana Joe":
                         monkeyMinigame.SetActive(false);
                         monkeyMinigame.GetComponentInChildren<Camera>().enabled = false;
+                        isInMiniGame = false;
 
                         player1.coins += score;
                         player1.HUD[0].SetCoins(player1.coins);
@@ -560,17 +568,22 @@ public class GameManager : MonoBehaviour
                     case "Parrotmancer":
                         parrotMinigame.SetActive(false);
                         parrotCamera.enabled = false;
+                        isInMiniGame = false;
 
                         //change this to dealing damage
-                        player1.coins += score;
+                        
                         player1.HUD[0].SetCoins(player1.coins);
                         break;
                     case "The Doctor":
                         boozeMinigame.SetActive(false);
                         boozeCamera.enabled = false;
+                        isInMiniGame = false;
 
                         //change this to healing
-                        player1.coins += score;
+                        foreach (Unit unit in player1.crew)
+                        {
+                            unit.currentHealth += score;
+                        }
                         player1.HUD[0].SetCoins(player1.coins);
                         break;
                 }
@@ -599,8 +612,10 @@ public class GameManager : MonoBehaviour
                         boozeCamera.enabled = false;
 
                         //change this to healing
-                        player2.coins += score;
-                        player2.HUD[0].SetCoins(player1.coins);
+                        foreach (Unit unit in player2.crew)
+                        {
+                            unit.currentHealth += score;
+                        }
                         break;
                 }
                 break;
